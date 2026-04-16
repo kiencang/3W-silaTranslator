@@ -7,7 +7,8 @@ import {
 import express from 'express';
 import {join} from 'node:path';
 import { parseHTML } from 'linkedom';
-import { Readability } from '@mozilla/readability';
+import { Readability, isProbablyReaderable } from '@mozilla/readability';
+import TurndownService from 'turndown';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -35,18 +36,40 @@ app.post('/api/extract', async (req, res) => {
     }
     const html = await response.text();
 
+    // Fast-fail: Reject ridiculously large HTML payloads before DOM parsing
+    if (html.length > 500000) {
+      res.status(413).json({ error: 'Mã nguồn trang web này quá lớn (vượt quá 500,000 ký tự). Máy chủ từ chối phân tích để tránh rủi ro tràn bộ nhớ. Vui lòng chọn một bài viết thông thường.' });
+      return;
+    }
+
     // 2. Extract main content using Readability
     const { document } = parseHTML(html);
+
+    // Check if the page is readerable (likely an article)
+    if (!isProbablyReaderable(document)) {
+      res.status(400).json({ error: 'Trang web này không có cấu trúc của một bài viết/bài báo. Vui lòng thử lại với một link nội dung cụ thể.' });
+      return;
+    }
+
     const reader = new Readability(document);
     const article = reader.parse();
 
-    if (!article) {
+    if (!article || !article.content) {
       throw new Error('Could not extract main content from the URL');
+    }
+
+    // 3. Convert to Markdown and check limit
+    const turndownService = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced' });
+    const markdownContent = turndownService.turndown(article.content);
+
+    if (markdownContent.length > 100000) {
+      res.status(413).json({ error: 'Bài viết này quá dài (vượt quá giới hạn 25.000 tokens quy định). Vui lòng chọn bài viết ngắn hơn để đảm bảo chất lượng bản dịch.' });
+      return;
     }
 
     res.json({ 
       title: article.title,
-      content: article.content,
+      content: markdownContent,
     });
 
   } catch (error: unknown) {

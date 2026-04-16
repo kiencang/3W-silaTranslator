@@ -5,7 +5,6 @@ import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {firstValueFrom} from 'rxjs';
 import {GoogleGenAI, ThinkingLevel} from '@google/genai';
-import TurndownService from 'turndown';
 import {marked} from 'marked';
 
 export interface Toast {
@@ -46,10 +45,11 @@ export class App {
     const id = this.toastIdCounter++;
     this.toasts.update(current => [...current, { id, message, type }]);
     
-    // Auto remove after 5 seconds
+    // Auto remove after 5 seconds for success, 7 seconds for error/info
+    const timeout = type === 'success' ? 5000 : 7000;
     setTimeout(() => {
       this.toasts.update(current => current.filter(t => t.id !== id));
-    }, 5000);
+    }, timeout);
   }
 
   async fetchPrompts() {
@@ -67,8 +67,37 @@ export class App {
   }
 
   async translate() {
-    if (!this.url()) return;
-    
+    const originalUrl = this.url().trim();
+    if (!originalUrl) return;
+
+    // --- FRONTEND URL VALIDATION ---
+    // 1. Valid URL format
+    let urlObj: URL;
+    try {
+      urlObj = new URL(originalUrl);
+      if (urlObj.protocol !== 'http:' && urlObj.protocol !== 'https:') {
+        throw new Error();
+      }
+    } catch {
+      this.showToast('URL không hợp lệ. Vui lòng nhập một đường dẫn bắt đầu bằng http:// hoặc https://', 'error');
+      return;
+    }
+
+    // 2. Reject static files
+    const extensions = ['.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.pdf', '.mp4', '.mp3', '.zip', '.rar', '.exe'];
+    const pathnameLower = urlObj.pathname.toLowerCase();
+    if (extensions.some(ext => pathnameLower.endsWith(ext))) {
+      this.showToast('silaTranslator không hỗ trợ dịch trực tiếp các file tĩnh (ảnh, video, pdf, css...). Vui lòng nhập link của một bài báo.', 'error');
+      return;
+    }
+
+    // 3. Reject homepages
+    if (urlObj.pathname === '/' || urlObj.pathname === '') {
+       this.showToast('Đây là đường dẫn trang chủ. silaTranslator tập trung vào việc dịch chi tiết nội dung. Vui lòng nhập link của một bài viết cụ thể!', 'error');
+       return;
+    }
+    // --- END VALIDATION ---
+
     this.isLoading.set(true);
     this.error.set('');
     this.translatedHtml.set(null);
@@ -80,16 +109,15 @@ export class App {
       // 0. Fetch prompts
       await this.fetchPrompts();
 
-      // 1. Extract content from the URL via our server proxy
+      // 1. Extract content from the URL via our server proxy (Server now returns Markdown directly and performs Readerable + Length checks)
       const extraction = await firstValueFrom(
-        this.http.post<{title: string, content: string}>('/api/extract', { url: this.url() })
+        this.http.post<{title: string, content: string}>('/api/extract', { url: originalUrl })
       );
       
       this.translatedTitle.set(extraction.title);
 
-      // 2. Convert HTML to Markdown
-      const turndownService = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced' });
-      const markdownContent = turndownService.turndown(extraction.content);
+      // Markdown is returned from backend directly
+      const markdownContent = extraction.content;
 
       // 3. Translate content using Gemini on the client
       const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
@@ -144,7 +172,12 @@ export class App {
       let errorMessage = 'Có lỗi xảy ra trong quá trình dịch. Vui lòng thử lại.';
       const errString = err.toString().toLowerCase();
       
-      if (errString.includes('429') || errString.includes('quota') || errString.includes('exhausted')) {
+      if (err.error && err.error.error) {
+        // Backend returned a specified error logic (Length limit, not readerable)
+        errorMessage = err.error.error;
+      } else if (errString.includes('parsing') || errString.includes('http failure during parsing')) {
+        errorMessage = 'Máy chủ bị quá tải khi phân tích trang web này (cấu trúc quá lớn hoặc từ chối kết nối). Vui lòng thử một đường link bài viết khác!';
+      } else if (errString.includes('429') || errString.includes('quota') || errString.includes('exhausted')) {
         errorMessage = 'Bạn đã vượt quá giới hạn dịch miễn phí của AI. Vui lòng thử lại sau hoặc kiểm tra lại API Key.';
       } else if (errString.includes('api key not valid') || errString.includes('api_key_invalid')) {
         errorMessage = 'API Key không hợp lệ. Vui lòng kiểm tra lại API Key trong phần Settings (biểu tượng bánh răng) -> Secrets.';

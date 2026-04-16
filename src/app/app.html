@@ -5,9 +5,44 @@
 
   <main class="flex-1 py-10 md:py-[60px] px-4 md:px-20 flex flex-col items-center">
     @if (!translatedHtml() && !isLoading()) {
-      <div class="text-center mb-12 mt-10">
+      <div class="text-center mb-8 mt-10">
         <h1 class="text-3xl md:text-[42px] font-bold tracking-tight mb-4">Dịch Website từ tiếng Anh sang tiếng Việt</h1>
         <p class="text-base md:text-lg text-[#6B7280] max-w-[600px] mx-auto">Đọc nội dung quốc tế bằng ngôn ngữ mẹ đẻ chỉ trong vài phút!</p>
+      </div>
+
+      <div class="flex items-center justify-center gap-6 mb-8">
+        <div class="relative group flex justify-center">
+          <button (click)="temperature.set(0.3)"
+                  class="w-4 h-4 rounded-full bg-slate-900 transition-all border-none cursor-pointer"
+                  [class.ring-2]="temperature() === 0.3" [class.ring-offset-2]="temperature() === 0.3" [class.ring-slate-900]="temperature() === 0.3">
+          </button>
+          <div class="absolute bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+            Dịch sát nghĩa (0.3)
+            <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+          </div>
+        </div>
+
+        <div class="relative group flex justify-center">
+          <button (click)="temperature.set(0.5)"
+                  class="w-4 h-4 rounded-full bg-[#0066FF] transition-all border-none cursor-pointer"
+                  [class.ring-2]="temperature() === 0.5" [class.ring-offset-2]="temperature() === 0.5" [class.ring-[#0066FF]]="temperature() === 0.5">
+          </button>
+          <div class="absolute bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+            Dịch cân bằng (0.5)
+            <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+          </div>
+        </div>
+
+        <div class="relative group flex justify-center">
+          <button (click)="temperature.set(0.7)"
+                  class="w-4 h-4 rounded-full bg-red-500 transition-all border-none cursor-pointer"
+                  [class.ring-2]="temperature() === 0.7" [class.ring-offset-2]="temperature() === 0.7" [class.ring-red-500]="temperature() === 0.7">
+          </button>
+          <div class="absolute bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+            Dịch uyển chuyển (0.7)
+            <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+          </div>
+        </div>
       </div>
     }
 
@@ -30,29 +65,9 @@
       </button>
     </div>
 
-    @if (!translatedHtml() && !isLoading()) {
-      <div class="w-full max-w-[720px] px-4 mb-8 flex flex-col gap-3">
-        <div class="flex justify-between items-center text-sm font-medium">
-          <span class="text-[#6B7280]">Sát nghĩa (0.3)</span>
-          <span class="text-[#1A1A1B] bg-white px-3 py-1 rounded-full border border-[#E5E7EB] shadow-sm">{{ temperature() }}</span>
-          <span class="text-[#6B7280]">Uyển chuyển (0.7)</span>
-        </div>
-        <input 
-          type="range" 
-          min="0.3" 
-          max="0.7" 
-          step="0.1" 
-          [(ngModel)]="temperature"
-          class="w-full h-2 bg-[#E5E7EB] rounded-lg appearance-none cursor-pointer accent-[#0066FF]"
-        >
-      </div>
-    }
 
-    @if (error()) {
-      <div class="w-full max-w-[720px] bg-red-50 text-red-600 p-4 rounded-xl border border-red-100 mb-8 text-center">
-        {{ error() }}
-      </div>
-    }
+
+
 
     @if (isLoading()) {
       <div class="flex flex-col items-center justify-center py-20">
@@ -89,17 +104,11 @@
          [class.bg-[#EF4444]]="toast.type === 'error'"
          [class.bg-[#3B82F6]]="toast.type === 'info'">
       @if (toast.type === 'success') {
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-        </svg>
+        <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0"></div>
       } @else if (toast.type === 'error') {
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
+        <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0 animate-pulse"></div>
       } @else {
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
+        <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0"></div>
       }
       <p class="leading-relaxed">{{ toast.message }}</p>
     </div>
