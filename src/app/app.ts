@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, signal, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, signal, computed, inject} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
@@ -33,8 +33,17 @@ export class App {
   fullHtmlString = signal<SafeHtml | null>(null);
   rawHtmlString = signal('');
   toasts = signal<Toast[]>([]);
+  translationTime = signal(0);
+  
+  formattedTime = computed(() => {
+    const t = this.translationTime();
+    const m = Math.floor(t / 60).toString().padStart(2, '0');
+    const s = (t % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  });
 
   private toastIdCounter = 0;
+  private timerInterval: any;
   private cachedSi = '';
   private cachedPrompt = '';
   private cachedTemplateHtml = '';
@@ -104,6 +113,10 @@ export class App {
     this.fullHtmlString.set(null);
     this.rawHtmlString.set('');
     this.translatedTitle.set('');
+
+    if (this.timerInterval) clearInterval(this.timerInterval);
+    this.translationTime.set(0);
+    this.timerInterval = setInterval(() => this.translationTime.update(v => v + 1), 1000);
 
     try {
       // 0. Fetch prompts
@@ -194,6 +207,7 @@ export class App {
       this.showToast(errorMessage, 'error');
       this.error.set(errorMessage);
     } finally {
+      if (this.timerInterval) clearInterval(this.timerInterval);
       this.isLoading.set(false);
     }
   }
