@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bản dịch: {{TITLE}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700&family=Inter:wght@400;700&family=Lexend:wght@400;700&family=Merriweather:wght@400;700&family=Roboto:wght@400;700&family=Source+Sans+3:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        {{CSS_CONTENT}}
+    </style>
+</head>
+<body>
+    <div id="progress-bar-container"><div id="progress-bar"></div></div>
+    <div id="accessibility-controls">
+        <strong>Tùy chỉnh hiển thị:</strong>
+        <div>
+            <button id="decrease-font" title="Giảm cỡ chữ">-</button>
+            <span>Cỡ chữ</span>
+            <button id="increase-font" title="Tăng cỡ chữ">+</button>
+        </div>
+        <div>
+            <button id="decrease-width" title="Giảm chiều rộng">-</button>
+            <span>Chiều rộng</span>
+            <button id="increase-width" title="Tăng chiều rộng">+</button>
+        </div>
+        <div>
+            <button id="decrease-line-height" title="Giảm giãn dòng">-</button>
+            <span>Giãn dòng</span>
+            <button id="increase-line-height" title="Tăng giãn dòng">+</button>
+        </div>
+        <div>
+            <label for="font-select">Font chữ:</label>
+            <select id="font-select" name="font-select" title="Chọn kiểu chữ">
+                <option value="Be Vietnam Pro" selected>Mặc định (Be VN Pro)</option>
+                <option value="Lexend">Lexend</option>
+                <option value="Roboto">Roboto</option>
+                <option value="Inter">Inter</option>
+                <option value="Source Sans 3">Source Sans 3</option>
+                <option value="Merriweather">Merriweather (Có chân)</option>
+            </select>
+        </div>
+        <div>
+            <button id="toggle-light-mode" title="Chuyển chế độ Sáng" aria-pressed="false">☀️</button>
+            <button id="toggle-dark-mode" title="Chuyển chế độ Tối" aria-pressed="false">🌙</button>
+            <button id="toggle-sepia-mode" title="Chuyển chế độ Sepia" aria-pressed="false">📜</button>
+            <button id="toggle-high-contrast-mode" title="Chuyển chế độ Tương phản cao" aria-pressed="false">HC</button>
+        </div>        
+        <button id="reset-settings" title="Đặt lại tất cả tùy chỉnh hiển thị về mặc định">Về Như Cũ</button>
+    </div>
+
+    <article itemprop="articleBody">
+        <div id="metadata-section-sila-trans">    
+            <p id='url_ori_sila_trans'><strong>URL bài gốc</strong>: <a href='{{ORIGINAL_URL}}' target='_blank'>{{ORIGINAL_URL}}</a></p>
+            <p id='date_sila_trans'><strong>Thời điểm bản dịch được tạo</strong>: {{DATE}}</p>
+            <p id="model_ai_sila_trans"><strong>Model AI</strong>: {{MODEL}}<span class="info-icon-sila-trans" data-tooltip="Model AI có ảnh hưởng lớn nhất đến chất lượng bản dịch">i</span></p>
+            <p id="tempe_sila_trans"><strong>Temperature:</strong> {{TEMP}}</p>                       
+            <p id="tokenEnglishP"><strong>Số lượng token input</strong> (ước tính): {{TOKENS_IN}}</p>
+            <p id="tokenVietnameseP"><strong>Số lượng token output</strong> (ước tính): {{TOKENS_OUT}}</p>
+            <div id='AImistakesDiv'>Dịch bằng AI có thể có sai sót. Hãy thuê người dịch với văn bản quan trọng.</div>
+        </div>
+        
+        <button id="toggleButtonPromptSystem">Xem System Instructions / Prompt</button>    
+        <div id="prompt_system_sila_trans">    
+            <h5>System Instructions</h5><pre id="system_content_sila_trans">{{SYSTEM_PROMPT}}</pre>
+            <h5>Prompt</h5><pre id="prompt_content_sila_trans">{{USER_PROMPT}}</pre>
+        </div>                         
+        
+        <div id="translated-content">
+            {{TRANSLATED_CONTENT}}
+        </div>
+    </article>
+    <script>
+        {{JS_CONTENT}}
+    </script>
+</body>
+</html>
