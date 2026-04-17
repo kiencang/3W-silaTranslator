@@ -62,17 +62,14 @@ export class App {
   }
 
   async fetchPrompts() {
-    if (!this.cachedSi) {
-      this.cachedSi = await firstValueFrom(this.http.get('/prompts/web_system_instructions.md', { responseType: 'text' }));
-    }
-    if (!this.cachedPrompt) {
-      this.cachedPrompt = await firstValueFrom(this.http.get('/prompts/web_prompt.md', { responseType: 'text' }));
-    }
-    if (!this.cachedTemplateHtml) {
-      this.cachedTemplateHtml = await firstValueFrom(this.http.get('/template/reader.html', { responseType: 'text' }));
-      this.cachedTemplateCss = await firstValueFrom(this.http.get('/template/reader.css', { responseType: 'text' }));
-      this.cachedTemplateJs = await firstValueFrom(this.http.get('/template/reader.js', { responseType: 'text' }));
-    }
+    const bypassCache = `?v=${new Date().getTime()}`;
+    // Always fetch latest to ensure UI updates apply immediately without requiring a full page refresh
+    this.cachedSi = await firstValueFrom(this.http.get('/prompts/web_system_instructions.md' + bypassCache, { responseType: 'text' }));
+    this.cachedPrompt = await firstValueFrom(this.http.get('/prompts/web_prompt.md' + bypassCache, { responseType: 'text' }));
+    
+    this.cachedTemplateHtml = await firstValueFrom(this.http.get('/template/reader.html' + bypassCache, { responseType: 'text' }));
+    this.cachedTemplateCss = await firstValueFrom(this.http.get('/template/reader.css' + bypassCache, { responseType: 'text' }));
+    this.cachedTemplateJs = await firstValueFrom(this.http.get('/template/reader.js' + bypassCache, { responseType: 'text' }));
   }
 
   async translate() {
@@ -130,7 +127,8 @@ export class App {
       this.translatedTitle.set(extraction.title);
 
       // Markdown is returned from backend directly
-      const markdownContent = extraction.content;
+      // Prepend the title inside markdown so the AI translates it!
+      const markdownContent = `# ${extraction.title}\n\n${extraction.content}`;
 
       // 3. Translate content using Gemini on the client
       const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
@@ -151,6 +149,14 @@ export class App {
       let translatedMarkdown = aiResponse.text || '';
       // Clean up potential markdown code blocks if the AI wraps the whole output
       translatedMarkdown = translatedMarkdown.replace(/^```markdown\n?/, '').replace(/\n?```$/, '');
+
+      // Parse the output to find the translated title
+      let translatedTitleString = extraction.title; // fallback
+      const h1Match = translatedMarkdown.match(/^\s*#\s+(.+)$/m);
+      if (h1Match) {
+         translatedTitleString = h1Match[1].trim();
+      }
+      this.translatedTitle.set(translatedTitleString);
       
       // 4. Convert translated Markdown back to HTML
       const finalHtml = await marked.parse(translatedMarkdown);
@@ -161,7 +167,7 @@ export class App {
       const dateStr = `${now.toLocaleDateString('vi-VN')} | Giờ: ${now.toLocaleTimeString('vi-VN')}`;
 
       let finalDoc = this.cachedTemplateHtml
-        .replace('{{TITLE}}', extraction.title)
+        .replace('{{TITLE}}', translatedTitleString)
         .replace('{{CSS_CONTENT}}', this.cachedTemplateCss)
         .replace('{{JS_CONTENT}}', this.cachedTemplateJs)
         .replace(/{{ORIGINAL_URL}}/g, this.url())
@@ -170,15 +176,13 @@ export class App {
         .replace('{{TEMP}}', this.temperature().toString())
         .replace('{{TOKENS_IN}}', tokensIn.toString())
         .replace('{{TOKENS_OUT}}', tokensOut.toString())
-        .replace('{{SYSTEM_PROMPT}}', this.cachedSi.replace(/</g, '&lt;').replace(/>/g, '&gt;'))
-        .replace('{{USER_PROMPT}}', this.cachedPrompt.replace(/</g, '&lt;').replace(/>/g, '&gt;'))
         .replace('{{TRANSLATED_CONTENT}}', finalHtml);
 
       this.rawHtmlString.set(finalDoc);
       this.fullHtmlString.set(this.sanitizer.bypassSecurityTrustHtml(finalDoc));
       this.translatedHtml.set(this.sanitizer.bypassSecurityTrustHtml(finalHtml));
       
-      this.showToast('Dịch hoàn tất! Đã sẵn sàng để đọc.', 'success');
+      this.showToast('Đã dịch xong, bạn hãy đọc nó ngay nhé!', 'success');
     } catch (err: any) {
       console.error('Translation error:', err);
       
@@ -189,7 +193,7 @@ export class App {
         // Backend returned a specified error logic (Length limit, not readerable)
         errorMessage = err.error.error;
       } else if (errString.includes('parsing') || errString.includes('http failure during parsing')) {
-        errorMessage = 'Máy chủ bị quá tải khi phân tích trang web này (cấu trúc quá lớn hoặc từ chối kết nối). Vui lòng thử một đường link bài viết khác!';
+        errorMessage = 'Hệ thống đang trích xuất dữ liệu chậm do website nguồn phản hồi lâu hoặc máy chủ đang tải nặng. Vui lòng đợi trong giây lát và thử lại nhé!';
       } else if (errString.includes('429') || errString.includes('quota') || errString.includes('exhausted')) {
         errorMessage = 'Bạn đã vượt quá giới hạn dịch miễn phí của AI. Vui lòng thử lại sau hoặc kiểm tra lại API Key.';
       } else if (errString.includes('api key not valid') || errString.includes('api_key_invalid')) {

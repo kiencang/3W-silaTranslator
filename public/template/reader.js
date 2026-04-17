@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const fontSelect = document.getElementById('font-select');
     const resetBtn = document.getElementById('reset-settings');
     const metadataSection = document.getElementById('metadata-section-sila-trans');
-    const toggleMetadataBtn = document.getElementById('toggle-metadata');
+    // removed toggleMetadataBtn
 
     const toggleLightModeBtn = document.getElementById('toggle-light-mode');
     const toggleDarkModeBtn = document.getElementById('toggle-dark-mode');
@@ -49,15 +49,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const fontFamilyKey = 'userFontFamily';
     const lineHeightKey = 'userLineHeight';
     const themeKey = 'userReadingTheme';
-    const metadataHiddenKey = 'userMetadataHidden';
 
     const defaultSettings = {
         fontSize: getCssVariableValue('--base-font-size'),
         maxWidth: getCssVariableValue('--content-max-width'),
         fontFamily: getCssVariableValue('--base-font-family').replace(/['"]+/g, ''),
         lineHeight: getCssVariableValue('--base-line-height').toString(),
-        theme: 'light',
-        metadataHidden: metadataSection?.classList.contains('hidden') || false
+        theme: 'light'
     };
 
     const limits = {
@@ -105,17 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const savedTheme = localStorage.getItem(themeKey) || defaultSettings.theme;
         applyTheme(savedTheme);
-
-        const savedMetadataHidden = localStorage.getItem(metadataHiddenKey);
-        if (metadataSection && toggleMetadataBtn) {
-            if (savedMetadataHidden === 'true') {
-                metadataSection.classList.add('hidden');
-                toggleMetadataBtn.textContent = 'Hiện thông tin';
-            } else {
-                metadataSection.classList.remove('hidden');
-                toggleMetadataBtn.textContent = 'Ẩn thông tin';
-            }
-        }
     }
 
     if (increaseFontBtn) increaseFontBtn.addEventListener('click', () => {
@@ -173,14 +160,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (toggleSepiaModeBtn) toggleSepiaModeBtn.addEventListener('click', () => applyTheme('sepia'));
     if (toggleHighContrastModeBtn) toggleHighContrastModeBtn.addEventListener('click', () => applyTheme('high-contrast'));
 
-    if (toggleMetadataBtn && metadataSection) {
-        toggleMetadataBtn.addEventListener('click', () => {
-            const isHidden = metadataSection.classList.toggle('hidden');
-            localStorage.setItem(metadataHiddenKey, isHidden);
-            toggleMetadataBtn.textContent = isHidden ? 'Hiện thông tin' : 'Ẩn thông tin';
-        });
-    }
-
     if (resetBtn) {
         resetBtn.addEventListener('click', () => {
             setCssVariable('--base-font-size', defaultSettings.fontSize);
@@ -189,14 +168,11 @@ document.addEventListener('DOMContentLoaded', function () {
             setCssVariable('--base-line-height', defaultSettings.lineHeight);
             if (fontSelect) fontSelect.value = defaultSettings.fontFamily;
             applyTheme(defaultSettings.theme);
-            if (metadataSection) metadataSection.classList.remove('hidden');
-            if (toggleMetadataBtn) toggleMetadataBtn.textContent = 'Ẩn thông tin';
             localStorage.removeItem(fontSizeKey);
             localStorage.removeItem(contentWidthKey);
             localStorage.removeItem(fontFamilyKey);
             localStorage.removeItem(lineHeightKey);
             localStorage.removeItem(themeKey);
-            localStorage.removeItem(metadataHiddenKey);
         });
     }
 
@@ -306,29 +282,4 @@ document.addEventListener('DOMContentLoaded', function () {
     if (readingTimeValueSpan) calculateReadingTime();
     initializeTableOfContents();
     updateProgressBar();
-});
-
-function setupToggleVisibilityPromptSystem(buttonId, contentId, textWhenHidden, textWhenVisible) {
-    const toggleBtn = document.getElementById(buttonId);
-    const contentDiv = document.getElementById(contentId);
-    if (!toggleBtn || !contentDiv) return;
-    toggleBtn.addEventListener('click', function () {
-        const isVisible = contentDiv.classList.contains('visible');
-        if (isVisible) {
-            contentDiv.classList.remove('visible');
-            toggleBtn.textContent = textWhenHidden;
-        } else {
-            contentDiv.classList.add('visible');
-            toggleBtn.textContent = textWhenVisible;
-        }
-    });
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    setupToggleVisibilityPromptSystem(
-        'toggleButtonPromptSystem',
-        'prompt_system_sila_trans',
-        'Xem System Instructions / Prompt',
-        'Ẩn System Instructions / Prompt'
-    );
 });

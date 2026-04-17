@@ -151,23 +151,16 @@ html.high-contrast-mode #reset-settings, html.dark-mode #reset-settings { color:
 #accessibility-controls button[id^="toggle-"][aria-pressed="false"] { opacity: var(--inactive-theme-button-opacity); border: 1px solid var(--controls-border-color); box-shadow: none; padding: 5px 12px; }
 #accessibility-controls button#toggle-high-contrast-mode[aria-pressed="false"] { padding: 5px 10px; }
 
-#prompt_system_sila_trans { display: none; border: 1px solid #ccc; padding: 15px; margin-top: 10px; margin-bottom: 10px; background-color: #f9f9f9; }
-#prompt_system_sila_trans.visible { display: block; }
-#prompt_system_sila_trans pre { max-height: 250px; overflow-y: auto; overflow-x: auto; background-color: #fff; color: #333; border: 1px dashed #ddd; padding: 10px; margin-top: 5px; white-space: pre-wrap; word-wrap: break-word; }
-#prompt_system_sila_trans h5 { margin-top: 0; margin-bottom: 5px; font-size: 1.1em; color: #333; }
-#toggleButtonPromptSystem { display: block; width: 100%; padding: 10px 15px; margin: -10px 0 20px 0; box-sizing: border-box; border: 1px solid var(--controls-border-color); background-color: var(--button-bg-color); color: var(--text-color); border-radius: 4px; text-align: center; font-size: 1em; cursor: pointer; outline: none; transition: all 0.2s ease; }
-#toggleButtonPromptSystem:focus { box-shadow: 0 0 0 2px rgba(100, 100, 100, 0.5); }
-#toggleButtonPromptSystem:hover { background-color: var(--button-hover-bg-color); }
-html.high-contrast-mode #toggleButtonPromptSystem { color: var(--text-color); }
+/* Prompt and old metadata styles removed */
 
 article { background-color: var(--article-bg-color); color: var(--text-color); padding: 25px 40px; border-radius: 8px; box-shadow: 0 2px 5px var(--article-shadow-color); max-width: var(--content-max-width); margin-left: auto; margin-right: auto; transition: all 0.3s ease; }
-#metadata-section-sila-trans { margin-bottom: 2em; padding-bottom: 1em; border-bottom: 1px dashed var(--subtle-border-color); transition: all 0.5s ease-out; overflow: hidden; max-height: 500px; opacity: 1; }
-#metadata-section-sila-trans.hidden { max-height: 0; opacity: 0; margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-#metadata-section-sila-trans p { font-size: 0.85em; color: var(--text-color); opacity: 0.85; transition: color 0.3s ease; }
-#AImistakesDiv { border: 1px solid var(--border-color); padding: 12px; background-color: var(--metadata-info-bg); color: var(--text-color); border-radius: 3px; text-align: center; font-size: 0.9rem; margin-top: 1em; transition: all 0.3s ease; }
-#toggle-metadata { display: block; margin: 1em auto 0 auto; padding: 6px 15px; font-size: 0.85em; cursor: pointer; border: 1px solid var(--controls-border-color); background-color: var(--metadata-toggle-button-bg); color: var(--text-color); border-radius: 4px; transition: all 0.2s ease; }
-#toggle-metadata:hover { background-color: var(--metadata-toggle-button-hover-bg); }
-html.high-contrast-mode #toggle-metadata { color: var(--text-color); }
+
+.metadata-accordion { margin-bottom: 2em; border: 1px dashed var(--subtle-border-color); border-radius: 4px; background-color: var(--metadata-info-bg); transition: all 0.3s ease; }
+.metadata-accordion summary { font-weight: bold; font-size: 0.9em; padding: 10px 15px; cursor: pointer; color: var(--text-color); outline: none; transition: background-color 0.2s ease; border-bottom: none !important; margin: 0 !important; border-radius: 4px; }
+.metadata-accordion summary:hover { background-color: var(--controls-bg-color); }
+.metadata-content { padding: 0 15px 15px 15px; margin-top: 10px; }
+.metadata-content p { font-size: 0.85em; color: var(--text-color); opacity: 0.85; transition: color 0.3s ease; margin-bottom: 0.5em; }
+#AImistakesDiv { border: 1px solid var(--border-color); padding: 12px; background-color: var(--controls-bg-color); color: var(--text-color); border-radius: 3px; text-align: center; font-size: 0.9rem; margin-top: 1em; transition: all 0.3s ease; }
 
 h1 { font-size: 2em; color: var(--heading-color-h1); margin-bottom: 0.5em; line-height: 1.3; transition: color 0.3s ease; }
 h2 { font-size: 1.5em; color: var(--heading-color-h2); margin-top: 1.5em; margin-bottom: 0.7em; border-bottom: 1px solid var(--subtle-border-color); padding-bottom: 0.3em; scroll-margin-top: 60px; transition: all 0.3s ease; }

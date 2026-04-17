@@ -14,7 +14,6 @@
 <body>
     <div id="progress-bar-container"><div id="progress-bar"></div></div>
     <div id="accessibility-controls">
-        <strong>Tùy chỉnh hiển thị:</strong>
         <div>
             <button id="decrease-font" title="Giảm cỡ chữ">-</button>
             <span>Cỡ chữ</span>
@@ -51,21 +50,18 @@
     </div>
 
     <article itemprop="articleBody">
-        <div id="metadata-section-sila-trans">    
-            <p id='url_ori_sila_trans'><strong>URL bài gốc</strong>: <a href='{{ORIGINAL_URL}}' target='_blank'>{{ORIGINAL_URL}}</a></p>
-            <p id='date_sila_trans'><strong>Thời điểm bản dịch được tạo</strong>: {{DATE}}</p>
-            <p id="model_ai_sila_trans"><strong>Model AI</strong>: {{MODEL}}<span class="info-icon-sila-trans" data-tooltip="Model AI có ảnh hưởng lớn nhất đến chất lượng bản dịch">i</span></p>
-            <p id="tempe_sila_trans"><strong>Temperature:</strong> {{TEMP}}</p>                       
-            <p id="tokenEnglishP"><strong>Số lượng token input</strong> (ước tính): {{TOKENS_IN}}</p>
-            <p id="tokenVietnameseP"><strong>Số lượng token output</strong> (ước tính): {{TOKENS_OUT}}</p>
-            <div id='AImistakesDiv'>Dịch bằng AI có thể có sai sót. Hãy thuê người dịch với văn bản quan trọng.</div>
-        </div>
-        
-        <button id="toggleButtonPromptSystem">Xem System Instructions / Prompt</button>    
-        <div id="prompt_system_sila_trans">    
-            <h5>System Instructions</h5><pre id="system_content_sila_trans">{{SYSTEM_PROMPT}}</pre>
-            <h5>Prompt</h5><pre id="prompt_content_sila_trans">{{USER_PROMPT}}</pre>
-        </div>                         
+        <details class="metadata-accordion">
+            <summary>ℹ️ Thông tin bản dịch</summary>
+            <div id="metadata-section-sila-trans" class="metadata-content">    
+                <p id='url_ori_sila_trans'><strong>URL bài gốc</strong>: <a href='{{ORIGINAL_URL}}' target='_blank'>{{ORIGINAL_URL}}</a></p>
+                <p id='date_sila_trans'><strong>Thời điểm bản dịch được tạo</strong>: {{DATE}}</p>
+                <p id="model_ai_sila_trans"><strong>Model AI</strong>: {{MODEL}}<span class="info-icon-sila-trans" data-tooltip="Model AI có ảnh hưởng lớn nhất đến chất lượng bản dịch">i</span></p>
+                <p id="tempe_sila_trans"><strong>Temperature:</strong> {{TEMP}}</p>                       
+                <p id="tokenEnglishP"><strong>Số lượng token input</strong> (ước tính): {{TOKENS_IN}}</p>
+                <p id="tokenVietnameseP"><strong>Số lượng token output</strong> (ước tính): {{TOKENS_OUT}}</p>
+                <div id='AImistakesDiv'>Dịch bằng AI có thể có sai sót. Hãy thuê người dịch với văn bản quan trọng.</div>
+            </div>
+        </details>
         
         <div id="translated-content">
             {{TRANSLATED_CONTENT}}
