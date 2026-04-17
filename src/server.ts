@@ -53,6 +53,21 @@ app.post('/api/extract', async (req, res) => {
     let parsedDOM: any = parseHTML(cleanHtml);
     let doc: any = parsedDOM.document;
 
+    // CHIẾN LƯỢC 3: Lột vỏ ảnh (Unwrap Images)
+    // Tìm các thẻ <img> nằm trong <a> (ví dụ: hiệu ứng Lightbox xem ảnh to).
+    // Nếu thẻ <a> không chứa đoạn văn bản nào (chỉ bọc ảnh), thế mạng thẻ <a> bằng chính <img>.
+    // Ngăn chặn triệt để lỗi vỡ Markdown lồng nhau khi đưa qua Turndown.
+    const images = Array.from(doc.querySelectorAll('img'));
+    for (const img of images as any[]) {
+      const parentLink = img.closest('a');
+      if (parentLink) {
+        const textContent = parentLink.textContent || '';
+        if (textContent.trim().length === 0) {
+          parentLink.replaceWith(img);
+        }
+      }
+    }
+
     // Check if the page is readerable (likely an article)
     if (!isProbablyReaderable(doc)) {
       parsedDOM = null; doc = null; // Quét rác sớm

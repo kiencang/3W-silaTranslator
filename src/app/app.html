@@ -157,6 +157,17 @@
 
 
   </main>
+
+  <!-- Footer -->
+  <footer class="flex-none text-center py-4 md:py-5 text-sm text-gray-500 transition-all duration-500 ease-in-out font-medium"
+          [class.border-t]="!isZenMode()" [class.border-[#E5E7EB]]="!isZenMode()"
+          [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.py-0]="isZenMode()" [class.md:py-0]="isZenMode()" [class.overflow-hidden]="isZenMode()" [class.border-none]="isZenMode()"
+          [class.max-h-[100px]]="!isZenMode()" [class.opacity-100]="!isZenMode()">
+    <div class="px-4">
+      v1.0.6 &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+      <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a>
+    </div>
+  </footer>
 </div>
 <router-outlet />
 

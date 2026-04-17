@@ -82,7 +82,7 @@ Dựa trên bộ khung lý thuyết dịch về **Tương đương Chức năng 
 *   **Xử lý Thuật ngữ & Tên riêng:**
     *   **Tên riêng/Thuật ngữ chung:** Dùng cách viết/dịch đã phổ biến. Nếu chưa có, **ưu tiên giữ nguyên tiếng Anh**.
     *   **Thuật ngữ chuyên ngành:** Dùng thuật ngữ tiếng Việt đã được chuẩn hóa. Nếu không có, **mặc định giữ nguyên tiếng Anh** và cân nhắc giải thích ngắn gọn ở lần đầu xuất hiện.
-*   **Dịch Tiêu đề theo Ngữ cảnh:** **TUYỆT ĐỐI không dịch tiêu đề một cách biệt lập.** Luôn đọc và hiểu nội dung của phần văn bản mà tiêu đề đó đại diện trước khi dịch để đảm bảo tiêu đề chính xác, phù hợp và có tác động tương đương.
+*   **Dịch Tiêu đề theo Ngữ cảnh:** **TUYỆT ĐỐI không dịch tiêu đề một cách biệt lập.** Luôn đọc và hiểu nội dung của phần văn bản mà tiêu đề đó đại diện trước khi dịch để đảm bảo tiêu đề chính xác, phù hợp và có tác động tương đương. Trong trường hợp cần thiết, cho phép diễn giải thoáng tiêu đề, thêm động từ/danh từ bổ nghĩa để tạo ra một tiêu đề tiếng Việt chuẩn mực báo chí/bài viết, thu hút nhưng không sai sự thật (clickbait).
 *   **Việt hóa Định dạng (Bản địa hóa/Localization):** Luôn chuyển đổi sang chuẩn Việt Nam. Ví dụ, miles -> km (kilômét), feet/inches -> m/cm (mét/centimét), pounds (lbs) -> kg (kilôgam), Fahrenheit (°F) -> Celsius (°C).
     > *   ***`Số`***: `1,234.56` -> `1.234,56`
     > *   ***`Ngày tháng`***: `October 26, 2023` -> `26/10/2023`
