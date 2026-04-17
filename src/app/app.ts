@@ -34,6 +34,7 @@ export class App {
   rawHtmlString = signal('');
   toasts = signal<Toast[]>([]);
   translationTime = signal(0);
+  isZenMode = signal(false);
   
   formattedTime = computed(() => {
     const t = this.translationTime();

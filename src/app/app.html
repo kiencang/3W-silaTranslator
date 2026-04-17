@@ -1,51 +1,66 @@
-<div class="min-h-screen bg-[#F8F9FA] text-[#1A1A1B] font-sans flex flex-col">
-  <header class="flex-none bg-white/90 backdrop-blur-md border-b border-[#E5E7EB] sticky top-0 z-50 px-4 md:px-10 py-2 transition-all duration-300">
+<div class="min-h-screen bg-[#F8F9FA] text-[#1A1A1B] font-sans flex flex-col transition-colors duration-500">
+  
+  <!-- Zen Mode Pull-down Handle -->
+  @if (isZenMode()) {
+    <div class="fixed top-0 right-4 md:right-10 z-[100] animate-in slide-in-from-top fade-in duration-300">
+      <button (click)="isZenMode.set(false)" title="Thoát chế độ Zen Mode" class="w-12 h-10 md:w-14 md:h-12 bg-gray-800/90 hover:bg-black border-none text-white flex items-center justify-center rounded-b-xl backdrop-blur-md shadow-lg transition-all cursor-pointer outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+    </div>
+  }
+
+  <header class="flex-none bg-white/90 backdrop-blur-md sticky top-0 z-50 px-4 md:px-10 transition-all duration-500 ease-in-out origin-top border-[#E5E7EB]"
+          [class.py-2]="!isZenMode()" [class.border-b]="!isZenMode()"
+          [class.max-h-[200px]]="!isZenMode()" [class.opacity-100]="!isZenMode()" [class.overflow-visible]="!isZenMode()"
+          [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.py-0]="isZenMode()" [class.border-none]="isZenMode()" [class.overflow-hidden]="isZenMode()">
     <div class="max-w-[1240px] mx-auto flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 md:gap-8">
       
       <!-- Logo & Temperature Block -->
-      <div class="flex items-center gap-4 md:gap-5 justify-center md:justify-start">
-        <!-- 3 Vertical Dots for Temperature -->
-        <div class="flex flex-col gap-2.5">
-          <div class="relative group flex items-center">
+      <div class="flex flex-col items-center md:items-start justify-center gap-1.5 md:gap-2">
+        <!-- Logo -->
+        <div class="font-sans font-black text-lg md:text-xl text-[#1A1A1B] tracking-tight whitespace-nowrap">3W silaTranslator</div>
+        
+        <!-- 3 Horizontal Dots for Temperature -->
+        <div class="flex flex-row gap-2.5">
+          <div class="relative group flex items-center justify-center">
             <button (click)="temperature.set(0.3)"
                     class="w-3 h-3 rounded-full bg-slate-900 transition-all border-none cursor-pointer"
                     [class.ring-2]="temperature() === 0.3" [class.ring-offset-1]="temperature() === 0.3" [class.ring-slate-900]="temperature() === 0.3">
             </button>
-            <div class="absolute left-full ml-3 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
+            <div class="absolute top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
               Sát nghĩa (0.3)
-              <div class="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900"></div>
+              <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
             </div>
           </div>
 
-          <div class="relative group flex items-center">
+          <div class="relative group flex items-center justify-center">
             <button (click)="temperature.set(0.5)"
                     class="w-3 h-3 rounded-full bg-[#0066FF] transition-all border-none cursor-pointer"
                     [class.ring-2]="temperature() === 0.5" [class.ring-offset-1]="temperature() === 0.5" [class.ring-[#0066FF]]="temperature() === 0.5">
             </button>
-            <div class="absolute left-full ml-3 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
+            <div class="absolute top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
               Cân bằng (0.5)
-              <div class="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900"></div>
+              <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
             </div>
           </div>
 
-          <div class="relative group flex items-center">
+          <div class="relative group flex items-center justify-center">
             <button (click)="temperature.set(0.7)"
                     class="w-3 h-3 rounded-full bg-red-500 transition-all border-none cursor-pointer"
                     [class.ring-2]="temperature() === 0.7" [class.ring-offset-1]="temperature() === 0.7" [class.ring-red-500]="temperature() === 0.7">
             </button>
-            <div class="absolute left-full ml-3 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
+            <div class="absolute top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
               Uyển chuyển (0.7)
-              <div class="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900"></div>
+              <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
             </div>
           </div>
         </div>
-        
-        <!-- Logo -->
-        <div class="font-serif font-black text-2xl text-[#1A1A1B] tracking-tight whitespace-nowrap">3W silaTranslator</div>
       </div>
 
       <!-- Search Bar Block -->
-      <div class="flex-1 w-full max-w-full md:max-w-[600px] xl:max-w-[720px] bg-[#F3F4F6] p-1.5 rounded-xl border border-transparent focus-within:border-[#E5E7EB] focus-within:bg-white focus-within:shadow-sm flex flex-col md:flex-row items-stretch md:items-center transition-all gap-1.5 md:gap-0 mx-auto md:mx-0">
+      <div class="flex-1 w-full max-w-full md:max-w-[480px] lg:max-w-[600px] xl:max-w-[840px] bg-[#F3F4F6] p-1.5 rounded-xl border border-transparent focus-within:border-[#E5E7EB] focus-within:bg-white focus-within:shadow-sm flex flex-col md:flex-row items-stretch md:items-center transition-all gap-1.5 md:gap-0 mx-auto md:mx-0">
         <input 
           type="text" 
           [(ngModel)]="url"
@@ -112,18 +127,30 @@
 
     @if (fullHtmlString() && !isLoading()) {
       <div class="w-full flex-1 flex flex-col bg-white">
-        <div class="px-5 py-2 md:py-2.5 border-b border-[#E5E7EB] flex justify-between items-center bg-[#F8F9FA] shrink-0 sticky top-[72px] md:top-[68px] z-40">
+        <div class="px-5 border-[#E5E7EB] flex justify-between items-center bg-[#F8F9FA] shrink-0 sticky z-40 transition-all duration-500 ease-in-out origin-top"
+             [class.top-[72px]]="!isZenMode()" [class.md:top-[68px]]="!isZenMode()" [class.top-0]="isZenMode()"
+             [class.py-2]="!isZenMode()" [class.md:py-2.5]="!isZenMode()" [class.border-b]="!isZenMode()"
+             [class.max-h-[100px]]="!isZenMode()" [class.opacity-100]="!isZenMode()" [class.overflow-visible]="!isZenMode()"
+             [class.py-0]="isZenMode()" [class.border-none]="isZenMode()" [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.overflow-hidden]="isZenMode()">
           <h2 class="text-base md:text-lg font-bold truncate mr-4 text-[#1A1A1B] flex-1">{{ translatedTitle() }}</h2>
-          <button (click)="downloadHtml()" class="bg-[#10B981] text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium hover:bg-[#059669] transition-colors whitespace-nowrap flex items-center gap-2 shadow-sm shrink-0 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-            <span class="hidden md:inline">Tải bản dịch (.html)</span>
-            <span class="inline md:hidden">Tải về</span>
-          </button>
+          <div class="flex items-center gap-2 md:gap-3 shrink-0">
+            <button (click)="isZenMode.set(true)" title="Chế độ đọc tĩnh tâm (Thu gọn Header)" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-[#E5E7EB] hover:bg-[#D1D5DB] text-gray-700 font-medium transition-colors border-none cursor-pointer flex items-center justify-center shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+              </svg>
+            </button>
+            <button (click)="downloadHtml()" class="bg-[#10B981] text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium hover:bg-[#059669] transition-colors whitespace-nowrap flex items-center gap-2 shadow-sm text-sm border-none cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+              <span class="hidden md:inline">Tải bản dịch (.html)</span>
+              <span class="inline md:hidden">Tải về</span>
+            </button>
+          </div>
         </div>
-        <div class="flex-1 w-full bg-white">
-          <iframe [srcdoc]="fullHtmlString()" class="w-full h-[calc(100vh-140px)] border-none block"></iframe>
+        <div class="flex-1 w-full bg-white transition-all duration-500 ease-in-out">
+          <iframe [srcdoc]="fullHtmlString()" class="w-full border-none block transition-all duration-500 ease-in-out" 
+                  [style.height]="isZenMode() ? '100vh' : 'calc(100vh - 140px)'"></iframe>
         </div>
       </div>
     }
