@@ -112,10 +112,10 @@
 
     @if (fullHtmlString() && !isLoading()) {
       <div class="w-full flex-1 flex flex-col bg-white">
-        <div class="px-6 py-4 border-b border-[#E5E7EB] flex justify-between items-center bg-[#F8F9FA] shrink-0 sticky top-[72px] md:top-[68px] z-40">
-          <h2 class="text-lg md:text-xl font-bold truncate mr-4 text-[#1A1A1B] flex-1">{{ translatedTitle() }}</h2>
-          <button (click)="downloadHtml()" class="bg-[#10B981] text-white px-4 md:px-5 py-2.5 rounded-xl font-medium hover:bg-[#059669] transition-colors whitespace-nowrap flex items-center gap-2 shadow-sm shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <div class="px-5 py-2 md:py-2.5 border-b border-[#E5E7EB] flex justify-between items-center bg-[#F8F9FA] shrink-0 sticky top-[72px] md:top-[68px] z-40">
+          <h2 class="text-base md:text-lg font-bold truncate mr-4 text-[#1A1A1B] flex-1">{{ translatedTitle() }}</h2>
+          <button (click)="downloadHtml()" class="bg-[#10B981] text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium hover:bg-[#059669] transition-colors whitespace-nowrap flex items-center gap-2 shadow-sm shrink-0 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
             <span class="hidden md:inline">Tải bản dịch (.html)</span>
