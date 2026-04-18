@@ -36,6 +36,9 @@ export class App {
   translationTime = signal(0);
   isZenMode = signal(false);
   
+  searchQuery = signal('');
+  isSearchLoading = signal(false);
+  
   formattedTime = computed(() => {
     const t = this.translationTime();
     const m = Math.floor(t / 60).toString().padStart(2, '0');
@@ -214,6 +217,92 @@ export class App {
     } finally {
       if (this.timerInterval) clearInterval(this.timerInterval);
       this.isLoading.set(false);
+    }
+  }
+
+  async translateSearchQuery() {
+    let query = this.searchQuery().trim();
+    
+    // Group 1: Validate input
+    if (!query) {
+      this.showToast('Vui lòng nhập từ khóa bạn muốn tìm kiếm.', 'error');
+      return;
+    }
+    
+    if (query.length > 300) {
+      this.showToast('Từ khóa quá dài. Vui lòng nhập ngắn gọn để Google tìm kiếm chính xác nhất.', 'error');
+      return;
+    }
+
+    const urlPattern = /^(https?:\/\/|www\.)|(\.[a-z]{2,}(\/|$))/i;
+    // Basic check for URL string. If it looks like a URL, notify user to use "Dịch Web"
+    if (urlPattern.test(query)) {
+      this.showToast('Đây là khu vực dịch từ khóa để tìm kiếm, nếu bạn muốn dịch web thì sử dụng tính năng ở trên.', 'info');
+      return;
+    }
+
+    this.isSearchLoading.set(true);
+
+    try {
+      const systemInstruction = `Bạn là một AI chuyên dịch truy vấn tìm kiếm (search queries) từ tiếng Việt sang tiếng Anh. Nhiệm vụ DUY NHẤT của bạn là trả về MỘT (1) truy vấn tìm kiếm tiếng Anh hiệu quả nhất, dựa trên đánh giá của bạn về ý định (search intent) và cách tìm kiếm phổ biến nhất trong tiếng Anh.
+
+QUY TẮC BẮT BUỘC TUÂN THỦ:
+1.  **CHỈ MỘT KẾT QUẢ:** Luôn luôn và chỉ luôn trả về DUY NHẤT MỘT chuỗi văn bản là bản dịch truy vấn tốt nhất. KHÔNG được đưa ra nhiều lựa chọn.
+2.  **CHỈ VĂN BẢN THUẦN TÚY:** Kết quả trả về CHỈ BAO GỒM văn bản tiếng Anh đã dịch. TUYỆT ĐỐI KHÔNG thêm bất kỳ lời chào, lời giải thích, ghi chú, dấu ngoặc kép bao quanh, định dạng markdown, hoặc bất kỳ ký tự/từ ngữ nào khác ngoài chính truy vấn đã dịch.
+3.  **ƯU TIÊN HIỆU QUẢ TÌM KIẾM:** Mục tiêu là tạo ra truy vấn mà người dùng tiếng Anh thực sự sẽ gõ vào máy tìm kiếm. Ưu tiên từ khóa cốt lõi, ý định, sự ngắn gọn, và các cụm từ tìm kiếm phổ biến (how to, best, near me, price, review, etc.).
+4.  **ĐỘ CHÍNH XÁC VỀ Ý ĐỊNH:** Nắm bắt chính xác nhất ý định đằng sau truy vấn gốc tiếng Việt. Nếu mơ hồ, hãy chọn cách diễn giải phổ biến hoặc khả năng cao nhất.
+5.  **ĐỊNH DẠNG ĐẦU RA:** Đảm bảo đầu ra là một chuỗi văn bản thuần túy (plain text string) duy nhất, sẵn sàng để sao chép và dán trực tiếp vào thanh tìm kiếm.`;
+
+      const prompt = `Provide the single best English search query translation for the following Vietnamese query. Output ONLY the raw English text, nothing else:\n[${query}]`;
+
+      // Group 2: Call Gemini API
+      const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+      const aiResponse = await ai.models.generateContent({
+        model: 'gemini-flash-latest',
+        contents: prompt,
+        config: {
+          systemInstruction: systemInstruction,
+          temperature: 0.2
+        }
+      });
+
+      let translatedQuery = aiResponse.text || '';
+      // Clean up whitespace/markdown gracefully just in case
+      translatedQuery = translatedQuery.replace(/^```[a-z]*\n?/, '').replace(/\n?```$/, '').trim();
+      
+      // Group 3: Popup Blocker & unexpected empty result
+      if (!translatedQuery) {
+        this.showToast('Có chút trục trặc khi trích xuất kết quả. Vui lòng thử lại từ khóa khác.', 'error');
+        return;
+      }
+
+      const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(translatedQuery)}`;
+      const newWindow = window.open(searchUrl, '_blank');
+      
+      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+        this.showToast('Trình duyệt của bạn đang chặn mở tab mới. Vui lòng cấp quyền Popup cho trang web này để xem kết quả.', 'error');
+      } else {
+        this.searchQuery.set(''); // Clear input on success
+      }
+      
+    } catch (err: any) {
+      console.error('Search Translation error:', err);
+      let errorMessage = 'Có lỗi xảy ra trong quá trình dịch. Vui lòng thử lại.';
+      const errString = err.toString().toLowerCase();
+
+      if (errString.includes('429') || errString.includes('quota') || errString.includes('exhausted')) {
+        errorMessage = 'Bạn đã vượt quá giới hạn dịch miễn phí của AI. Vui lòng thử lại sau.';
+      } else if (errString.includes('api key not valid') || errString.includes('api_key_invalid')) {
+        errorMessage = 'API Key không hợp lệ. Vui lòng kiểm tra lại trong phần Cài đặt.';
+      } else if (errString.includes('network') || errString.includes('failed to fetch')) {
+        errorMessage = 'Lỗi kết nối mạng. Vui lòng kiểm tra lại internet của bạn.';
+      } else if (errString.includes('safety') || errString.includes('blocked')) {
+        errorMessage = 'Từ khóa bị AI từ chối dịch do vi phạm chính sách an toàn.';
+      }
+
+      this.showToast(errorMessage, 'error');
+    } finally {
+      this.isSearchLoading.set(false);
     }
   }
 
