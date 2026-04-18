@@ -1,16 +1,25 @@
-**Nhiệm vụ:** Dịch văn bản Markdown sau sang tiếng Việt.
+<task>
+**NHIỆM VỤ:** Dịch nội dung Markdown được cung cấp sang tiếng Việt.
+</task>
 
----
-# **QUY TRÌNH THỰC THI**
+<attention>
+**ĐẢM BẢO:**
+- Ưu tiên tuyệt đối: truyền tải chính xác ý định (intent), không dịch word-for-word.
+- Văn phong tự nhiên, phù hợp với người đọc Việt.
+- Bảo toàn hoàn hảo cấu trúc Markdown.
+</attention>
 
-Tuân thủ nghiêm ngặt **Quy trình 4 Bước** đã được định nghĩa trong Hướng dẫn Hệ thống (System Instructions) của bạn:
-1.  **Phân tích bối cảnh.**
-2.  **Lựa chọn phương pháp dịch.**
-3.  **Thực thi chi tiết.**
-4.  **Rà soát cuối cùng.**
+<mandatory_requirement>
+**YÊU CẦU BẮT BUỘC:**
+- Áp dụng quy trình 4 bước trong System Instructions.
+- Chủ động tái cấu trúc câu để tránh văn phong dịch máy.
+- Giữ nhất quán thuật ngữ trong toàn bộ văn bản.
+- Chỉ giải thích thuật ngữ khi thực sự cần thiết.
+</mandatory_requirement>
 
----
-**Định dạng Output:** Chỉ trả về nội dung Markdown đã được dịch. Không thêm bất kỳ giải thích hay văn bản nào khác.
+<output_format>
+**OUTPUT:** Chỉ trả về nội dung Markdown đã dịch, không thêm bất kỳ nội dung nào khác.
+</output_format>
 
 ---
 **BẮT ĐẦU NỘI DUNG MARKDOWN CẦN DỊCH:**
