@@ -320,7 +320,7 @@ export class App {
     const urlPattern = /^(https?:\/\/|www\.)|(\.[a-z]{2,}(\/|$))/i;
     // Basic check for URL string. If it looks like a URL, notify user to use "Dịch Web"
     if (urlPattern.test(query)) {
-      this.showToast('Đây là khu vực dịch từ khóa để tìm kiếm, nếu bạn muốn dịch web thì sử dụng tính năng ở trên.', 'info');
+      this.showToast('Đây là khu vực dịch từ khóa để tìm kiếm, nếu bạn muốn dịch web thì sử dụng tính năng ở phần đầu trang [chỗ có nút "Dịch Web"].', 'info');
       return;
     }
 
