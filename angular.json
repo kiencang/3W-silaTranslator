@@ -37,7 +37,10 @@
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"
-            }
+            },
+            "allowedCommonJsDependencies": [
+              "node-domexception"
+            ]
           },
           "configurations": {
             "production": {
