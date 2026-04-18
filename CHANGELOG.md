@@ -5,6 +5,12 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.10] - 2026-04-19
+
+### Fixed
+- Chỉnh sửa kích cỡ nút thoát khỏi chế độ Zen mode cho nó nhỏ lại.
+- Điều chỉnh vị trí của nút mục lục để nó đỡ tranh chấp không gian với nút Thoát Zen mode.
+
 ## [v1.0.9] - 2026-04-19
 
 ### Added
