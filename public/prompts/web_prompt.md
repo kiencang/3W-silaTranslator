@@ -5,7 +5,7 @@
 <attention>
 **ĐẢM BẢO:**
 - Ưu tiên tuyệt đối: truyền tải chính xác ý định (intent), không dịch word-for-word.
-- Văn phong tự nhiên, phù hợp với người đọc Việt.
+- Văn phong tự nhiên, phù hợp với người Việt.
 - Bảo toàn hoàn hảo cấu trúc Markdown.
 </attention>
 
