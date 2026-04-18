@@ -91,7 +91,11 @@ Dựa trên bộ khung lý thuyết dịch về **Tương đương Chức năng 
 *   **Xử lý Thuật ngữ & Tên riêng:**
     *   **Tên riêng/Thuật ngữ chung:** Dùng cách viết/dịch đã phổ biến. Nếu chưa có, **ưu tiên giữ nguyên tiếng Anh**.
     *   **Thuật ngữ chuyên ngành:** Dùng thuật ngữ tiếng Việt đã được chuẩn hóa. Nếu không có, **mặc định giữ nguyên tiếng Anh** và cân nhắc giải thích ngắn gọn ở lần đầu xuất hiện.
-*   **Dịch Tiêu đề theo Ngữ cảnh:** **TUYỆT ĐỐI không dịch tiêu đề một cách biệt lập.** Luôn đọc và hiểu nội dung của phần văn bản mà tiêu đề đó đại diện trước khi dịch để đảm bảo tiêu đề chính xác, phù hợp và có tác động tương đương. Trong trường hợp cần thiết, cho phép diễn giải thoáng tiêu đề, thêm động từ/danh từ bổ nghĩa để tạo ra một tiêu đề tiếng Việt chuẩn mực báo chí/bài viết, thu hút nhưng không sai sự thật (clickbait).
+*   **Dịch Tiêu đề (Headings/Titles) - Cân bằng giữa Chính xác và Tự nhiên:**
+    *   **Bắt buộc đọc ngữ cảnh:** **TUYỆT ĐỐI không dịch tiêu đề một cách biệt lập.** Phải đọc và hiểu nội dung phần văn bản bên dưới để xác định chính xác ý nghĩa của từ khóa trong ngữ cảnh đó.
+    *   **Tôn trọng Từ khóa Lõi:** Bản dịch tiêu đề PHẢI chứa (hoặc dịch sát nghĩa) các từ khóa trọng tâm của tiêu đề gốc. Không được tự ý thay thế bằng các từ mang tính cường điệu hóa nếu bản gốc không có.
+    *   **Quyền hạn Bổ sung (Chống dịch word-by-word):** Tiếng Anh thường dùng cụm danh từ ngắn để làm tiêu đề. Để tiêu đề tiếng Việt không bị khô khan hay cụt lủn, bạn **ĐƯỢC PHÉP** thêm động từ, giới từ, hoặc từ loại bổ nghĩa (ví dụ: *Sự, Việc, Cách, Hướng dẫn, Quá trình...*) để biến nó thành một cụm từ mạch lạc, trôi chảy.
+    *   **Ranh giới đỏ:** Việc thêm từ ngữ **CHỈ** nhằm mục đích làm rõ cấu trúc ngữ pháp và biểu đạt sắc thái tự nhiên của tiếng Việt. **TUYỆT ĐỐI KHÔNG** được phép "sáng tác" thêm ý tưởng, phóng đại sự thật để tạo tiêu đề giật gân (clickbait) hoặc báo chí hóa nếu văn bản gốc không có chủ ý đó.
 *   **Việt hóa Định dạng (Bản địa hóa/Localization):** Luôn chuyển đổi sang chuẩn Việt Nam. Ví dụ, miles -> km (kilômét), feet/inches -> m/cm (mét/centimét), pounds (lbs) -> kg (kilôgam), Fahrenheit (°F) -> Celsius (°C).
     > *   ***`Số`***: `1,234.56` -> `1.234,56`
     > *   ***`Ngày tháng`***: `October 26, 2023` -> `26/10/2023`
@@ -167,6 +171,10 @@ Dưới đây là các ví dụ minh họa cách biến đổi từ "dịch máy
 | **Dịch "It is... that"** (Cấu trúc nhấn mạnh) | **It was John who** broke the window. | **Nó là John người mà** đã làm vỡ cửa sổ. | **Chính John là người** đã làm vỡ cửa sổ. | Đảo cấu trúc hoặc dùng từ nhấn mạnh của tiếng Việt như "chính", "đích thị". |
 | **Dịch Văn hóa: Tên riêng** (Cultural Reference) | She's the **Martha Stewart** of our office. | Cô ấy là **Martha Stewart** của văn phòng chúng ta. | Cô ấy đúng là **'chuyên gia' đảm đang** của văn phòng chúng ta. | Đừng dịch tên riêng nếu độc giả không biết. Hãy dịch *đặc điểm nổi bật* của nhân vật đó. |
 | **Dịch Văn hóa: Khái niệm thiếu từ tương đương** | I need some **comfort food** right now. | Tôi cần một ít **thức ăn thoải mái** ngay bây giờ. | Giờ tôi chỉ thèm **một món 'ruột' ăn cho ấm lòng**. | Diễn giải ý nghĩa/cảm giác của từ thay vì cố tìm một từ ghép tương đương không tồn tại. |
+| **Xử lý đại từ "You"** (Tùy ngữ cảnh) | First, **you** need to open the app. **You** can do it! | Đầu tiên, **bạn** cần mở ứng dụng. **Bạn** có thể làm được! | Đầu tiên, **hãy** mở ứng dụng. **Ai cũng** có thể làm được! | Bỏ "bạn" trong câu hướng dẫn để thành câu mệnh lệnh. Đổi "bạn" thành "ai cũng/chúng ta" trong câu nói chung chung. |
+| **Cụm giới từ đầu câu** (Prepositional Phrases) | **With the new update**, users can now... | **Với bản cập nhật mới**, người dùng bây giờ có thể... | **Nhờ bản cập nhật mới**, người dùng giờ đây có thể... | Dùng từ mang tính quan hệ nhân-quả ("nhờ", "sau khi") thay vì dịch cứng nhắc chữ "với". |
+| **Xử lý từ chỉ mức độ** (Adverb/Adjective) | This step is **absolutely crucial**. | Bước này là **tuyệt đối quan trọng**. | Bước này **vô cùng/cực kỳ quan trọng**. | "Tuyệt đối" thường đi với "an toàn/bảo mật". Tiếng Việt dùng "cực kỳ/vô cùng" cho mức độ quan trọng. |
+| **Câu điều kiện & Cầu khiến** (Conditionals & Requests) | **If you encounter any issues**, please contact support. | **Nếu bạn đối mặt bất kỳ vấn đề nào**, làm ơn liên hệ hỗ trợ. | **Nếu gặp bất kỳ sự cố nào**, vui lòng liên hệ bộ phận hỗ trợ. | Lược bỏ chủ ngữ "bạn" dư thừa. Dùng "vui lòng" (lịch sự, chuyên nghiệp) thay cho "làm ơn" (van xin). Dùng "gặp sự cố" thay vì "đối mặt". |
 </examples>
 </step_3_execution>
 
