@@ -38,6 +38,11 @@ export class App {
   
   searchQuery = signal('');
   isSearchLoading = signal(false);
+
+  favoriteSites = signal<string[]>([]);
+  isSitesModalOpen = signal(false);
+  modalSiteInputs = signal<{id: number, url: string}[]>([]);
+  private modalInputIdCounter = 0;
   
   formattedTime = computed(() => {
     const t = this.translationTime();
@@ -53,6 +58,84 @@ export class App {
   private cachedTemplateHtml = '';
   private cachedTemplateCss = '';
   private cachedTemplateJs = '';
+
+  constructor() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const savedSites = localStorage.getItem('wpsila_fav_sites');
+      if (savedSites) {
+        try {
+          const parsed = JSON.parse(savedSites);
+          if (Array.isArray(parsed)) {
+            this.favoriteSites.set(parsed);
+          }
+        } catch (e) {}
+      }
+    }
+  }
+
+  getDomainName(url: string): string {
+    try {
+      let cleanUrl = url.trim();
+      if (!/^https?:\/\//i.test(cleanUrl)) {
+        cleanUrl = 'https://' + cleanUrl;
+      }
+      const domain = new URL(cleanUrl).hostname;
+      return domain.replace(/^www\./i, '');
+    } catch (e) {
+      return url;
+    }
+  }
+
+  openSitesModal() {
+    const current = this.favoriteSites();
+    let initialInputs: {id: number, url: string}[] = [];
+    if (current.length === 0) {
+      initialInputs = [
+        { id: this.modalInputIdCounter++, url: '' },
+        { id: this.modalInputIdCounter++, url: '' },
+        { id: this.modalInputIdCounter++, url: '' }
+      ];
+    } else {
+      initialInputs = current.map(url => ({ id: this.modalInputIdCounter++, url }));
+    }
+    this.modalSiteInputs.set(initialInputs);
+    this.isSitesModalOpen.set(true);
+  }
+
+  addModalInput() {
+    if (this.modalSiteInputs().length < 10) {
+      this.modalSiteInputs.update(inputs => [...inputs, { id: this.modalInputIdCounter++, url: '' }]);
+    }
+  }
+
+  removeModalInput(id: number) {
+    this.modalSiteInputs.update(inputs => inputs.filter(item => item.id !== id));
+  }
+
+  updateModalInput(id: number, value: string) {
+    this.modalSiteInputs.update(inputs => 
+      inputs.map(item => item.id === id ? { ...item, url: value } : item)
+    );
+  }
+
+  saveSites() {
+    const validSites = this.modalSiteInputs()
+      .map(item => item.url.trim())
+      .filter(url => url.length > 0)
+      .map(url => {
+        if (!/^https?:\/\//i.test(url)) {
+          return 'https://' + url;
+        }
+        return url;
+      });
+
+    this.favoriteSites.set(validSites);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('wpsila_fav_sites', JSON.stringify(validSites));
+    }
+    this.isSitesModalOpen.set(false);
+    this.showToast('Đã lưu danh sách website!', 'success');
+  }
 
   showToast(message: string, type: 'success' | 'error' | 'info' = 'info') {
     const id = this.toastIdCounter++;
