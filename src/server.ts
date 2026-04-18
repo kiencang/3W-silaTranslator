@@ -19,22 +19,28 @@ app.use(express.json({ limit: '50mb' }));
 
 app.post('/api/extract', async (req, res) => {
   try {
-    const { url } = req.body;
+    const { url, htmlContent } = req.body;
     if (!url) {
       res.status(400).json({ error: 'URL is required' });
       return;
     }
 
-    // 1. Fetch the HTML
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    let rawHtml = '';
+
+    // 1. Dùng nội dung HTML đẩy lên (Bypass) hoặc Tự Fetch
+    if (htmlContent && typeof htmlContent === 'string') {
+      rawHtml = htmlContent;
+    } else {
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch URL: ${response.statusText}`);
       }
-    });
-    if (!response.ok) {
-      throw new Error(`Failed to fetch URL: ${response.statusText}`);
+      rawHtml = await response.text();
     }
-    const rawHtml = await response.text();
 
     // CHIẾN LƯỢC 2: Tiền xử lý - Cắt gọt thẻ <script> và <style> (giữ lại <svg>) 
     // để làm nhẹ DOM xuống 80% bộ nhớ.
@@ -71,7 +77,16 @@ app.post('/api/extract', async (req, res) => {
     // Check if the page is readerable (likely an article)
     if (!isProbablyReaderable(doc)) {
       parsedDOM = null; doc = null; // Quét rác sớm
-      res.status(400).json({ error: 'Trang web này không có cấu trúc của một bài viết/bài báo. Vui lòng thử lại với một link nội dung cụ thể.' });
+      let errorMessage = 'Trang web này không có cấu trúc của một bài viết/bài báo. Vui lòng thử lại với một link nội dung cụ thể.';
+      
+      const firewallKeywords = ['cloudflare', 'complete the challenge', 'unusual activity', 'access denied', 'prove you are human', 'robot check'];
+      const lowerHtml = cleanHtml.toLowerCase();
+      
+      if (firewallKeywords.some(keyword => lowerHtml.includes(keyword))) {
+        errorMessage += ' Trang web này có thể đang sử dụng tường lửa chống Bot chặn tự động trích xuất nội dung. Chúng tôi không thể truy cập bài viết.';
+      }
+      
+      res.status(400).json({ error: errorMessage });
       return;
     }
 

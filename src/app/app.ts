@@ -39,6 +39,9 @@ export class App {
   searchQuery = signal('');
   isSearchLoading = signal(false);
 
+  uploadedHtmlFile = signal<File | null>(null);
+  uploadedHtmlContent = signal<string>('');
+
   favoriteSites = signal<string[]>([]);
   isSitesModalOpen = signal(false);
   modalSiteInputs = signal<{id: number, url: string}[]>([]);
@@ -71,6 +74,30 @@ export class App {
         } catch (e) {}
       }
     }
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0] as File;
+    if (!file) return;
+
+    if (file.size > 500 * 1024) {
+      this.showToast("File HTML quá lớn (trên 500KB do dính ảnh/mã rác). Bạn vui lòng tải lại/lưu lại trang web với tùy chọn 'Webpage, HTML Only' (Chỉ HTML) nhé!", "error");
+      event.target.value = '';
+      return;
+    }
+
+    this.uploadedHtmlFile.set(file);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.uploadedHtmlContent.set(e.target?.result as string);
+      event.target.value = '';
+    };
+    reader.readAsText(file);
+  }
+
+  removeUploadedFile() {
+    this.uploadedHtmlFile.set(null);
+    this.uploadedHtmlContent.set('');
   }
 
   getDomainName(url: string): string {
@@ -206,9 +233,14 @@ export class App {
       // 0. Fetch prompts
       await this.fetchPrompts();
 
-      // 1. Extract content from the URL via our server proxy (Server now returns Markdown directly and performs Readerable + Length checks)
+      // 1. Extract content via our server proxy (passing HTML content if user uploaded a file)
+      const payload: any = { url: originalUrl };
+      if (this.uploadedHtmlContent()) {
+        payload.htmlContent = this.uploadedHtmlContent();
+      }
+
       const extraction = await firstValueFrom(
-        this.http.post<{title: string, content: string}>('/api/extract', { url: originalUrl })
+        this.http.post<{title: string, content: string}>('/api/extract', payload)
       );
       
       this.translatedTitle.set(extraction.title);
