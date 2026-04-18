@@ -5,6 +5,14 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.12] - 2026-04-19
+
+### Fixed
+- Thêm thông báo lỗi nếu website đó bị chặn không truy cập được (ví dụ dùng cloudflare).
+
+### Added
+- Bổ sung tính năng dịch html, người dùng vẫn vào được các website chặn bot, họ tải file về và up lên để dịch.
+
 ## [v1.0.11] - 2026-04-19
 
 ### Fixed
