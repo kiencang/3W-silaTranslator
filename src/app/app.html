@@ -3,7 +3,7 @@
   <!-- Zen Mode Pull-down Handle -->
   @if (isZenMode()) {
     <div class="fixed top-0 right-4 md:right-10 z-[100] animate-in slide-in-from-top fade-in duration-300">
-      <button (click)="isZenMode.set(false)" title="Thoát chế độ Zen Mode" class="w-10 h-8 md:w-11 md:h-9 bg-gray-800/90 hover:bg-black border-none text-white flex items-center justify-center rounded-b-xl backdrop-blur-md shadow-lg transition-all cursor-pointer outline-none">
+      <button (click)="isZenMode.set(false)" aria-label="Thoát chế độ Zen Mode" title="Thoát chế độ Zen Mode" class="w-10 h-8 md:w-11 md:h-9 bg-gray-800/90 hover:bg-black border-none text-white flex items-center justify-center rounded-b-xl backdrop-blur-md shadow-lg transition-all cursor-pointer outline-none">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
@@ -26,6 +26,7 @@
         <div class="flex flex-row gap-2.5">
           <div class="relative group flex items-center justify-center">
             <button (click)="temperature.set(0.3)"
+                    aria-label="Chọn giọng dịch: Sát nghĩa (0.3)"
                     class="w-3 h-3 rounded-full bg-slate-900 transition-all border-none cursor-pointer"
                     [class.ring-2]="temperature() === 0.3" [class.ring-offset-1]="temperature() === 0.3" [class.ring-slate-900]="temperature() === 0.3">
             </button>
@@ -37,6 +38,7 @@
 
           <div class="relative group flex items-center justify-center">
             <button (click)="temperature.set(0.5)"
+                    aria-label="Chọn giọng dịch: Cân bằng (0.5)"
                     class="w-3 h-3 rounded-full bg-[#0066FF] transition-all border-none cursor-pointer"
                     [class.ring-2]="temperature() === 0.5" [class.ring-offset-1]="temperature() === 0.5" [class.ring-[#0066FF]]="temperature() === 0.5">
             </button>
@@ -48,6 +50,7 @@
 
           <div class="relative group flex items-center justify-center">
             <button (click)="temperature.set(0.7)"
+                    aria-label="Chọn giọng dịch: Uyển chuyển (0.7)"
                     class="w-3 h-3 rounded-full bg-red-500 transition-all border-none cursor-pointer"
                     [class.ring-2]="temperature() === 0.7" [class.ring-offset-1]="temperature() === 0.7" [class.ring-red-500]="temperature() === 0.7">
             </button>
@@ -65,7 +68,7 @@
           @if (uploadedHtmlFile()) {
             <div class="flex items-center bg-gray-200/60 border border-gray-200 rounded-md px-2 py-1 gap-1.5 mr-2 shrink-0 shadow-sm animate-in fade-in zoom-in duration-200">
               <span class="text-[13px] text-gray-700 font-medium truncate max-w-[80px] md:max-w-[130px]" [title]="uploadedHtmlFile()?.name">📄 {{ uploadedHtmlFile()?.name }}</span>
-              <button (click)="removeUploadedFile()" class="text-gray-400 hover:text-red-500 bg-transparent border-none cursor-pointer flex items-center justify-center p-0.5 rounded transition-colors" title="Xóa file">
+              <button (click)="removeUploadedFile()" aria-label="Xóa file đã tải lên" class="text-gray-400 hover:text-red-500 bg-transparent border-none cursor-pointer flex items-center justify-center p-0.5 rounded transition-colors" title="Xóa file">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
@@ -75,17 +78,23 @@
           <input 
             type="text" 
             [(ngModel)]="url"
+            aria-label="Nhập đường dẫn website cần dịch"
             (keyup.enter)="translate()"
             class="flex-1 border-none py-2 md:py-2.5 text-sm md:text-base outline-none bg-transparent w-full placeholder:text-gray-500 min-w-[50px] truncate" 
             [placeholder]="uploadedHtmlFile() ? 'Dán URL gốc của website vào đây...' : 'Dán liên kết website tại đây...'">
         </div>
         
         <div class="flex items-center justify-end px-2 md:px-0">
-          <label class="cursor-pointer text-gray-400 hover:text-gray-600 p-2 flex items-center justify-center transition-colors" title="Tải lên file bài viết (.html) nếu bị chặn hoặc yêu cầu đăng nhập. (Nhấn Ctrl+S/Cmd+S tại trang gốc để lưu)">
-            <input type="file" accept=".html,.htm" class="hidden" (change)="onFileSelected($event)">
+          <label class="relative group cursor-pointer text-gray-400 hover:text-gray-600 p-2 flex items-center justify-center transition-colors">
+            <input type="file" aria-label="Tải lên file tài liệu định dạng HTML" accept=".html,.htm" class="hidden" (change)="onFileSelected($event)">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
               <path stroke-linecap="round" stroke-linejoin="round" d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13" />
             </svg>
+            <!-- Custom Tooltip -->
+            <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[280px] md:w-[320px] bg-[#1A1A1B] text-white text-[11px] md:text-xs leading-relaxed p-2.5 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 delay-500 z-50 pointer-events-none text-center font-medium">
+              Tải lên file bài viết (.html) nếu ứng dụng bị chặn không thể lấy được nội dung hoặc yêu cầu đăng nhập. (Nhấn Ctrl+S/Cmd+S tại trang gốc để lưu, chọn 'HTML only/chỉ HTML')
+              <div class="absolute bottom-full left-1/2 -translate-x-1/2 -mb-[1px] border-4 border-transparent border-b-[#1A1A1B]"></div>
+            </div>
           </label>
 
           <button 
@@ -95,7 +104,8 @@
             [class.hover:bg-blue-700]="!uploadedHtmlFile()"
             [class.bg-[#8B5CF6]]="uploadedHtmlFile()"
             [class.hover:bg-[#7C3AED]]="uploadedHtmlFile()"
-            class="w-full md:w-auto text-white border-none py-2 md:py-2.5 px-6 md:px-8 rounded-lg font-semibold text-sm md:text-base cursor-pointer transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed ml-1">
+            class="w-full md:w-auto text-white border-none py-2 md:py-2.5 px-6 md:px-8 rounded-lg font-semibold text-sm md:text-base cursor-pointer transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed ml-1"
+            [attr.aria-label]="uploadedHtmlFile() ? 'Dịch từ file HTML đã chọn' : 'Bắt đầu dịch đường dẫn website'">
             @if (isLoading()) {
               Đang dịch...
             } @else {
@@ -108,34 +118,28 @@
   </header>
 
   <main class="flex-1 flex flex-col w-full" 
-        [class.py-10]="!fullHtmlString() || isLoading()" 
-        [class.md:py-12]="!fullHtmlString() || isLoading()" 
         [class.px-4]="!fullHtmlString() || isLoading()" 
         [class.md:px-10]="!fullHtmlString() || isLoading()"
         [class.items-center]="!fullHtmlString() || isLoading()">    @if (isLoading()) {
-      <div class="w-full max-w-[1000px] relative bg-white rounded-2xl border border-[#E5E7EB] shadow-sm overflow-hidden p-6 md:p-10 min-h-[400px] mt-4">
+      <div class="w-full max-w-[1000px] relative bg-white rounded-2xl border border-[#E5E7EB] shadow-sm overflow-hidden p-6 md:p-10 min-h-[300px] my-auto flex-none">
         <!-- Skeleton Article (Background) -->
         <div class="animate-pulse opacity-50 select-none">
           <!-- Title -->
-          <div class="h-10 bg-[#E5E7EB] rounded-xl w-3/4 mb-6"></div>
+          <div class="h-10 bg-[#E5E7EB] rounded-xl w-3/4 mb-4"></div>
           <!-- Meta / Date -->
-          <div class="h-4 bg-[#E5E7EB] rounded-md w-1/4 mb-10"></div>
+          <div class="h-4 bg-[#E5E7EB] rounded-md w-1/4 mb-5"></div>
           
           <!-- Paragraphs -->
-          <div class="space-y-4 mb-8">
+          <div class="space-y-4 mb-4">
             <div class="h-4 bg-[#E5E7EB] rounded-md w-full"></div>
             <div class="h-4 bg-[#E5E7EB] rounded-md w-[95%]"></div>
-            <div class="h-4 bg-[#E5E7EB] rounded-md w-full"></div>
             <div class="h-4 bg-[#E5E7EB] rounded-md w-[85%]"></div>
-            <div class="h-4 bg-[#E5E7EB] rounded-md w-[60%]"></div>
           </div>
           
           <div class="space-y-4">
             <div class="h-4 bg-[#E5E7EB] rounded-md w-[90%]"></div>
             <div class="h-4 bg-[#E5E7EB] rounded-md w-full"></div>
             <div class="h-4 bg-[#E5E7EB] rounded-md w-[80%]"></div>
-            <div class="h-4 bg-[#E5E7EB] rounded-md w-[95%]"></div>
-            <div class="h-4 bg-[#E5E7EB] rounded-md w-[45%]"></div>
           </div>
         </div>
 
@@ -152,10 +156,10 @@
     }
 
     @if (!fullHtmlString() && !isLoading()) {
-      <div class="w-full flex-1 flex flex-col items-center justify-center min-h-[65vh] gap-6 px-4 py-12 md:py-16">
+      <div class="w-full flex-1 flex flex-col items-center justify-center gap-6 px-4">
         
         <div class="text-center space-y-2 mb-2">
-          <h1 class="text-3xl md:text-4xl font-extrabold text-[#1A1A1B] tracking-tight">DỊCH TÌM KIẾM</h1>
+          <h1 class="text-3xl md:text-4xl font-extrabold text-[#1A1A1B] tracking-tight">Dịch Tìm Kiếm</h1>
           <p class="text-gray-500 text-sm md:text-base font-medium max-w-md mx-auto">Nhập từ khóa tiếng Việt, chúng tôi sẽ giúp bạn tìm kiếm các bài viết tiếng Anh!</p>
         </div>
 
@@ -167,12 +171,14 @@
             <input 
               type="text" 
               [(ngModel)]="searchQuery"
+              aria-label="Nhập từ khóa tiếng Việt để tìm kiếm bài viết nước ngoài"
               (keyup.enter)="translateSearchQuery()"
               class="flex-1 w-full ml-3 border-none outline-none text-base bg-transparent text-[#1A1A1B] placeholder:text-gray-400" 
               placeholder="VD: văn hóa làm việc tại Nhật Bản có gì thú vị..." />
           </div>
           <button 
             (click)="translateSearchQuery()"
+            aria-label="Dịch từ khóa và tìm kiếm"
             [disabled]="isSearchLoading() || !searchQuery()"
             class="mt-2 sm:mt-0 w-full sm:w-auto bg-[#1A1A1B] text-white border-none py-3 px-8 rounded-xl font-semibold text-sm md:text-base cursor-pointer hover:bg-black hover:shadow-md transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
             @if (isSearchLoading()) {
@@ -197,7 +203,7 @@
             <div class="w-full flex flex-col items-center gap-4">
               <div class="flex items-center gap-2">
                 <span class="text-sm md:text-base text-gray-600 font-semibold uppercase tracking-wide">Danh sách website ưa thích</span>
-                <button (click)="openSitesModal()" title="Quản lý danh sách" class="p-1.5 text-gray-400 hover:text-[#0066FF] bg-transparent border-none cursor-pointer transition-colors rounded-full hover:bg-blue-50">
+                <button (click)="openSitesModal()" aria-label="Quản lý danh sách website ưa thích" title="Quản lý danh sách" class="p-1.5 text-gray-400 hover:text-[#0066FF] bg-transparent border-none cursor-pointer transition-colors rounded-full hover:bg-blue-50">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -230,12 +236,12 @@
              [class.py-0]="isZenMode()" [class.border-none]="isZenMode()" [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.overflow-hidden]="isZenMode()">
           <h2 class="text-base md:text-lg font-bold truncate mr-4 text-[#1A1A1B] flex-1">{{ translatedTitle() }}</h2>
           <div class="flex items-center gap-2 md:gap-3 shrink-0">
-            <button (click)="isZenMode.set(true)" title="Chế độ đọc tĩnh tâm (Thu gọn Header)" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-[#E5E7EB] hover:bg-[#D1D5DB] text-gray-700 font-medium transition-colors border-none cursor-pointer flex items-center justify-center shadow-sm">
+            <button (click)="isZenMode.set(true)" aria-label="Kích hoạt chế độ đọc tĩnh tâm" title="Chế độ đọc tĩnh tâm (Thu gọn Header)" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-[#E5E7EB] hover:bg-[#D1D5DB] text-gray-700 font-medium transition-colors border-none cursor-pointer flex items-center justify-center shadow-sm">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
               </svg>
             </button>
-            <button (click)="downloadHtml()" class="bg-[#10B981] text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium hover:bg-[#059669] transition-colors whitespace-nowrap flex items-center gap-2 shadow-sm text-sm border-none cursor-pointer">
+            <button (click)="downloadHtml()" aria-label="Tải bản dịch định dạng HTML về máy" class="bg-[#10B981] text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium hover:bg-[#059669] transition-colors whitespace-nowrap flex items-center gap-2 shadow-sm text-sm border-none cursor-pointer">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
               </svg>
@@ -245,7 +251,7 @@
           </div>
         </div>
         <div class="flex-1 w-full bg-white transition-all duration-500 ease-in-out">
-          <iframe [srcdoc]="fullHtmlString()" class="w-full border-none block transition-all duration-500 ease-in-out" 
+          <iframe [srcdoc]="fullHtmlString()" title="Nội dung bản dịch tiếng Việt" class="w-full border-none block transition-all duration-500 ease-in-out" 
                   [style.height]="isZenMode() ? '100vh' : 'calc(100vh - 140px)'"></iframe>
         </div>
       </div>
@@ -260,19 +266,19 @@
           [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.py-0]="isZenMode()" [class.md:py-0]="isZenMode()" [class.overflow-hidden]="isZenMode()" [class.border-none]="isZenMode()"
           [class.max-h-[100px]]="!isZenMode()" [class.opacity-100]="!isZenMode()">
     <div class="px-4">
-      v1.0.12 &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+      v1.0.13 &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
       <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a>
     </div>
   </footer>
 
   <!-- Sites Modal -->
   @if (isSitesModalOpen()) {
-    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200">
+    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h3 class="text-lg font-bold text-[#1A1A1B]">Cài đặt Website ưa thích</h3>
-          <button (click)="isSitesModalOpen.set(false)" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors p-1 rounded-md hover:bg-gray-100">
+          <h3 id="modal-title" class="text-lg font-bold text-[#1A1A1B]">Cài đặt Website ưa thích</h3>
+          <button (click)="isSitesModalOpen.set(false)" aria-label="Đóng cửa sổ cài đặt" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors p-1 rounded-md hover:bg-gray-100">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -285,11 +291,13 @@
             <div class="flex items-center gap-2">
               <span class="text-gray-400 font-mono text-sm w-5 text-right">{{idx + 1}}.</span>
               <input type="text"
+                     [id]="'modal-input-' + item.id"
+                     aria-label="Đường dẫn website"
                      [ngModel]="item.url" 
                      (ngModelChange)="updateModalInput(item.id, $event)"
                      placeholder="https://..."
                      class="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A1B] outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF] transition-all">
-              <button (click)="removeModalInput(item.id)" class="text-gray-300 hover:text-red-500 bg-transparent border-none cursor-pointer p-1.5 rounded-md hover:bg-red-50 transition-colors" title="Xóa">
+              <button (click)="removeModalInput(item.id)" aria-label="Xóa đường dẫn này" class="text-gray-300 hover:text-red-500 bg-transparent border-none cursor-pointer p-1.5 rounded-md hover:bg-red-50 transition-colors" title="Xóa">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
@@ -298,7 +306,7 @@
           }
 
           @if (modalSiteInputs().length < 10) {
-            <button (click)="addModalInput()" class="mt-2 self-start flex items-center gap-1.5 text-sm font-medium text-[#0066FF] hover:text-blue-700 bg-transparent border-none cursor-pointer hover:underline underline-offset-2 transition-all">
+            <button (click)="addModalInput()" aria-label="Thêm ô nhập website mới" class="mt-2 self-start flex items-center gap-1.5 text-sm font-medium text-[#0066FF] hover:text-blue-700 bg-transparent border-none cursor-pointer hover:underline underline-offset-2 transition-all">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
@@ -313,7 +321,7 @@
 
         <!-- Footer -->
         <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end">
-          <button (click)="saveSites()" class="bg-[#1A1A1B] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-black hover:shadow-md transition-all cursor-pointer border-none">
+          <button (click)="saveSites()" aria-label="Lưu danh sách website" class="bg-[#1A1A1B] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-black hover:shadow-md transition-all cursor-pointer border-none">
             Lưu danh sách
           </button>
         </div>
@@ -324,20 +332,29 @@
 <router-outlet />
 
 <!-- Toast Notifications Container -->
-<div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none">
+<div class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none">
   @for (toast of toasts(); track toast.id) {
-    <div class="pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg text-white text-sm font-medium min-w-[250px] max-w-[400px] animate-toast-slide-in"
+    <div class="pointer-events-auto flex items-start gap-3 px-4 py-3 rounded-xl shadow-lg text-white text-sm font-medium min-w-[280px] max-w-[420px] animate-toast-slide-in relative group"
+         [attr.role]="toast.type === 'error' ? 'alert' : 'status'"
+         [attr.aria-live]="toast.type === 'error' ? 'assertive' : 'polite'"
          [class.bg-[#10B981]]="toast.type === 'success'"
          [class.bg-[#EF4444]]="toast.type === 'error'"
          [class.bg-[#3B82F6]]="toast.type === 'info'">
       @if (toast.type === 'success') {
-        <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0"></div>
+        <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0 mt-1"></div>
       } @else if (toast.type === 'error') {
-        <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0 animate-pulse"></div>
+        <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0 animate-pulse mt-1"></div>
       } @else {
-        <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0"></div>
+        <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0 mt-1"></div>
       }
-      <p class="leading-relaxed">{{ toast.message }}</p>
+      <div class="flex-1 leading-relaxed pr-6">{{ toast.message }}</div>
+      
+      <!-- Close Button -->
+      <button (click)="removeToast(toast.id)" aria-label="Đóng thông báo" class="absolute right-2 top-2 shrink-0 p-1 rounded-md opacity-60 hover:opacity-100 hover:bg-white/20 transition-all cursor-pointer border-none bg-transparent text-white flex justify-center items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </button>
     </div>
   }
 </div>

@@ -11,6 +11,7 @@ export interface Toast {
   id: number;
   message: string;
   type: 'success' | 'error' | 'info';
+  timeoutId?: any;
 }
 
 @Component({
@@ -81,7 +82,7 @@ export class App {
     if (!file) return;
 
     if (file.size > 500 * 1024) {
-      this.showToast("File HTML quá lớn (trên 500KB do dính ảnh/mã rác). Bạn vui lòng tải lại/lưu lại trang web với tùy chọn 'Webpage, HTML Only' (Chỉ HTML) nhé!", "error");
+      this.showToast("File HTML quá lớn (trên 500KB có thể do chứa ảnh hoặc/và mã rác). Bạn vui lòng tải lại/lưu lại trang web với tùy chọn 'Webpage, HTML Only' (Chỉ HTML) nhé!", "error");
       event.target.value = '';
       return;
     }
@@ -127,6 +128,14 @@ export class App {
     }
     this.modalSiteInputs.set(initialInputs);
     this.isSitesModalOpen.set(true);
+    
+    // Trap focus/Auto focus
+    setTimeout(() => {
+      const firstInput = document.getElementById(`modal-input-${initialInputs[0]?.id}`);
+      if (firstInput) {
+        firstInput.focus();
+      }
+    }, 100);
   }
 
   addModalInput() {
@@ -161,18 +170,34 @@ export class App {
       localStorage.setItem('wpsila_fav_sites', JSON.stringify(validSites));
     }
     this.isSitesModalOpen.set(false);
-    this.showToast('Đã lưu danh sách website!', 'success');
+    
+    if (validSites.length === 0) {
+      this.showToast('Bạn chưa nhập bất cứ website nào.', 'info');
+    } else {
+      this.showToast('Đã lưu danh sách website!', 'success');
+    }
   }
 
   showToast(message: string, type: 'success' | 'error' | 'info' = 'info') {
     const id = this.toastIdCounter++;
-    this.toasts.update(current => [...current, { id, message, type }]);
     
-    // Auto remove after 5 seconds for success, 7 seconds for error/info
-    const timeout = type === 'success' ? 5000 : 7000;
-    setTimeout(() => {
-      this.toasts.update(current => current.filter(t => t.id !== id));
+    // Auto remove after 5 seconds for success, 10 seconds for error/info
+    const timeout = type === 'success' ? 5000 : 10000;
+    const timeoutId = setTimeout(() => {
+      this.removeToast(id);
     }, timeout);
+    
+    this.toasts.update(current => [...current, { id, message, type, timeoutId }]);
+  }
+
+  removeToast(id: number) {
+    this.toasts.update(current => {
+      const toast = current.find(t => t.id === id);
+      if (toast && toast.timeoutId) {
+        clearTimeout(toast.timeoutId);
+      }
+      return current.filter(t => t.id !== id);
+    });
   }
 
   async fetchPrompts() {
@@ -199,7 +224,7 @@ export class App {
         throw new Error();
       }
     } catch {
-      this.showToast('URL không hợp lệ. Vui lòng nhập một đường dẫn bắt đầu bằng http:// hoặc https://', 'error');
+      this.showToast('URL không hợp lệ. Vui lòng nhập một đường dẫn bắt đầu bằng http:// hoặc https://. Đơn giản là hãy copy đường link của bài viết trên thanh địa chỉ trình duyệt rồi dán vào là cách chắc chắn nhất.', 'error');
       return;
     }
 
@@ -433,6 +458,6 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
     
-    this.showToast('Đã tải bản dịch (.html) về máy.', 'success');
+    this.showToast('Đã tải bản dịch (.html) về máy. Bạn có thể đọc được bài dịch bằng tất cả các trình duyệt phổ thông.', 'success');
   }
 }
