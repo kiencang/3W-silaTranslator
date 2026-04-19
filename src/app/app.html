@@ -106,9 +106,9 @@
             [class.hover:bg-blue-700]="!uploadedHtmlFile()"
             [class.bg-[#8B5CF6]]="uploadedHtmlFile()"
             [class.hover:bg-[#7C3AED]]="uploadedHtmlFile()"
-            [class.animate-pulse]="url() && !isLoading()"
-            [class.shadow-[0_0_15px_rgba(0,102,255,0.4)]]="url() && !isLoading() && !uploadedHtmlFile()"
-            [class.shadow-[0_0_15px_rgba(139,92,246,0.4)]]="url() && !isLoading() && uploadedHtmlFile()"
+            [class.animate-pulse]="url() && !isLoading() && !fullHtmlString()"
+            [class.shadow-[0_0_15px_rgba(0,102,255,0.4)]]="url() && !isLoading() && !uploadedHtmlFile() && !fullHtmlString()"
+            [class.shadow-[0_0_15px_rgba(139,92,246,0.4)]]="url() && !isLoading() && uploadedHtmlFile() && !fullHtmlString()"
             class="w-full md:w-auto text-white border-none py-2 md:py-2.5 px-6 md:px-8 rounded-lg font-semibold text-sm md:text-base cursor-pointer transition-all duration-300 whitespace-nowrap hover:animate-none disabled:opacity-50 disabled:cursor-not-allowed ml-1"
             [attr.aria-label]="uploadedHtmlFile() ? 'Dịch từ file HTML đã chọn' : 'Bắt đầu dịch đường dẫn website'">
             @if (isLoading()) {
@@ -246,10 +246,11 @@
              [class.py-0]="isZenMode()" [class.border-none]="isZenMode()" [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.overflow-hidden]="isZenMode()">
           <h2 class="text-base md:text-lg font-bold truncate mr-4 text-[#1A1A1B] flex-1">{{ translatedTitle() }}</h2>
           <div class="flex items-center gap-2 md:gap-3 shrink-0">
-            <button (click)="isZenMode.set(true)" aria-label="Kích hoạt chế độ đọc tĩnh tâm" title="Chế độ đọc tĩnh tâm (Thu gọn Header)" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-[#E5E7EB] hover:bg-[#D1D5DB] text-gray-700 font-medium transition-colors border-none cursor-pointer flex items-center justify-center shadow-sm">
+            <button (click)="isZenMode.set(true)" aria-label="Kích hoạt chế độ đọc tĩnh tâm" title="Mở rộng toàn màn hình" class="px-3 md:px-4 py-1.5 md:py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition-all shadow-md hover:shadow-lg border-none cursor-pointer flex items-center gap-2 text-sm whitespace-nowrap">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
               </svg>
+              <span class="hidden lg:inline">Toàn màn hình</span>
             </button>
             <button (click)="downloadHtml()" aria-label="Tải bản dịch định dạng HTML về máy" class="bg-[#10B981] text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium hover:bg-[#059669] transition-colors whitespace-nowrap flex items-center gap-2 shadow-sm text-sm border-none cursor-pointer">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -276,7 +277,7 @@
           [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.py-0]="isZenMode()" [class.md:py-0]="isZenMode()" [class.overflow-hidden]="isZenMode()" [class.border-none]="isZenMode()"
           [class.max-h-[100px]]="!isZenMode()" [class.opacity-100]="!isZenMode()">
     <div class="px-4">
-      v1.0.14 &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+      v1.0.15 &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
       <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a>
     </div>
   </footer>
