@@ -5,6 +5,12 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.17] - 2026-04-19
+
+### Fixed
+- Điều chỉnh mã để nó giữ lại các video YouTube theo cách chắc chắn hơn (không bị AI hiểu nhầm làm quá trình khôi phục mã video bị thất bại).
+- Bổ sung thông tin: Sản phẩm chỉ dùng cho mục đích cá nhân.
+
 ## [v1.0.16] - 2026-04-19
 
 ### Fixed
