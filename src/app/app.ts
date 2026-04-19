@@ -314,7 +314,8 @@ export class App {
               ${videoHtml.replace(/<iframe /gi, '<iframe style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;" ')}
             </div>
           </div>`;
-          const regex = new RegExp(`<p>\\[YOUTUBE_VIDEO_${i}\\]<\\/p>|\\[YOUTUBE_VIDEO_${i}\\]`, 'gi');
+          // marked sẽ render `[SILA_YOUTUBE_0]` thành <code>[SILA_YOUTUBE_0]</code>
+          const regex = new RegExp(`<p><code>\\[SILA_YOUTUBE_${i}\\]<\\/code><\\/p>|<code>\\[SILA_YOUTUBE_${i}\\]<\\/code>|\\[SILA_YOUTUBE_${i}\\]`, 'gi');
           finalHtml = finalHtml.replace(regex, responsiveVideoHtml);
         });
       }

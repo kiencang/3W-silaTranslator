@@ -112,7 +112,7 @@ app.post('/api/extract', async (req, res) => {
           // Get the HTML string of the iframe
           const html = node.outerHTML || `<iframe src="${src}" width="${node.getAttribute('width') || '100%'}" height="${node.getAttribute('height') || '400'}" frameborder="0" allowfullscreen></iframe>`;
           youtubeVideos.push(html);
-          return `\n\n[YOUTUBE_VIDEO_${index}]\n\n`;
+          return `\n\n\`[SILA_YOUTUBE_${index}]\`\n\n`;
         }
         return ''; // Bỏ qua các iframe khác
       }
