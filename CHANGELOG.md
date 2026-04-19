@@ -15,10 +15,10 @@ và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0
 ## [v1.0.12] - 2026-04-19
 
 ### Fixed
-- Thêm thông báo lỗi nếu website đó bị chặn không truy cập được (ví dụ dùng cloudflare).
+- Thêm thông báo lỗi nếu website đó bị chặn không truy cập được (ví dụ dùng Cloudflare).
 
 ### Added
-- Bổ sung tính năng dịch html, người dùng vẫn vào được các website chặn bot, họ tải file về và up lên để dịch.
+- Bổ sung tính năng dịch file html, người dùng vẫn vào được các website chặn bot, họ tải file về và up lên để dịch.
 
 ## [v1.0.11] - 2026-04-19
 
