@@ -5,6 +5,13 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.14] - 2026-04-19
+
+### Fixed
+- Điều chỉnh màu sắc cho logo text để nó ấn tượng hơn.
+- Thêm chữ G lớn làm background cho phần tìm kiếm.
+- Button 'nhịp thở' cho phần dịch web.
+
 ## [v1.0.13] - 2026-04-19
 
 ### Fixed
