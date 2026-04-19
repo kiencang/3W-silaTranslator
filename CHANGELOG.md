@@ -10,6 +10,7 @@ và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0
 ### Fixed
 - Sửa lại loạt toast notification cho chuẩn hơn. Chỉnh thời gian báo lỗi lên 10s, giữ nguyên báo thành công là 5s.
 - Điều chỉnh mã để thuận lợi hơn cho người mù sử dụng.
+- Thay đổi chiều cao của một số chỗ (tranh chính, trang chờ kết quả dịch) để không xuất hiện Scrollbar vô duyên.
 
 ## [v1.0.12] - 2026-04-19
 
