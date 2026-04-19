@@ -27,7 +27,7 @@ app.post('/api/extract', async (req, res) => {
 
     let rawHtml = '';
 
-    // 1. Dùng nội dung HTML đẩy lên (Bypass) hoặc Tự Fetch
+    // 1. Dùng nội dung HTML từ client đẩy lên (Bypass) hoặc Tự Fetch từ URL
     if (htmlContent && typeof htmlContent === 'string') {
       rawHtml = htmlContent;
     } else {
@@ -49,13 +49,13 @@ app.post('/api/extract', async (req, res) => {
       .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
       .replace(/<!--[\s\S]*?-->/g, '');
 
-    // Fast-fail: Reject ridiculously large HTML payloads before DOM parsing
+    // Fast-fail: Từ chối các khối HTML lớn bất thường trước khi đưa vào phân tích DOM để tránh tràn bộ nhớ
     if (cleanHtml.length > 500000) {
       res.status(413).json({ error: 'Mã nguồn trang web này quá lớn (vượt quá 500,000 ký tự). Máy chủ từ chối phân tích để tránh rủi ro tràn bộ nhớ. Vui lòng chọn một bài viết thông thường.' });
       return;
     }
 
-    // 2. Extract main content using Readability
+    // 2. Trích xuất nội dung chính của bài báo bằng thư viện Readability
     let parsedDOM: any = parseHTML(cleanHtml);
     let doc: any = parsedDOM.document;
 
@@ -74,7 +74,26 @@ app.post('/api/extract', async (req, res) => {
       }
     }
 
-    // Check if the page is readerable (likely an article)
+    // CHIẾN LƯỢC 4: Lột vỏ Link khổng lồ (Unwrap Block-Level Links)
+    // Các thẻ <a> trong HTML5 thường bọc ngoài các khối lớn (div, h1-h6, p) như quảng cáo, thẻ bài viết.
+    // Điều này sẽ làm gãy cú pháp Markdown cổ điển `[text](link)` do có chứa chèn dòng (Enter).
+    // Ta bóc vỏ <a> đi, nhả ruột ra để bảo toàn cấu trúc phẳng.
+    const EXPECTED_BLOCK_TAGS = ['DIV', 'P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'SECTION', 'ARTICLE', 'UL', 'OL', 'LI', 'BLOCKQUOTE', 'FIGURE'];
+    const links = Array.from(doc.querySelectorAll('a'));
+    for (const link of links as any[]) {
+      if (!link.parentNode) continue;
+      const hasBlockChildren = Array.from(link.children).some((child: any) => EXPECTED_BLOCK_TAGS.includes(child.tagName?.toUpperCase()));
+      if (hasBlockChildren) {
+        // Lột vỏ: Di chuyển mọi node con (nội dung) ra đứng trước thẻ <a> hiện tại
+        while (link.firstChild) {
+          link.parentNode.insertBefore(link.firstChild, link);
+        }
+        // Xóa vỏ <a> tàn dư
+        link.parentNode.removeChild(link);
+      }
+    }
+
+    // Kiểm tra xem trang web có cấu trúc phù hợp để đọc không (ví dụ: là một bài báo)
     if (!isProbablyReaderable(doc)) {
       parsedDOM = null; doc = null; // Quét rác sớm
       let errorMessage = 'Trang web này không có cấu trúc của một bài viết/bài báo. Vui lòng thử lại với một link nội dung cụ thể.';
@@ -95,10 +114,10 @@ app.post('/api/extract', async (req, res) => {
 
     if (!article || !article.content) {
       parsedDOM = null; doc = null; reader = null; // Quét rác sớm
-      throw new Error('Could not extract main content from the URL');
+      throw new Error('Không thể trích xuất nội dung chính từ URL này');
     }
 
-    // 3. Convert to Markdown and check limit
+    // 3. Chuyển đổi HTML sang Markdown và kiểm tra giới hạn độ dài
     const turndownService = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced' });
 
     // CHIẾN LƯỢC: Bảo tồn YouTube Video (Placeholder Strategy)
@@ -109,7 +128,7 @@ app.post('/api/extract', async (req, res) => {
         const src = node.getAttribute('src') || '';
         if (src.includes('youtube.com') || src.includes('youtu.be')) {
           const index = youtubeVideos.length;
-          // Get the HTML string of the iframe
+          // Lấy chuỗi HTML nguyên bản của thẻ iframe
           const html = node.outerHTML || `<iframe src="${src}" width="${node.getAttribute('width') || '100%'}" height="${node.getAttribute('height') || '400'}" frameborder="0" allowfullscreen></iframe>`;
           youtubeVideos.push(html);
           return `\n\n\`[SILA_YOUTUBE_${index}]\`\n\n`;
@@ -142,14 +161,14 @@ app.post('/api/extract', async (req, res) => {
     });
 
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'An error occurred during content extraction';
-    console.error('Extraction error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Đã xảy ra lỗi trong quá trình trích xuất nội dung';
+    console.error('Lỗi trích xuất:', error);
     res.status(500).json({ error: errorMessage });
   }
 });
 
 /**
- * Serve static files from /browser
+ * Phục vụ các file tĩnh từ thư mục /browser
  */
 app.use(
   express.static(browserDistFolder, {
@@ -160,7 +179,7 @@ app.use(
 );
 
 /**
- * Handle all other requests by rendering the Angular application.
+ * Xử lý tất cả các request khác bằng cách render ứng dụng Angular.
  */
 app.use((req, res, next) => {
   angularApp
@@ -172,8 +191,8 @@ app.use((req, res, next) => {
 });
 
 /**
- * Start the server if this module is the main entry point, or it is ran via PM2.
- * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
+ * Khởi động máy chủ nếu module này là điểm đầu vào chính, hoặc được chạy thông qua PM2.
+ * Máy chủ sẽ lắng nghe trên cổng được định nghĩa bởi biến môi trường `PORT`, hoặc mặc định là 3000.
  */
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
   const port = process.env['PORT'] || 3000;
@@ -181,12 +200,12 @@ if (isMainModule(import.meta.url) || process.env['pm_id']) {
     if (error) {
       throw error;
     }
-    console.log(`Node Express server listening on http://localhost:${port}`);
+    console.log(`Máy chủ Node Express đang lắng nghe tại http://localhost:${port}`);
   });
 }
 
 /**
- * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
+ * Trình xử lý request được sử dụng bởi Angular CLI (cho dev-server và trong quá trình build) hoặc Firebase Cloud Functions.
  */
 export const reqHandler = createNodeRequestHandler(app);
 export { app };
