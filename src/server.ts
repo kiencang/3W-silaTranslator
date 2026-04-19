@@ -100,6 +100,24 @@ app.post('/api/extract', async (req, res) => {
 
     // 3. Convert to Markdown and check limit
     const turndownService = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced' });
+
+    // CHIẾN LƯỢC: Bảo tồn YouTube Video (Placeholder Strategy)
+    const youtubeVideos: string[] = [];
+    turndownService.addRule('youtubeIframe', {
+      filter: ['iframe'],
+      replacement: function (content, node: any) {
+        const src = node.getAttribute('src') || '';
+        if (src.includes('youtube.com') || src.includes('youtu.be')) {
+          const index = youtubeVideos.length;
+          // Get the HTML string of the iframe
+          const html = node.outerHTML || `<iframe src="${src}" width="${node.getAttribute('width') || '100%'}" height="${node.getAttribute('height') || '400'}" frameborder="0" allowfullscreen></iframe>`;
+          youtubeVideos.push(html);
+          return `\n\n[YOUTUBE_VIDEO_${index}]\n\n`;
+        }
+        return ''; // Bỏ qua các iframe khác
+      }
+    });
+
     const markdownContent = turndownService.turndown(article.content);
 
     // CHIẾN LƯỢC 1: Giải phóng RAM chủ động trước khi Server kịp phản hồi.
@@ -120,6 +138,7 @@ app.post('/api/extract', async (req, res) => {
     res.json({ 
       title: responseTitle,
       content: markdownContent,
+      youtubeVideos: youtubeVideos
     });
 
   } catch (error: unknown) {

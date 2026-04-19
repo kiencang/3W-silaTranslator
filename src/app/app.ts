@@ -265,7 +265,7 @@ export class App {
       }
 
       const extraction = await firstValueFrom(
-        this.http.post<{title: string, content: string}>('/api/extract', payload)
+        this.http.post<{title: string, content: string, youtubeVideos?: string[]}>('/api/extract', payload)
       );
       
       this.translatedTitle.set(extraction.title);
@@ -303,7 +303,21 @@ export class App {
       this.translatedTitle.set(translatedTitleString);
       
       // 4. Convert translated Markdown back to HTML
-      const finalHtml = await marked.parse(translatedMarkdown);
+      let finalHtml = await marked.parse(translatedMarkdown);
+
+      // 5. Restore YouTube Videos
+      if (extraction.youtubeVideos && extraction.youtubeVideos.length > 0) {
+        extraction.youtubeVideos.forEach((videoHtml, i) => {
+          // Bọc lại bằng wrapper để tối ưu hiển thị (Responsive Iframe)
+          const responsiveVideoHtml = `<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px; margin: 24px 0px;">
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+              ${videoHtml.replace(/<iframe /gi, '<iframe style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;" ')}
+            </div>
+          </div>`;
+          const regex = new RegExp(`<p>\\[YOUTUBE_VIDEO_${i}\\]<\\/p>|\\[YOUTUBE_VIDEO_${i}\\]`, 'gi');
+          finalHtml = finalHtml.replace(regex, responsiveVideoHtml);
+        });
+      }
 
       const tokensIn = Math.round(fullPrompt.length / 4);
       const tokensOut = Math.round(translatedMarkdown.length / 4);
