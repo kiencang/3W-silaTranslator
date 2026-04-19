@@ -5,11 +5,17 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.19] - 2026-04-20
+
+### Fixed
+- Khắc phục lỗi thẻ `<a>` bọc các thẻ không tiêu chuẩn (như div, h2, v.v..) khiến quá trình chuyển từ html -> markdown bị lỗi hiển thị.
+- Chuyển hết comment tiếng Anh thành chú thích tiếng Việt trong file server.ts.
+
 ## [v1.0.18] - 2026-04-19
 
 ### Fixed
 - Khắc phục lỗi xem được YouTube qua app nhưng không xem được khi tải file html về máy.
-- Về bản chất là không sửa được vì môi trường html xem tại máy, nhưng làm được cái thumbnail và icon YouTube để người dùng click xem trực tiếp trên YouTube.
+- Về bản chất là không sửa được vì môi trường html xem tại máy, nhưng dùng js làm được cái thumbnail và icon YouTube để người dùng click xem trực tiếp trên YouTube (khi xem video trên web trực tuyến thì vẫn bình thường, khi xem qua file tải về thì mới cần thumbnail).
 
 ## [v1.0.17] - 2026-04-19
 
