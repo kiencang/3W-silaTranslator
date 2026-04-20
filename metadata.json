@@ -1,6 +1,6 @@
 {
   "name": "3W silaTranslator",
-  "description": "Công cụ dịch website sang tiếng Việt sử dụng AI",
+  "description": "Công cụ dịch website từ tiếng Anh sang tiếng Việt.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }
