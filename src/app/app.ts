@@ -36,6 +36,7 @@ export class App {
   toasts = signal<Toast[]>([]);
   translationTime = signal(0);
   isZenMode = signal(false);
+  useSearchGrounding = signal(false);
   
   searchQuery = signal('');
   isSearchLoading = signal(false);
@@ -278,16 +279,22 @@ export class App {
       const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
       const fullPrompt = `${this.cachedPrompt}\n\n${markdownContent}`;
 
+      const config: any = {
+        systemInstruction: this.cachedSi,
+        temperature: this.temperature(),
+        thinkingConfig: {
+          thinkingLevel: ThinkingLevel.HIGH,
+        }
+      };
+
+      if (this.useSearchGrounding()) {
+        config.tools = [{ googleSearch: {} }];
+      }
+
       const aiResponse = await ai.models.generateContent({
         model: 'gemini-pro-latest',
         contents: fullPrompt,
-        config: {
-          systemInstruction: this.cachedSi,
-          temperature: this.temperature(),
-          thinkingConfig: {
-            thinkingLevel: ThinkingLevel.HIGH,
-          }
-        }
+        config: config
       });
 
       let translatedMarkdown = aiResponse.text || '';
