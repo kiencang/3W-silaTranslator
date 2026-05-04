@@ -3,7 +3,7 @@
   <!-- Zen Mode Pull-down Handle -->
   @if (isZenMode()) {
     <div class="fixed top-0 right-4 md:right-10 z-[100] animate-in slide-in-from-top fade-in duration-300">
-      <button (click)="isZenMode.set(false)" aria-label="Thoát chế độ Zen Mode" title="Thoát chế độ Zen Mode" class="w-10 h-8 md:w-11 md:h-9 bg-gray-800/90 hover:bg-black border-none text-white flex items-center justify-center rounded-b-xl backdrop-blur-md shadow-lg transition-all cursor-pointer outline-none">
+      <button (click)="isZenMode.set(false)" aria-label="Thoát chế độ Zen Mode" title="Thoát chế độ Zen Mode" class="w-10 h-8 md:w-11 md:h-9 bg-gray-800/90 hover:bg-black border-none text-white flex items-center justify-center rounded-b-xl backdrop-blur-md shadow-lg transition-all cursor-pointer outline-none active:scale-95">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
@@ -79,7 +79,7 @@
           
           <!-- Tooltip -->
           <div class="absolute top-full mt-2 w-72 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg text-center">
-            <strong>[{{ useSearchGrounding() ? 'Đang Bật' : 'Đang Tắt' }}]</strong> Bổ sung thêm tính năng tra cứu cho AI trong quá trình dịch, tốn token/thời gian hơn. Không phải bài dịch nào cũng cần bật.
+            <strong [class.text-blue-400]="useSearchGrounding()" [class.text-gray-400]="!useSearchGrounding()">[{{ useSearchGrounding() ? 'Đang Bật' : 'Đang Tắt' }}]</strong> Bổ sung công cụ tìm kiếm cho AI trong quá trình dịch, sẽ tốn token/thời gian hơn. Chỉ nên bật với bài có tính học thuật hoặc thời sự cao.
             <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
           </div>
         </div>
@@ -87,7 +87,7 @@
 
       <!-- Search Bar Block -->
       <div class="flex-1 w-full max-w-full md:max-w-[480px] lg:max-w-[600px] xl:max-w-[840px] bg-[#F3F4F6] p-1.5 rounded-xl border border-transparent focus-within:border-[#E5E7EB] focus-within:bg-white focus-within:shadow-sm flex flex-col md:flex-row items-stretch md:items-center transition-all gap-1.5 md:gap-0 mx-auto md:mx-0">
-        <div class="flex-1 flex items-center overflow-hidden px-2 md:px-3">
+        <div class="flex-1 flex items-center min-w-0 px-2 md:px-3">
           @if (uploadedHtmlFile()) {
             <div class="hidden md:flex items-center bg-gray-200/60 border border-gray-200 rounded-md px-2 py-1 gap-1.5 mr-2 shrink-0 shadow-sm animate-in fade-in zoom-in duration-200">
               <span class="text-[13px] text-gray-700 font-medium truncate max-w-[80px] md:max-w-[130px]" [title]="uploadedHtmlFile()?.name">📄 {{ uploadedHtmlFile()?.name }}</span>
@@ -105,21 +105,21 @@
             (keyup.enter)="translate()"
             class="flex-1 border-none py-2 md:py-2.5 text-sm md:text-base outline-none bg-transparent w-full placeholder:text-gray-500 min-w-[50px] truncate" 
             [placeholder]="uploadedHtmlFile() ? 'Dán URL gốc của website vào đây...' : 'Dán link website tại đây...'">
-        </div>
-        
-        <div class="flex items-center justify-end px-2 md:px-0">
-          <label class="hidden md:flex relative group cursor-pointer text-gray-400 hover:text-gray-600 p-2 items-center justify-center transition-colors">
+
+          <label class="flex shrink-0 relative group cursor-pointer text-gray-400 hover:text-gray-600 p-2 items-center justify-center transition-all active:scale-95">
             <input type="file" aria-label="Tải lên file tài liệu định dạng HTML" accept=".html,.htm" class="hidden" (change)="onFileSelected($event)">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
               <path stroke-linecap="round" stroke-linejoin="round" d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13" />
             </svg>
             <!-- Custom Tooltip -->
-            <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[280px] md:w-[320px] bg-[#1A1A1B] text-white text-[11px] md:text-xs leading-relaxed p-2.5 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 delay-500 z-50 pointer-events-none text-center font-medium">
+            <div class="absolute top-full right-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[280px] md:w-[320px] bg-[#1A1A1B] text-white text-[11px] md:text-xs leading-relaxed p-2.5 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 delay-500 z-50 pointer-events-none text-center font-medium">
               Tải lên file bài viết (.html) nếu ứng dụng bị chặn không thể lấy được nội dung hoặc yêu cầu đăng nhập. (Nhấn Ctrl+S/Cmd+S tại trang gốc để lưu, chọn 'HTML only/chỉ HTML')
-              <div class="absolute bottom-full left-1/2 -translate-x-1/2 -mb-[1px] border-4 border-transparent border-b-[#1A1A1B]"></div>
+              <div class="absolute bottom-full right-2 md:right-auto md:left-1/2 md:-translate-x-1/2 -mb-[1px] border-4 border-transparent border-b-[#1A1A1B]"></div>
             </div>
           </label>
-
+        </div>
+        
+        <div class="flex items-center justify-end px-2 md:px-0">
           <button 
             (click)="translate()"
             [disabled]="isLoading() || !url()"
@@ -127,10 +127,10 @@
             [class.hover:bg-blue-700]="!uploadedHtmlFile()"
             [class.bg-[#8B5CF6]]="uploadedHtmlFile()"
             [class.hover:bg-[#7C3AED]]="uploadedHtmlFile()"
-            [class.animate-pulse]="url() && !isLoading() && !fullHtmlString()"
-            [class.shadow-[0_0_15px_rgba(0,102,255,0.4)]]="url() && !isLoading() && !uploadedHtmlFile() && !fullHtmlString()"
-            [class.shadow-[0_0_15px_rgba(139,92,246,0.4)]]="url() && !isLoading() && uploadedHtmlFile() && !fullHtmlString()"
-            class="w-full md:w-auto text-white border-none py-2 md:py-2.5 px-6 md:px-8 rounded-lg font-semibold text-sm md:text-base cursor-pointer transition-all duration-300 whitespace-nowrap hover:animate-none disabled:opacity-50 disabled:cursor-not-allowed ml-1"
+            [class.shadow-[0_0_15px_rgba(0,102,255,0.6)]]="url() && !isLoading() && !uploadedHtmlFile() && !fullHtmlString()"
+            [class.shadow-[0_0_15px_rgba(139,92,246,0.6)]]="url() && !isLoading() && uploadedHtmlFile() && !fullHtmlString()"
+            class="w-full md:w-auto text-white border-none py-2 md:py-2.5 px-6 md:px-8 rounded-lg font-semibold text-sm md:text-base cursor-pointer transition-all duration-300 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed ml-1"
+            [class.active:scale-95]="!isLoading() && url()"
             [attr.aria-label]="uploadedHtmlFile() ? 'Dịch từ file HTML đã chọn' : 'Bắt đầu dịch đường dẫn website'">
             @if (isLoading()) {
               Đang dịch...
@@ -184,13 +184,15 @@
     @if (!fullHtmlString() && !isLoading()) {
       <div class="w-full flex-1 flex flex-col items-center justify-center gap-6 px-4 relative overflow-hidden">
         
-        <!-- Giant Watermark "G" -->
-        <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
-          <span class="text-[300px] md:text-[500px] font-sans font-extrabold text-slate-900 opacity-[0.025] leading-none select-none -mt-10">G</span>
+        <!-- Giant Watermark: Search Icon -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" class="text-slate-900 opacity-[0.02] w-[300px] h-[300px] md:w-[450px] md:h-[450px] -mt-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
         </div>
 
         <div class="text-center space-y-2 mb-2 relative z-10">
-          <h1 class="text-3xl md:text-4xl font-extrabold text-[#1A1A1B] tracking-tight">Dịch Tìm Kiếm</h1>
+          <h1 class="text-3xl md:text-4xl font-extrabold text-[#1A1A1B] tracking-tight">Dịch Từ Khóa Google</h1>
           <p class="text-gray-500 text-sm md:text-base font-medium max-w-md mx-auto">Nhập từ khóa tiếng Việt, chúng tôi sẽ giúp bạn tìm kiếm các bài viết tiếng Anh!</p>
         </div>
 
@@ -204,14 +206,15 @@
               [(ngModel)]="searchQuery"
               aria-label="Nhập từ khóa tiếng Việt để tìm kiếm bài viết nước ngoài"
               (keyup.enter)="translateSearchQuery()"
-              class="flex-1 w-full ml-3 border-none outline-none text-base bg-transparent text-[#1A1A1B] placeholder:text-gray-400" 
+              class="flex-1 w-full ml-3 border-none outline-none text-lg bg-transparent text-[#1A1A1B] placeholder:text-gray-400" 
               placeholder="VD: văn hóa làm việc tại Nhật Bản có gì thú vị..." />
           </div>
           <button 
             (click)="translateSearchQuery()"
             aria-label="Dịch từ khóa và tìm kiếm"
             [disabled]="isSearchLoading() || !searchQuery()"
-            class="mt-2 sm:mt-0 w-full sm:w-auto bg-[#1A1A1B] text-white border-none py-3 px-8 rounded-xl font-semibold text-sm md:text-base cursor-pointer hover:bg-black hover:shadow-md transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+            class="mt-2 sm:mt-0 w-full sm:w-auto bg-[#1A1A1B] text-white border-none py-2.5 px-6 rounded-xl font-semibold text-sm md:text-base cursor-pointer hover:bg-black hover:shadow-md transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            [class.active:scale-95]="!isSearchLoading() && searchQuery()">
             @if (isSearchLoading()) {
               <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -267,13 +270,13 @@
              [class.py-0]="isZenMode()" [class.border-none]="isZenMode()" [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.overflow-hidden]="isZenMode()">
           <h2 class="text-base md:text-lg font-bold truncate mr-4 text-[#1A1A1B] flex-1">{{ translatedTitle() }}</h2>
           <div class="flex items-center gap-2 md:gap-3 shrink-0">
-            <button (click)="isZenMode.set(true)" aria-label="Kích hoạt chế độ đọc tĩnh tâm" title="Mở rộng toàn màn hình" class="px-3 md:px-4 py-1.5 md:py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition-all shadow-md hover:shadow-lg border-none cursor-pointer flex items-center gap-2 text-sm whitespace-nowrap">
+            <button (click)="isZenMode.set(true)" aria-label="Kích hoạt chế độ đọc tĩnh tâm" title="Mở rộng toàn màn hình" class="px-3 md:px-4 py-1.5 md:py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition-all shadow-md hover:shadow-lg border-none cursor-pointer flex items-center gap-2 text-sm whitespace-nowrap active:scale-95">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
               </svg>
               <span class="hidden lg:inline">Toàn màn hình</span>
             </button>
-            <button (click)="downloadHtml()" aria-label="Tải bản dịch định dạng HTML về máy" class="bg-[#10B981] text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium hover:bg-[#059669] transition-colors whitespace-nowrap flex items-center gap-2 shadow-sm text-sm border-none cursor-pointer">
+            <button (click)="downloadHtml()" aria-label="Tải bản dịch định dạng HTML về máy" class="bg-[#10B981] text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium hover:bg-[#059669] transition-colors whitespace-nowrap flex items-center gap-2 shadow-sm text-sm border-none cursor-pointer active:scale-95">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
               </svg>
@@ -293,12 +296,12 @@
   </main>
 
   <!-- Footer -->
-  <footer class="flex-none text-center py-4 md:py-5 text-sm text-gray-500 transition-all duration-500 ease-in-out font-medium"
+  <footer class="flex-none text-center py-2 md:py-3 text-xs text-gray-500 transition-all duration-500 ease-in-out font-medium"
           [class.border-t]="!isZenMode()" [class.border-[#E5E7EB]]="!isZenMode()"
           [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.py-0]="isZenMode()" [class.md:py-0]="isZenMode()" [class.overflow-hidden]="isZenMode()" [class.border-none]="isZenMode()"
           [class.max-h-[100px]]="!isZenMode()" [class.opacity-100]="!isZenMode()">
     <div class="px-4">
-      v1.0.21 &bull; <a href="https://blog.wpsila.com/app-dich-website-tu-anh-sang-viet/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn sử dụng</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+      v1.0.22 &bull; <a href="https://blog.wpsila.com/app-dich-website-tu-anh-sang-viet/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn sử dụng</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
       <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a>
     </div>
   </footer>
@@ -353,7 +356,7 @@
 
         <!-- Footer -->
         <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end">
-          <button (click)="saveSites()" aria-label="Lưu danh sách website" class="bg-[#1A1A1B] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-black hover:shadow-md transition-all cursor-pointer border-none">
+          <button (click)="saveSites()" aria-label="Lưu danh sách website" class="bg-[#0066FF] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:shadow-md transition-all cursor-pointer border-none active:scale-95">
             Lưu danh sách
           </button>
         </div>
