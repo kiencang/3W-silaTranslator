@@ -9,6 +9,7 @@ và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0
 ### Fixed
 - Chỉnh giao diện nút +Search.
 - Chỉnh phương thức mở ra tab mới bằng cách để người dùng tự click thay vì auto (dễ bị trình duyệt chặn).
+- Thêm kiểm tra URL đối với đầu input nhập link website.
 
 ## [v1.0.22] - 2026-05-05
 ### Fixed
