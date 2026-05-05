@@ -39,7 +39,15 @@ export class App {
   useSearchGrounding = signal(false);
   
   searchQuery = signal('');
+  translatedSearchQuery = signal('');
   isSearchLoading = signal(false);
+
+  isValidUrlInput = computed(() => {
+    const input = this.url().trim();
+    if (!input) return false;
+    const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/i;
+    return urlPattern.test(input);
+  });
 
   uploadedHtmlFile = signal<File | null>(null);
   uploadedHtmlContent = signal<string>('');
@@ -213,8 +221,12 @@ export class App {
   }
 
   async translate() {
-    const originalUrl = this.url().trim();
+    let originalUrl = this.url().trim();
     if (!originalUrl) return;
+
+    if (!/^https?:\/\//i.test(originalUrl)) {
+      originalUrl = 'https://' + originalUrl;
+    }
 
     // --- FRONTEND URL VALIDATION ---
     // 1. Valid URL format
@@ -225,7 +237,7 @@ export class App {
         throw new Error();
       }
     } catch {
-      this.showToast('URL không hợp lệ. Vui lòng nhập một đường dẫn bắt đầu bằng http:// hoặc https://. Đơn giản là hãy copy đường link của bài viết trên thanh địa chỉ trình duyệt rồi dán vào là cách chắc chắn nhất.', 'error');
+      this.showToast('URL không hợp lệ. Vui lòng nhập một đường dẫn hợp lệ (vd: vnexpress.net/...).', 'error');
       return;
     }
 
@@ -420,6 +432,13 @@ export class App {
     }
   }
 
+  onSearchLinkClick() {
+    setTimeout(() => {
+      this.translatedSearchQuery.set('');
+      this.searchQuery.set('');
+    }, 100);
+  }
+
   async translateSearchQuery() {
     let query = this.searchQuery().trim();
     
@@ -470,20 +489,13 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
       // Clean up whitespace/markdown gracefully just in case
       translatedQuery = translatedQuery.replace(/^```[a-z]*\n?/, '').replace(/\n?```$/, '').trim();
       
-      // Group 3: Popup Blocker & unexpected empty result
+      // Group 3: Display results
       if (!translatedQuery) {
         this.showToast('Có chút trục trặc khi trích xuất kết quả. Vui lòng thử lại từ khóa khác.', 'error');
         return;
       }
 
-      const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(translatedQuery)}`;
-      const newWindow = window.open(searchUrl, '_blank');
-      
-      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-        this.showToast('Trình duyệt của bạn đang chặn mở tab mới. Vui lòng cấp quyền Popup cho trang web này để xem kết quả.', 'error');
-      } else {
-        this.searchQuery.set(''); // Clear input on success
-      }
+      this.translatedSearchQuery.set(translatedQuery);
       
     } catch (err: any) {
       console.error('Search Translation error:', err);
@@ -506,13 +518,70 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
     }
   }
 
+  private slugify(text: string): string {
+    return text.toString().toLowerCase()
+      .normalize('NFD') // Normalize to decomposed form
+      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+      .replace(/đ/g, 'd').replace(/Đ/g, 'D') // Handle Vietnamese 'đ'
+      .replace(/[^a-z0-9 -]/g, '') // Keep only letters, numbers, spaces, and hyphens
+      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/-+/g, '-') // Collapse multiple hyphens
+      .replace(/^-+|-+$/g, ''); // Remove leading and trailing hyphens
+  }
+
+  private generateFilename(): string {
+    let filename = '';
+    
+    // 1. Try to extract translated title from HTML
+    const htmlContent = this.rawHtmlString();
+    if (htmlContent) {
+      const titleMatch = htmlContent.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+      if (titleMatch && titleMatch[1]) {
+        filename = this.slugify(titleMatch[1].trim());
+      }
+    }
+    
+    // 2. Fallback to English URL part
+    if (!filename) {
+      const currentUrl = this.url().trim();
+      if (currentUrl) {
+        try {
+          const urlObj = new URL(currentUrl.startsWith('http') ? currentUrl : 'https://' + currentUrl);
+          const pathSegments = urlObj.pathname.split('/').filter(Boolean);
+          if (pathSegments.length > 0) {
+            let lastSegment = pathSegments[pathSegments.length - 1];
+            // Remove file extension if present
+            lastSegment = lastSegment.replace(/\.[a-z0-9]+$/i, '');
+            if (lastSegment) {
+              filename = 'vi_' + this.slugify(lastSegment);
+            }
+          }
+        } catch (e) {
+          // Ignore invalid URLs
+        }
+      }
+    }
+    
+    // 3. Ultimate fallback
+    if (!filename) {
+      filename = `ban-dich-${new Date().getTime()}`;
+    }
+    
+    // 4. Truncate to a reasonable length limit (e.g., 60 characters)
+    if (filename.length > 60) {
+      filename = filename.substring(0, 60).replace(/-+$/, '');
+    }
+    
+    return `${filename}.html`;
+  }
+
   downloadHtml() {
     if (!this.rawHtmlString()) return;
     const blob = new Blob([this.rawHtmlString()], { type: 'text/html;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `ban-dich-${new Date().getTime()}.html`;
+    a.download = this.generateFilename();
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
