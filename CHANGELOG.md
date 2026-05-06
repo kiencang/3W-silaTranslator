@@ -5,6 +5,11 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.24] - 2026-05-06
+### Added
+- Thêm nút chia sẻ copy link dễ dàng.
+- Thêm tính năng lưu trữ lịch sử dịch.
+
 ## [v1.0.23] - 2026-05-05
 ### Fixed
 - Chỉnh giao diện nút +Search.
