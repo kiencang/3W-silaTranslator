@@ -7,7 +7,7 @@ và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0
 
 ## [v1.0.26] - 2026-05-07
 ### Fixed
-- Đồng bộ bộ icon trên ứng dụng.
+- Đồng bộ bộ icon trên ứng dụng (chỉ sử dụng Angular Material Icons, thay vì trộn lẫn cả icon svg).
 
 ## [v1.0.25] - 2026-05-06
 ### Fixed
