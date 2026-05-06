@@ -7,6 +7,9 @@ import {firstValueFrom} from 'rxjs';
 import {GoogleGenAI, ThinkingLevel} from '@google/genai';
 import {marked} from 'marked';
 
+import {MatIconModule} from '@angular/material/icon';
+import {HistoryService, TranslationHistoryItem} from './history.service';
+
 export interface Toast {
   id: number;
   message: string;
@@ -17,13 +20,14 @@ export interface Toast {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule],
+  imports: [RouterOutlet, FormsModule, MatIconModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
   private http = inject(HttpClient);
   private sanitizer = inject(DomSanitizer);
+  private historyService = inject(HistoryService);
 
   url = signal('');
   temperature = signal(0.5);
@@ -56,6 +60,14 @@ export class App {
   isSitesModalOpen = signal(false);
   modalSiteInputs = signal<{id: number, url: string}[]>([]);
   private modalInputIdCounter = 0;
+  
+  isShareModalOpen = signal(false);
+  isCopied = signal(false);
+  
+  isHistoryModalOpen = signal(false);
+  historyItems = this.historyService.historyItems;
+  confirmDeleteId = signal<number | null>(null);
+  confirmDeleteAll = signal(false);
   
   formattedTime = computed(() => {
     const t = this.translationTime();
@@ -121,6 +133,30 @@ export class App {
     } catch (e) {
       return url;
     }
+  }
+
+  copyShareLink() {
+    const shareUrl = 'https://aistudio.google.com/apps/4cc7e19e-46dd-4d38-8617-ba38ef1c80c3?showAssistant=true&showPreview=true&fullscreenApplet=true';
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      this.isCopied.set(true);
+      setTimeout(() => {
+        this.isCopied.set(false);
+      }, 3000);
+    }).catch(() => {
+      // Fallback
+      const textArea = document.createElement("textarea");
+      textArea.value = shareUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        this.isCopied.set(true);
+        setTimeout(() => {
+          this.isCopied.set(false);
+        }, 3000);
+      } catch (err) {}
+      document.body.removeChild(textArea);
+    });
   }
 
   openSitesModal() {
@@ -398,6 +434,14 @@ export class App {
       this.fullHtmlString.set(this.sanitizer.bypassSecurityTrustHtml(finalDoc));
       this.translatedHtml.set(this.sanitizer.bypassSecurityTrustHtml(finalHtml));
       
+      // Save to history
+      this.historyService.addHistory({
+        url: this.url().trim() || 'Nội dung upload',
+        title: translatedTitleString || 'Bản dịch',
+        htmlContent: finalHtml,
+        rawHtmlString: finalDoc
+      });
+      
       this.showToast('Đã dịch xong, bạn hãy đọc nó ngay nhé!', 'success');
     } catch (err: any) {
       console.error('Translation error:', err);
@@ -588,5 +632,48 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
     window.URL.revokeObjectURL(url);
     
     this.showToast('Đã tải bản dịch (.html) về máy. Bạn có thể đọc được bài dịch bằng tất cả các trình duyệt phổ thông.', 'success');
+  }
+
+  loadHistoryItem(item: TranslationHistoryItem) {
+    this.url.set(item.url);
+    this.translatedTitle.set(item.title);
+    this.rawHtmlString.set(item.rawHtmlString);
+    this.fullHtmlString.set(this.sanitizer.bypassSecurityTrustHtml(item.rawHtmlString));
+    this.translatedHtml.set(this.sanitizer.bypassSecurityTrustHtml(item.htmlContent));
+    this.isHistoryModalOpen.set(false);
+    this.showToast('Đã tải lại bản dịch từ lịch sử', 'success');
+  }
+
+  deleteHistoryItem(id: number, event: Event) {
+    event.stopPropagation();
+    if (this.confirmDeleteId() === id) {
+      this.historyService.deleteHistory(id);
+      this.confirmDeleteId.set(null);
+    } else {
+      this.confirmDeleteId.set(id);
+      // Auto cancel after 3s
+      setTimeout(() => {
+        if (this.confirmDeleteId() === id) {
+          this.confirmDeleteId.set(null);
+        }
+      }, 3000);
+    }
+  }
+
+  deleteAllHistory() {
+    if (this.confirmDeleteAll()) {
+      this.historyService.clearAllHistory();
+      this.confirmDeleteAll.set(false);
+    } else {
+      this.confirmDeleteAll.set(true);
+      setTimeout(() => {
+        this.confirmDeleteAll.set(false);
+      }, 3000);
+    }
+  }
+
+  formatTimestamp(ts: number): string {
+    const d = new Date(ts);
+    return `${d.toLocaleDateString('vi-VN')} ${d.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}`;
   }
 }

@@ -339,11 +339,140 @@
           [class.border-t]="!isZenMode()" [class.border-[#E5E7EB]]="!isZenMode()"
           [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.py-0]="isZenMode()" [class.md:py-0]="isZenMode()" [class.overflow-hidden]="isZenMode()" [class.border-none]="isZenMode()"
           [class.max-h-[100px]]="!isZenMode()" [class.opacity-100]="!isZenMode()">
-    <div class="px-4">
-      v1.0.23 &bull; <a href="https://blog.wpsila.com/app-dich-website-tu-anh-sang-viet/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn sử dụng</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
-      <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a>
+    <div class="px-4 flex flex-wrap items-center justify-center gap-2 md:gap-3 lg:gap-4">
+      <div class="flex items-center gap-2">
+        <button (click)="isHistoryModalOpen.set(true)" aria-label="Lịch sử dịch" class="inline-flex items-center justify-center gap-1.5 text-gray-600 hover:text-[#0066FF] bg-white border border-gray-200 hover:border-[#0066FF] hover:bg-blue-50 transition-all font-medium cursor-pointer px-3 py-1 rounded-lg shadow-sm">
+          <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;">history</mat-icon>
+          <span>History</span>
+        </button>
+        <button (click)="isShareModalOpen.set(true)" aria-label="Chia sẻ công cụ" class="inline-flex items-center justify-center gap-1.5 text-gray-600 hover:text-[#0066FF] bg-white border border-gray-200 hover:border-[#0066FF] hover:bg-blue-50 transition-all font-medium cursor-pointer px-3 py-1 rounded-lg shadow-sm">
+          <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;">share</mat-icon>
+          <span>Share</span>
+        </button>
+      </div>
+      <div class="leading-relaxed hidden sm:block">
+        v1.0.24 &bull; <a href="https://blog.wpsila.com/app-dich-website-tu-anh-sang-viet/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn sử dụng</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+        <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a>
+      </div>
     </div>
   </footer>
+
+  <!-- Share Modal -->
+  @if (isShareModalOpen()) {
+    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
+      <div class="bg-white w-full max-w-[480px] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+        <!-- Header -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <h3 id="share-modal-title" class="text-lg font-bold text-[#1A1A1B]">Chia sẻ 3W silaTranslator</h3>
+          <button (click)="isShareModalOpen.set(false)" aria-label="Đóng cửa sổ chia sẻ" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors p-1 rounded-md hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Body -->
+        <div class="px-6 py-5 flex flex-col gap-4">
+          <p class="text-sm text-gray-600 leading-relaxed">
+            3W silaTranslator là công cụ miễn phí, dựa trên gói miễn phí mà AI Studio cung cấp, đủ dịch khoảng 20 bài viết / ngày bằng model AI Gemini mới nhất.
+          </p>
+          
+          <div class="flex items-center gap-2 mt-2">
+            <input type="text"
+                   readonly
+                   [value]="'https://aistudio.google.com/apps/4cc7e19e...'"
+                   class="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-500 font-mono outline-none cursor-default select-all">
+            <button (click)="copyShareLink()" aria-label="Sao chép đường dẫn" class="shrink-0 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all text-white border-none cursor-pointer"
+                    [class.bg-[#0066FF]]="!isCopied()" [class.hover:bg-blue-700]="!isCopied()"
+                    [class.bg-[#10B981]]="isCopied()">
+              @if (isCopied()) {
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 18px;">check</mat-icon>
+                <span>Đã copy!</span>
+              } @else {
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 18px;">content_copy</mat-icon>
+                <span>Copy link</span>
+              }
+            </button>
+          </div>
+          
+          <p class="text-xs text-left text-gray-400 mt-1 italic">
+            Bạn có thể copy đường dẫn chia sẻ cho người khác cùng dùng.
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- History Modal -->
+  @if (isHistoryModalOpen()) {
+    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="history-modal-title">
+      <div class="bg-white w-full max-w-[600px] max-h-[85vh] rounded-2xl shadow-2xl flex flex-col">
+        <!-- Header -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">
+          <div class="flex items-center gap-3">
+            <h3 id="history-modal-title" class="text-lg font-bold text-[#1A1A1B]">Lịch sử dịch</h3>
+            @if (historyItems().length > 0) {
+              <button (click)="deleteAllHistory()" class="text-xs px-2 py-1.5 rounded-lg bg-white text-red-600 hover:bg-red-50 transition-colors border border-red-200 cursor-pointer flex items-center gap-1 font-medium shadow-sm">
+                @if (confirmDeleteAll()) {
+                  <span>Xác nhận xóa hết?</span>
+                } @else {
+                  <mat-icon style="font-size: 14px; width: 14px; height: 14px; line-height: 14px;">delete_sweep</mat-icon>
+                  <span>Xóa tất cả</span>
+                }
+              </button>
+            }
+          </div>
+          <button (click)="isHistoryModalOpen.set(false)" aria-label="Đóng cửa sổ lịch sử" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors p-1 rounded-md hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Warning block -->
+        <div class="px-6 py-3 bg-amber-50 shrink-0 border-b border-amber-100">
+          <p class="text-[13px] text-amber-800 leading-relaxed m-0 flex gap-2">
+            <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 18px; margin-top: 2px" class="shrink-0 text-amber-600">warning_amber</mat-icon>
+            <span>Danh sách 10 bài viết gần nhất bạn dịch, được <strong>lưu cục bộ</strong> trên <strong>trình duyệt đang dùng</strong> để tiện xem lại. Hãy chủ động "Tải bản dịch" để lưu trữ lâu dài, danh sách này có thể bị mất nếu bạn xóa dữ liệu web.</span>
+          </p>
+        </div>
+
+        <!-- Body -->
+        <div class="px-2 py-2 overflow-y-auto flex-1">
+          @if (historyItems().length === 0) {
+            <div class="text-center py-12 text-gray-500">
+              <mat-icon style="font-size: 48px; width: 48px; height: 48px; line-height: 48px; margin-bottom: 8px" class="opacity-20 text-gray-400">history</mat-icon>
+              <p class="mt-2 text-sm text-gray-500 font-medium">Chưa có lịch sử dịch nào.</p>
+            </div>
+          } @else {
+            <div class="flex flex-col gap-1">
+              @for (item of historyItems(); track item.id) {
+                <div class="group flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer border border-transparent hover:border-gray-200" (click)="loadHistoryItem(item)">
+                  <div class="flex-1 min-w-0 pr-4">
+                    <h4 class="text-[15px] font-semibold text-gray-900 truncate mb-1" [title]="item.title">{{ item.title }}</h4>
+                    <div class="flex items-center gap-2 text-xs text-gray-500 font-medium">
+                      <span class="truncate max-w-[200px]" [title]="item.url">{{ item.url }}</span>
+                      <span class="shrink-0 opacity-40">&bull;</span>
+                      <span class="shrink-0 flex items-center gap-1"><mat-icon style="font-size: 11px; width: 11px; height: 11px; line-height: 11px;">schedule</mat-icon>{{ formatTimestamp(item.timestamp) }}</span>
+                    </div>
+                  </div>
+                  <div class="shrink-0">
+                    <button (click)="deleteHistoryItem(item.id!, $event)" class="px-2 py-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100 bg-transparent cursor-pointer flex items-center justify-center relative overflow-hidden" [class.bg-red-50]="confirmDeleteId() === item.id!" [class.text-red-600]="confirmDeleteId() === item.id!" [class.border-red-200]="confirmDeleteId() === item.id!">
+                      @if (confirmDeleteId() === item.id!) {
+                        <span class="text-[11px] font-bold px-1 uppercase tracking-wide">Xóa?</span>
+                      } @else {
+                        <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">delete_outline</mat-icon>
+                      }
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
 
   <!-- Sites Modal -->
   @if (isSitesModalOpen()) {
