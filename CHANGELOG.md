@@ -8,6 +8,7 @@ và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0
 ## [v1.0.25] - 2026-05-06
 ### Fixed
 - Điều chỉnh một chút giao diện (nút +Search, Popup Share).
+- Chỉnh giao diện của input nhập link web để nó giống với nơi nhập địa chỉ website hơn, tạo liên tưởng tốt hơn cho người dùng.
 
 ## [v1.0.24] - 2026-05-06
 ### Added
