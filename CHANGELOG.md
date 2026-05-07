@@ -5,6 +5,13 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.26] - 2026-05-07
+### Fixed
+- Đồng bộ hóa bộ icon của ứng dụng (chỉ sử dụng bộ icon chuyên dụng, bỏ không dùng svg thô).
+- Điều chỉnh một số nút như Toàn màn hình, Download nhò gọn hơn.
+- Thêm nút đóng lại giao diện đọc để quay lại giao diện trang chủ.
+- Khóa các nút History và +Search trong quá trình thao tác Dịch Web/File/Từ khóa.
+
 ## [v1.0.25] - 2026-05-06
 ### Fixed
 - Điều chỉnh một chút giao diện (nút +Search, Popup Share).
