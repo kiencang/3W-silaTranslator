@@ -619,6 +619,13 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
     return `${filename}.html`;
   }
 
+  closeTranslation() {
+    this.fullHtmlString.set(null);
+    this.translatedHtml.set(null);
+    this.rawHtmlString.set('');
+    this.translatedTitle.set('');
+  }
+
   downloadHtml() {
     if (!this.rawHtmlString()) return;
     const blob = new Blob([this.rawHtmlString()], { type: 'text/html;charset=utf-8' });
