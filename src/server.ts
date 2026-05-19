@@ -31,7 +31,7 @@ app.use(express.json({ limit: '50mb' }));
 
 app.post('/api/translate', async (req: Request, res: Response) => {
   try {
-    const { markdownContent, systemInstruction, userPrompt, temperature } = req.body;
+    const { markdownContent, systemInstruction, userPrompt, temperature, model } = req.body;
 
     if (!markdownContent) {
       res.status(400).json({ error: 'Nội dung cần dịch là bắt buộc' });
@@ -46,7 +46,7 @@ app.post('/api/translate', async (req: Request, res: Response) => {
     const fullPrompt = `${userPrompt}\n\n${markdownContent}`;
 
     const result = await ai.models.generateContent({
-      model: 'gemini-pro-latest',
+      model: model || 'gemini-pro-latest',
       contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
       config: {
         systemInstruction: systemInstruction,
@@ -62,7 +62,13 @@ app.post('/api/translate', async (req: Request, res: Response) => {
     res.json({ translatedMarkdown: text });
   } catch (error: unknown) {
     console.error('Translation Error:', error);
-    res.status(500).json({ error: error instanceof Error ? error.message : 'Lỗi trong quá trình dịch' });
+    let errorMessage = error instanceof Error ? error.message : 'Lỗi trong quá trình dịch';
+    
+    if (errorMessage.includes('429') || errorMessage.includes('Quota exceeded') || errorMessage.includes('RESOURCE_EXHAUSTED')) {
+      errorMessage = 'Bạn đã vượt quá giới hạn lượt sử dụng Google Gemini API (Lỗi 429). Vui lòng chờ khoảng 1 phút rồi thử lại, hoặc kiểm tra lại gói cước API của bạn.';
+    }
+    
+    res.status(500).json({ error: errorMessage });
   }
 });
 
@@ -97,7 +103,13 @@ app.post('/api/translate-query', async (req: Request, res: Response) => {
     res.json({ translatedQuery: cleanedText });
   } catch (error: unknown) {
     console.error('Query Translation Error:', error);
-    res.status(500).json({ error: error instanceof Error ? error.message : 'Lỗi dịch từ khóa' });
+    let errorMessage = error instanceof Error ? error.message : 'Lỗi dịch từ khóa';
+    
+    if (errorMessage.includes('429') || errorMessage.includes('Quota exceeded') || errorMessage.includes('RESOURCE_EXHAUSTED')) {
+      errorMessage = 'Bạn đã vượt quá giới hạn lượt sử dụng Google Gemini API (Lỗi 429). Vui lòng chờ khoảng 1 phút rồi thử lại.';
+    }
+    
+    res.status(500).json({ error: errorMessage });
   }
 });
 

@@ -22,74 +22,124 @@
           <span class="text-slate-900">3W</span>&nbsp;<span class="text-indigo-600">sila</span><span class="text-rose-600">Translator</span>
         </div>
         
-        <!-- 3 Horizontal Dots for Temperature -->
-        <div class="flex flex-row gap-2.5">
-          <div class="relative group flex items-center justify-center">
-            <button (click)="temperature.set(0.3)"
-                    aria-label="Chọn giọng dịch: Sát nghĩa (0.3)"
-                    class="w-3 h-3 rounded-full bg-slate-900 transition-all border-none cursor-pointer"
-                    [class.ring-2]="temperature() === 0.3" [class.ring-offset-1]="temperature() === 0.3" [class.ring-slate-900]="temperature() === 0.3">
-            </button>
-            <div class="absolute top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
-              Sát nghĩa (0.3)
-              <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
+        <!-- Controls: Temperature & Search -->
+        <div class="flex flex-row gap-4 items-center">
+          <!-- 3 Horizontal Dots for Temperature -->
+          <div class="flex flex-row gap-2.5 items-center">
+            <div class="relative group flex items-center justify-center">
+              <button (click)="temperature.set(0.3)"
+                      aria-label="Chọn giọng dịch: Sát nghĩa (0.3)"
+                      class="w-3 h-3 rounded-full bg-slate-900 transition-all border-none cursor-pointer"
+                      [class.ring-2]="temperature() === 0.3" [class.ring-offset-1]="temperature() === 0.3" [class.ring-slate-900]="temperature() === 0.3">
+              </button>
+              <div class="absolute top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
+                Sát nghĩa (0.3)
+                <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
+              </div>
+            </div>
+
+            <div class="relative group flex items-center justify-center">
+              <button (click)="temperature.set(0.5)"
+                      aria-label="Chọn giọng dịch: Cân bằng (0.5)"
+                      class="w-3 h-3 rounded-full bg-indigo-600 transition-all border-none cursor-pointer"
+                      [class.ring-2]="temperature() === 0.5" [class.ring-offset-1]="temperature() === 0.5" [class.ring-indigo-600]="temperature() === 0.5">
+              </button>
+              <div class="absolute top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
+                Cân bằng (0.5)
+                <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
+              </div>
+            </div>
+
+            <div class="relative group flex items-center justify-center">
+              <button (click)="temperature.set(0.7)"
+                      aria-label="Chọn giọng dịch: Uyển chuyển (0.7)"
+                      class="w-3 h-3 rounded-full bg-rose-600 transition-all border-none cursor-pointer"
+                      [class.ring-2]="temperature() === 0.7" [class.ring-offset-1]="temperature() === 0.7" [class.ring-rose-600]="temperature() === 0.7">
+              </button>
+              <div class="absolute top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
+                Uyển chuyển (0.7)
+                <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
+              </div>
             </div>
           </div>
-
-          <div class="relative group flex items-center justify-center">
-            <button (click)="temperature.set(0.5)"
-                    aria-label="Chọn giọng dịch: Cân bằng (0.5)"
-                    class="w-3 h-3 rounded-full bg-indigo-600 transition-all border-none cursor-pointer"
-                    [class.ring-2]="temperature() === 0.5" [class.ring-offset-1]="temperature() === 0.5" [class.ring-indigo-600]="temperature() === 0.5">
+          
+          <div class="w-px h-3 bg-gray-300 hidden md:block"></div>
+          
+          <!-- +Search -->
+          <div class="relative group flex items-center justify-center hidden md:flex">
+            <button (click)="useSearchGrounding.set(!useSearchGrounding())"
+                    aria-label="Tính năng tra cứu Google Search"
+                    [disabled]="isLoading() || isSearchLoading()"
+                    class="flex items-center gap-1 p-0 transition-all border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed bg-transparent">
+              
+              <div class="relative inline-flex h-3 w-6 shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none"
+                   [class.bg-blue-600]="useSearchGrounding()"
+                   [class.bg-gray-300]="!useSearchGrounding()">
+                <span class="pointer-events-none inline-block h-2 w-2 transform rounded-full bg-white shadow ring-0 transition-transform duration-200 ease-in-out absolute left-[2px]"
+                      [class.translate-x-3]="useSearchGrounding()"
+                      [class.translate-x-0]="!useSearchGrounding()"></span>
+              </div>
+              
+              <span class="text-[11px] font-bold transition-colors tracking-wide"
+                    [class.text-blue-600]="useSearchGrounding()"
+                    [class.text-gray-400]="!useSearchGrounding()">SEARCH Grounding</span>
             </button>
-            <div class="absolute top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
-              Cân bằng (0.5)
-              <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
-            </div>
-          </div>
-
-          <div class="relative group flex items-center justify-center">
-            <button (click)="temperature.set(0.7)"
-                    aria-label="Chọn giọng dịch: Uyển chuyển (0.7)"
-                    class="w-3 h-3 rounded-full bg-rose-600 transition-all border-none cursor-pointer"
-                    [class.ring-2]="temperature() === 0.7" [class.ring-offset-1]="temperature() === 0.7" [class.ring-rose-600]="temperature() === 0.7">
-            </button>
-            <div class="absolute top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
-              Uyển chuyển (0.7)
-              <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
+            
+            <!-- Tooltip -->
+            <div class="absolute top-full mt-2 w-72 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg text-center left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0">
+              <strong [class.text-blue-400]="useSearchGrounding()" [class.text-gray-400]="!useSearchGrounding()">[{{ useSearchGrounding() ? 'Đang Bật' : 'Đang Tắt' }}]</strong> Bổ sung công cụ tìm kiếm cho AI trong quá trình dịch, sẽ tốn token/thời gian hơn. Chỉ nên bật với bài có tính học thuật hoặc thời sự.
+              <div class="absolute bottom-full left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0 border-4 border-transparent border-b-gray-900"></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Features / Options -->
+      <!-- Model Selection -->
       <div class="flex items-center justify-center">
-        <div class="relative group flex items-center justify-center">
-          <button (click)="useSearchGrounding.set(!useSearchGrounding())"
-                  aria-label="Tính năng tra cứu Google Search"
-                  [disabled]="isLoading() || isSearchLoading()"
-                  class="flex items-center gap-1.5 px-3.5 py-1 rounded-full transition-all border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                  [class.bg-blue-50]="useSearchGrounding()" [class.hover:bg-blue-100]="useSearchGrounding() && !isLoading() && !isSearchLoading()"
-                  [class.bg-transparent]="!useSearchGrounding()" [class.hover:bg-gray-100]="!useSearchGrounding() && !isLoading() && !isSearchLoading()">
+        <div class="flex items-center bg-gray-100/80 p-0.5 rounded-full shadow-inner border border-gray-200">
+          <!-- Pro Model Button -->
+          <button 
+            (click)="selectedModel.set('gemini-pro-latest')"
+            [disabled]="isLoading() || isSearchLoading()"
+            class="group relative flex items-center justify-center px-4 py-1 rounded-full transition-all duration-300 border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            [class.bg-white]="selectedModel() === 'gemini-pro-latest'"
+            [class.shadow-sm]="selectedModel() === 'gemini-pro-latest'"
+            [class.text-indigo-600]="selectedModel() === 'gemini-pro-latest'"
+            [class.bg-transparent]="selectedModel() !== 'gemini-pro-latest'"
+            [class.text-gray-400]="selectedModel() !== 'gemini-pro-latest'"
+            [class.hover:text-gray-600]="selectedModel() !== 'gemini-pro-latest' && !isLoading() && !isSearchLoading()"
+            aria-label="Chọn model Gemini Pro (Dịch chất lượng cao)">
+            <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">psychology</mat-icon>
             
-            <div class="relative inline-flex h-4 w-8 shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none"
-                 [class.bg-blue-600]="useSearchGrounding()"
-                 [class.bg-gray-300]="!useSearchGrounding()">
-              <span class="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition-transform duration-200 ease-in-out absolute left-[2px]"
-                    [class.translate-x-4]="useSearchGrounding()"
-                    [class.translate-x-0]="!useSearchGrounding()"></span>
+            <!-- Tooltip -->
+            <div class="absolute top-full mt-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-center z-10">
+              <strong class="text-indigo-400">Gemini Pro</strong><br/>
+              Khuyên dùng. Nhấn mạnh vào chất lượng bản dịch.
+              <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
             </div>
-            
-            <span class="text-[13px] font-semibold transition-colors"
-                  [class.text-blue-600]="useSearchGrounding()"
-                  [class.text-gray-400]="!useSearchGrounding()">+Search</span>
           </button>
-          
-          <!-- Tooltip -->
-          <div class="absolute top-full mt-2 w-72 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg text-center">
-            <strong [class.text-blue-400]="useSearchGrounding()" [class.text-gray-400]="!useSearchGrounding()">[{{ useSearchGrounding() ? 'Đang Bật' : 'Đang Tắt' }}]</strong> Bổ sung công cụ tìm kiếm cho AI trong quá trình dịch, sẽ tốn token/thời gian hơn. Chỉ nên bật với bài có tính học thuật hoặc thời sự cao.
-            <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
-          </div>
+
+          <!-- Flash Model Button -->
+          <button 
+            (click)="selectedModel.set('gemini-flash-latest')"
+            [disabled]="isLoading() || isSearchLoading()"
+            class="group relative flex items-center justify-center px-4 py-1 rounded-full transition-all duration-300 border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            [class.bg-white]="selectedModel() === 'gemini-flash-latest'"
+            [class.shadow-sm]="selectedModel() === 'gemini-flash-latest'"
+            [class.text-amber-500]="selectedModel() === 'gemini-flash-latest'"
+            [class.bg-transparent]="selectedModel() !== 'gemini-flash-latest'"
+            [class.text-gray-400]="selectedModel() !== 'gemini-flash-latest'"
+            [class.hover:text-gray-600]="selectedModel() !== 'gemini-flash-latest' && !isLoading() && !isSearchLoading()"
+            aria-label="Chọn model Gemini Flash (Dịch cực nhanh)">
+            <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">bolt</mat-icon>
+            
+             <!-- Tooltip -->
+             <div class="absolute top-full mt-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-center z-10">
+              <strong class="text-amber-400">Gemini Flash</strong><br/>
+              Tốc độ dịch cực nhanh. Phù hợp báo chí cơ bản.
+              <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
+            </div>
+          </button>
         </div>
       </div>
 
@@ -345,7 +395,7 @@
         </button>
       </div>
       <div class="leading-relaxed hidden sm:block">
-        v1.0.27 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+        v1.0.28 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
         <a href="https://blog.wpsila.com/app-dich-website-tu-anh-sang-viet/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn sử dụng</a>
       </div>
     </div>

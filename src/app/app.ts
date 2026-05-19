@@ -41,6 +41,7 @@ export class App {
   translationTime = signal(0);
   isZenMode = signal(false);
   useSearchGrounding = signal(false);
+  selectedModel = signal<'gemini-pro-latest' | 'gemini-flash-latest'>('gemini-pro-latest');
   
   searchQuery = signal('');
   translatedSearchQuery = signal('');
@@ -337,7 +338,7 @@ export class App {
           systemInstruction: this.cachedSi,
           userPrompt: this.cachedPrompt,
           temperature: this.temperature(),
-          model: 'gemini-pro-latest'
+          model: this.selectedModel()
         })
       );
 
@@ -419,7 +420,7 @@ export class App {
         .replace('{{JS_CONTENT}}', this.cachedTemplateJs)
         .replace(/{{ORIGINAL_URL}}/g, this.url())
         .replace('{{DATE}}', dateStr)
-        .replace('{{MODEL}}', 'gemini-pro-latest')
+        .replace('{{MODEL}}', this.selectedModel())
         .replace('{{TEMP}}', this.temperature().toString())
         .replace('{{TOKENS_IN}}', tokensIn.toString())
         .replace('{{TOKENS_OUT}}', tokensOut.toString())
