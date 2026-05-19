@@ -1,1 +1,1 @@
-declare const GEMINI_API_KEY: string;
+// No global variables needed on client

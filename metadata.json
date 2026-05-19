@@ -1,6 +1,8 @@
 {
   "name": "3W silaTranslator",
-  "description": "Công cụ dịch website từ tiếng Anh sang tiếng Việt.",
+  "description": "Công cụ trích xuất nội dung và dịch website từ tiếng Anh sang tiếng Việt sử dụng AI Gemini.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

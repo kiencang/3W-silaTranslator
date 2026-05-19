@@ -4,7 +4,6 @@ import {HttpClient} from '@angular/common/http';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {firstValueFrom} from 'rxjs';
-import {GoogleGenAI, ThinkingLevel} from '@google/genai';
 import {marked} from 'marked';
 
 import {MatIconModule} from '@angular/material/icon';
@@ -14,6 +13,7 @@ export interface Toast {
   id: number;
   message: string;
   type: 'success' | 'error' | 'info';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   timeoutId?: any;
 }
 
@@ -77,6 +77,7 @@ export class App {
   });
 
   private toastIdCounter = 0;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private timerInterval: any;
   private cachedSi = '';
   private cachedPrompt = '';
@@ -93,18 +94,21 @@ export class App {
           if (Array.isArray(parsed)) {
             this.favoriteSites.set(parsed);
           }
-        } catch (e) {}
+        } catch {
+          // Ignore parse errors
+        }
       }
     }
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0] as File;
+  onFileSelected(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
     if (!file) return;
 
     if (file.size > 500 * 1024) {
       this.showToast("File HTML quá lớn (trên 500KB có thể do chứa ảnh hoặc/và mã rác). Bạn vui lòng tải lại/lưu lại trang web với tùy chọn 'Webpage, HTML Only' (Chỉ HTML) nhé!", "error");
-      event.target.value = '';
+      target.value = '';
       return;
     }
 
@@ -112,7 +116,7 @@ export class App {
     const reader = new FileReader();
     reader.onload = (e) => {
       this.uploadedHtmlContent.set(e.target?.result as string);
-      event.target.value = '';
+      target.value = '';
     };
     reader.readAsText(file);
   }
@@ -130,7 +134,7 @@ export class App {
       }
       const domain = new URL(cleanUrl).hostname;
       return domain.replace(/^www\./i, '');
-    } catch (e) {
+    } catch {
       return url;
     }
   }
@@ -154,7 +158,9 @@ export class App {
         setTimeout(() => {
           this.isCopied.set(false);
         }, 3000);
-      } catch (err) {}
+      } catch {
+        // Ignore fallback errors
+      }
       document.body.removeChild(textArea);
     });
   }
@@ -308,13 +314,14 @@ export class App {
       await this.fetchPrompts();
 
       // 1. Extract content via our server proxy (passing HTML content if user uploaded a file)
-      const payload: any = { url: originalUrl };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const extractPayload: any = { url: originalUrl };
       if (this.uploadedHtmlContent()) {
-        payload.htmlContent = this.uploadedHtmlContent();
+        extractPayload.htmlContent = this.uploadedHtmlContent();
       }
 
       const extraction = await firstValueFrom(
-        this.http.post<{title: string, content: string, youtubeVideos?: string[]}>('/api/extract', payload)
+        this.http.post<{title: string, content: string, youtubeVideos?: string[]}>('/api/extract', extractPayload)
       );
       
       this.translatedTitle.set(extraction.title);
@@ -323,31 +330,18 @@ export class App {
       // Prepend the title inside markdown so the AI translates it!
       const markdownContent = `# ${extraction.title}\n\n${extraction.content}`;
 
-      // 3. Translate content using Gemini on the client
-      const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-      const fullPrompt = `${this.cachedPrompt}\n\n${markdownContent}`;
+      // 3. Translate content via server-side proxy
+      const translationResponse = await firstValueFrom(
+        this.http.post<{translatedMarkdown: string}>('/api/translate', {
+          markdownContent,
+          systemInstruction: this.cachedSi,
+          userPrompt: this.cachedPrompt,
+          temperature: this.temperature(),
+          model: 'gemini-pro-latest'
+        })
+      );
 
-      const config: any = {
-        systemInstruction: this.cachedSi,
-        temperature: this.temperature(),
-        thinkingConfig: {
-          thinkingLevel: ThinkingLevel.HIGH,
-        }
-      };
-
-      if (this.useSearchGrounding()) {
-        config.tools = [{ googleSearch: {} }];
-      }
-
-      const aiResponse = await ai.models.generateContent({
-        model: 'gemini-pro-latest',
-        contents: fullPrompt,
-        config: config
-      });
-
-      let translatedMarkdown = aiResponse.text || '';
-      // Clean up potential markdown code blocks if the AI wraps the whole output
-      translatedMarkdown = translatedMarkdown.replace(/^```markdown\n?/, '').replace(/\n?```$/, '');
+      const translatedMarkdown = translationResponse.translatedMarkdown || '';
 
       // Parse the output to find the translated title
       let translatedTitleString = extraction.title; // fallback
@@ -376,7 +370,7 @@ export class App {
               videoHtml = videoHtml.replace(srcMatch[1], videoSrc);
             }
             // Trích xuất ID youtube để lấy Thumbnail
-            const idMatch = videoSrc.match(/(?:embed\/|v=|\/v\/|youtu\.be\/|\/e\/)([^"&?\/\s]{11})/);
+            const idMatch = videoSrc.match(/(?:embed\/|v=|\/v\/|youtu\.be\/|\/e\/)([^"&?/\s]{11})/);
             if (idMatch && idMatch[1]) {
               videoId = idMatch[1];
             }
@@ -408,17 +402,18 @@ export class App {
             </script>
           </div>`;
           // marked sẽ render `[SILA_YOUTUBE_0]` thành <code>[SILA_YOUTUBE_0]</code>
-          const regex = new RegExp(`<p><code>\\[SILA_YOUTUBE_${i}\\]<\\/code><\\/p>|<code>\\[SILA_YOUTUBE_${i}\\]<\\/code>|\\[SILA_YOUTUBE_${i}\\]`, 'gi');
+          const regexStr = `<p><code>\\[SILA_YOUTUBE_${i}\\]<\\/code><\\/p>|<code>\\[SILA_YOUTUBE_${i}\\]<\\/code>|\\[SILA_YOUTUBE_${i}\\]`;
+          const regex = new RegExp(regexStr, 'gi');
           finalHtml = finalHtml.replace(regex, responsiveVideoHtml);
         });
       }
 
-      const tokensIn = Math.round(fullPrompt.length / 4);
+      const tokensIn = Math.round(markdownContent.length / 4);
       const tokensOut = Math.round(translatedMarkdown.length / 4);
       const now = new Date();
       const dateStr = `${now.toLocaleDateString('vi-VN')} | Giờ: ${now.toLocaleTimeString('vi-VN')}`;
 
-      let finalDoc = this.cachedTemplateHtml
+      const finalDoc = this.cachedTemplateHtml
         .replace('{{TITLE}}', translatedTitleString)
         .replace('{{CSS_CONTENT}}', this.cachedTemplateCss)
         .replace('{{JS_CONTENT}}', this.cachedTemplateJs)
@@ -443,6 +438,7 @@ export class App {
       });
       
       this.showToast('Đã dịch xong, bạn hãy đọc nó ngay nhé!', 'success');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error('Translation error:', err);
       
@@ -484,7 +480,7 @@ export class App {
   }
 
   async translateSearchQuery() {
-    let query = this.searchQuery().trim();
+    const query = this.searchQuery().trim();
     
     // Group 1: Validate input
     if (!query) {
@@ -518,20 +514,16 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
 
       const prompt = `Provide the single best English search query translation for the following Vietnamese query. Output ONLY the raw English text, nothing else:\n[${query}]`;
 
-      // Group 2: Call Gemini API
-      const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-      const aiResponse = await ai.models.generateContent({
-        model: 'gemini-flash-latest',
-        contents: prompt,
-        config: {
-          systemInstruction: systemInstruction,
-          temperature: 0.2
-        }
-      });
+      // Call server proxy
+      const response = await firstValueFrom(
+        this.http.post<{translatedQuery: string}>('/api/translate-query', {
+          query,
+          systemInstruction,
+          userPrompt: prompt
+        })
+      );
 
-      let translatedQuery = aiResponse.text || '';
-      // Clean up whitespace/markdown gracefully just in case
-      translatedQuery = translatedQuery.replace(/^```[a-z]*\n?/, '').replace(/\n?```$/, '').trim();
+      const translatedQuery = response.translatedQuery || '';
       
       // Group 3: Display results
       if (!translatedQuery) {
@@ -541,6 +533,7 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
 
       this.translatedSearchQuery.set(translatedQuery);
       
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error('Search Translation error:', err);
       let errorMessage = 'Có lỗi xảy ra trong quá trình dịch. Vui lòng thử lại.';
@@ -600,7 +593,7 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
               filename = 'vi_' + this.slugify(lastSegment);
             }
           }
-        } catch (e) {
+        } catch {
           // Ignore invalid URLs
         }
       }

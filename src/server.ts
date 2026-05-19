@@ -4,18 +4,102 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import {join} from 'node:path';
 import { parseHTML } from 'linkedom';
 import { Readability, isProbablyReaderable } from '@mozilla/readability';
 import TurndownService from 'turndown';
+import { GoogleGenAI } from '@google/genai';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
+// Thêm cấu hình Gemini ở server để bảo mật API Key
+const GEMINI_API_KEY = process.env['GEMINI_API_KEY'] || '';
+const ai = new GoogleGenAI({
+  apiKey: GEMINI_API_KEY,
+  httpOptions: {
+    headers: {
+      'User-Agent': 'aistudio-build',
+    }
+  }
+});
+
 app.use(express.json({ limit: '50mb' }));
+
+app.post('/api/translate', async (req: Request, res: Response) => {
+  try {
+    const { markdownContent, systemInstruction, userPrompt, temperature } = req.body;
+
+    if (!markdownContent) {
+      res.status(400).json({ error: 'Nội dung cần dịch là bắt buộc' });
+      return;
+    }
+
+    if (!GEMINI_API_KEY) {
+      res.status(500).json({ error: 'GEMINI_API_KEY chưa được cấu hình trên máy chủ.' });
+      return;
+    }
+
+    const fullPrompt = `${userPrompt}\n\n${markdownContent}`;
+
+    const result = await ai.models.generateContent({
+      model: 'gemini-pro-latest',
+      contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
+      config: {
+        systemInstruction: systemInstruction,
+        temperature: temperature || 0.5,
+      }
+    });
+
+    let text = result.text || '';
+    
+    // Clean up potential markdown code blocks if the AI wraps the whole output
+    text = text.replace(/^```markdown\n?/, '').replace(/\n?```$/, '');
+
+    res.json({ translatedMarkdown: text });
+  } catch (error: unknown) {
+    console.error('Translation Error:', error);
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Lỗi trong quá trình dịch' });
+  }
+});
+
+app.post('/api/translate-query', async (req: Request, res: Response) => {
+  try {
+    const { query, systemInstruction, userPrompt } = req.body;
+
+    if (!query) {
+      res.status(400).json({ error: 'Query is required' });
+      return;
+    }
+
+    if (!GEMINI_API_KEY) {
+      res.status(500).json({ error: 'GEMINI_API_KEY chưa được cấu hình trên máy chủ.' });
+      return;
+    }
+
+    const prompt = `${userPrompt}\n[${query}]`;
+
+    const result = await ai.models.generateContent({
+      model: 'gemini-flash-latest',
+      contents: prompt,
+      config: {
+        systemInstruction: systemInstruction,
+        temperature: 0.2
+      }
+    });
+
+    const text = result.text || '';
+    const cleanedText = text.replace(/^```[a-z]*\n?/, '').replace(/\n?```$/, '').trim();
+
+    res.json({ translatedQuery: cleanedText });
+  } catch (error: unknown) {
+    console.error('Query Translation Error:', error);
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Lỗi dịch từ khóa' });
+  }
+});
 
 app.post('/api/extract', async (req, res) => {
   try {
@@ -56,14 +140,17 @@ app.post('/api/extract', async (req, res) => {
     }
 
     // 2. Trích xuất nội dung chính của bài báo bằng thư viện Readability
-    let parsedDOM: any = parseHTML(cleanHtml);
-    let doc: any = parsedDOM.document;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const parsedDOM: any = parseHTML(cleanHtml);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const doc: any = parsedDOM.document;
 
     // CHIẾN LƯỢC 3: Lột vỏ ảnh (Unwrap Images)
     // Tìm các thẻ <img> nằm trong <a> (ví dụ: hiệu ứng Lightbox xem ảnh to).
     // Nếu thẻ <a> không chứa đoạn văn bản nào (chỉ bọc ảnh), thế mạng thẻ <a> bằng chính <img>.
     // Ngăn chặn triệt để lỗi vỡ Markdown lồng nhau khi đưa qua Turndown.
     const images = Array.from(doc.querySelectorAll('img'));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     for (const img of images as any[]) {
       const parentLink = img.closest('a');
       if (parentLink) {
@@ -80,8 +167,10 @@ app.post('/api/extract', async (req, res) => {
     // Ta bóc vỏ <a> đi, nhả ruột ra để bảo toàn cấu trúc phẳng.
     const EXPECTED_BLOCK_TAGS = ['DIV', 'P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'SECTION', 'ARTICLE', 'UL', 'OL', 'LI', 'BLOCKQUOTE', 'FIGURE'];
     const links = Array.from(doc.querySelectorAll('a'));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     for (const link of links as any[]) {
       if (!link.parentNode) continue;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const hasBlockChildren = Array.from(link.children).some((child: any) => EXPECTED_BLOCK_TAGS.includes(child.tagName?.toUpperCase()));
       if (hasBlockChildren) {
         // Lột vỏ: Di chuyển mọi node con (nội dung) ra đứng trước thẻ <a> hiện tại
@@ -95,7 +184,6 @@ app.post('/api/extract', async (req, res) => {
 
     // Kiểm tra xem trang web có cấu trúc phù hợp để đọc không (ví dụ: là một bài báo)
     if (!isProbablyReaderable(doc)) {
-      parsedDOM = null; doc = null; // Quét rác sớm
       let errorMessage = 'Trang web này không có cấu trúc của một bài viết/bài báo. Vui lòng thử lại với một link nội dung cụ thể.';
       
       const firewallKeywords = ['cloudflare', 'complete the challenge', 'unusual activity', 'access denied', 'prove you are human', 'robot check'];
@@ -109,11 +197,12 @@ app.post('/api/extract', async (req, res) => {
       return;
     }
 
-    let reader: any = new Readability(doc);
-    let article: any = reader.parse();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const reader: any = new Readability(doc);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const article: any = reader.parse();
 
     if (!article || !article.content) {
-      parsedDOM = null; doc = null; reader = null; // Quét rác sớm
       throw new Error('Không thể trích xuất nội dung chính từ URL này');
     }
 
@@ -124,6 +213,7 @@ app.post('/api/extract', async (req, res) => {
     const youtubeVideos: string[] = [];
     turndownService.addRule('youtubeIframe', {
       filter: ['iframe'],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       replacement: function (content, node: any) {
         const src = node.getAttribute('src') || '';
         if (src.includes('youtube.com') || src.includes('youtu.be')) {
@@ -142,15 +232,10 @@ app.post('/api/extract', async (req, res) => {
     // CHIẾN LƯỢC 1: Giải phóng RAM chủ động trước khi Server kịp phản hồi.
     const responseTitle = article.title;
     
-    // Gán cờ rỗng cho các Object DOM khổng lồ
-    parsedDOM = null;
-    doc = null;
-    reader = null;
-    article = null;
     cleanHtml = '';
 
-    if (markdownContent.length > 100000) {
-      res.status(413).json({ error: 'Bài viết này quá dài (vượt quá giới hạn 25.000 tokens quy định). Vui lòng chọn bài viết ngắn hơn để đảm bảo chất lượng bản dịch.' });
+    if (markdownContent.length > 200000) {
+      res.status(413).json({ error: 'Bài viết này quá dài. Vui lòng chọn bài viết ngắn hơn để đảm bảo chất lượng bản dịch.' });
       return;
     }
 
