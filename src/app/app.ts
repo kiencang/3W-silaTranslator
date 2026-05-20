@@ -41,7 +41,7 @@ export class App {
   translationTime = signal(0);
   isZenMode = signal(false);
   useSearchGrounding = signal(false);
-  selectedModel = signal<'gemini-pro-latest' | 'gemini-flash-latest'>('gemini-pro-latest');
+  selectedModel = signal<'gemini-pro-latest' | 'gemini-flash-latest'>('gemini-flash-latest');
   
   searchQuery = signal('');
   translatedSearchQuery = signal('');

@@ -56,7 +56,7 @@ app.post('/api/translate', async (req: Request, res: Response) => {
     }
 
     const result = await ai.models.generateContent({
-      model: model || 'gemini-pro-latest',
+      model: model || 'gemini-flash-latest',
       contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
       config: config
     });
