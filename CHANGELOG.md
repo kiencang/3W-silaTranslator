@@ -5,6 +5,12 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.30] - 2026-05-20
+### Fixed
+- Thêm dấu x để xóa link trong input.
+- Tăng giới hạn up file HTML lên tối đa 5MB.
+- Đặt giới hạn số lượng ký tự file markdown sau khi lọc là 100 ngàn ký tự.
+
 ## [v1.0.29] - 2026-05-20
 ### Fixed
 - Vô hiệu hóa một số button khi quá trình dịch đang diễn ra để tránh thao tác nhầm.
