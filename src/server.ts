@@ -146,8 +146,8 @@ app.post('/api/extract', async (req, res) => {
       .replace(/<!--[\s\S]*?-->/g, '');
 
     // Fast-fail: Từ chối các khối HTML lớn bất thường trước khi đưa vào phân tích DOM để tránh tràn bộ nhớ
-    if (cleanHtml.length > 500000) {
-      res.status(413).json({ error: 'Mã nguồn trang web này quá lớn (vượt quá 500,000 ký tự). Máy chủ từ chối phân tích để tránh rủi ro tràn bộ nhớ. Vui lòng chọn một bài viết thông thường.' });
+    if (cleanHtml.length > 5000000) {
+      res.status(413).json({ error: 'Mã nguồn trang web này quá lớn (vượt quá 5MB). Máy chủ từ chối phân tích để tránh rủi ro tràn bộ nhớ. Vui lòng chọn một bài viết thông thường.' });
       return;
     }
 
@@ -246,8 +246,8 @@ app.post('/api/extract', async (req, res) => {
     
     cleanHtml = '';
 
-    if (markdownContent.length > 200000) {
-      res.status(413).json({ error: 'Bài viết này quá dài. Vui lòng chọn bài viết ngắn hơn để đảm bảo chất lượng bản dịch.' });
+    if (markdownContent.length > 100000) {
+      res.status(413).json({ error: 'Bài viết này quá dài (vượt quá 100,000 ký tự). Vui lòng chọn bài viết ngắn hơn để đảm bảo chất lượng bản dịch.' });
       return;
     }
 

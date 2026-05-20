@@ -166,6 +166,18 @@
             class="flex-1 border-none py-2 md:py-2.5 text-sm md:text-base outline-none bg-transparent w-full placeholder:text-gray-500 min-w-[50px] truncate" 
             [placeholder]="uploadedHtmlFile() ? 'Dán URL gốc của website vào đây...' : 'Dán link website tại đây...'">
 
+          @if (url()) {
+            <button (click)="url.set('')" 
+                    [disabled]="isLoading()"
+                    aria-label="Xóa đường dẫn" 
+                    class="text-gray-400 bg-transparent border-none flex items-center justify-center p-1.5 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed mx-1 shrink-0"
+                    [class.hover:bg-gray-200]="!isLoading()"
+                    [class.hover:text-gray-600]="!isLoading()"
+                    [class.cursor-pointer]="!isLoading()">
+              <mat-icon class="h-4 w-4 flex items-center justify-center" style="font-size: 18px; line-height: 18px; width: 18px; height: 18px;">close</mat-icon>
+            </button>
+          }
+
           <label class="flex shrink-0 relative group p-2 items-center justify-center transition-all"
                  [class.active:scale-95]="!isLoading()"
                  [class.cursor-pointer]="!isLoading()"
@@ -405,7 +417,7 @@
         </button>
       </div>
       <div class="leading-relaxed hidden sm:block">
-        v1.0.29 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+        v1.0.30 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
         <a href="https://blog.wpsila.com/app-dich-website-tu-anh-sang-viet/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn sử dụng</a>
       </div>
     </div>

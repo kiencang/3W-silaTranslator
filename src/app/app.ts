@@ -107,8 +107,8 @@ export class App {
     const file = target.files?.[0];
     if (!file) return;
 
-    if (file.size > 500 * 1024) {
-      this.showToast("File HTML quá lớn (trên 500KB có thể do chứa ảnh hoặc/và mã rác). Bạn vui lòng tải lại/lưu lại trang web với tùy chọn 'Webpage, HTML Only' (Chỉ HTML) nhé!", "error");
+    if (file.size > 5 * 1024 * 1024) {
+      this.showToast("File HTML quá lớn (trên 5MB). Bạn vui lòng tải lại/lưu lại trang web với tùy chọn 'Webpage, HTML Only' (Chỉ HTML) nhé!", "error");
       target.value = '';
       return;
     }
