@@ -29,7 +29,8 @@
             <div class="relative group flex items-center justify-center">
               <button (click)="temperature.set(0.3)"
                       aria-label="Chọn giọng dịch: Sát nghĩa (0.3)"
-                      class="w-3 h-3 rounded-full bg-slate-900 transition-all border-none cursor-pointer"
+                      [disabled]="isLoading()"
+                      class="w-3 h-3 rounded-full bg-slate-900 transition-all border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                       [class.ring-2]="temperature() === 0.3" [class.ring-offset-1]="temperature() === 0.3" [class.ring-slate-900]="temperature() === 0.3">
               </button>
               <div class="absolute top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
@@ -41,7 +42,8 @@
             <div class="relative group flex items-center justify-center">
               <button (click)="temperature.set(0.5)"
                       aria-label="Chọn giọng dịch: Cân bằng (0.5)"
-                      class="w-3 h-3 rounded-full bg-indigo-600 transition-all border-none cursor-pointer"
+                      [disabled]="isLoading()"
+                      class="w-3 h-3 rounded-full bg-indigo-600 transition-all border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                       [class.ring-2]="temperature() === 0.5" [class.ring-offset-1]="temperature() === 0.5" [class.ring-indigo-600]="temperature() === 0.5">
               </button>
               <div class="absolute top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
@@ -53,7 +55,8 @@
             <div class="relative group flex items-center justify-center">
               <button (click)="temperature.set(0.7)"
                       aria-label="Chọn giọng dịch: Uyển chuyển (0.7)"
-                      class="w-3 h-3 rounded-full bg-rose-600 transition-all border-none cursor-pointer"
+                      [disabled]="isLoading()"
+                      class="w-3 h-3 rounded-full bg-rose-600 transition-all border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                       [class.ring-2]="temperature() === 0.7" [class.ring-offset-1]="temperature() === 0.7" [class.ring-rose-600]="temperature() === 0.7">
               </button>
               <div class="absolute top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs whitespace-nowrap rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg flex items-center hidden md:flex">
@@ -149,7 +152,7 @@
           @if (uploadedHtmlFile()) {
             <div class="hidden md:flex items-center bg-gray-200/60 border border-gray-200 rounded-md px-2 py-1 gap-1.5 mr-2 shrink-0 shadow-sm animate-in fade-in zoom-in duration-200">
               <span class="text-[13px] text-gray-700 font-medium truncate max-w-[80px] md:max-w-[130px]" [title]="uploadedHtmlFile()?.name">📄 {{ uploadedHtmlFile()?.name }}</span>
-              <button (click)="removeUploadedFile()" aria-label="Xóa file đã tải lên" class="text-gray-400 hover:text-red-500 bg-transparent border-none cursor-pointer flex items-center justify-center p-0.5 rounded transition-colors" title="Xóa file">
+              <button (click)="removeUploadedFile()" aria-label="Xóa file đã tải lên" [disabled]="isLoading()" class="bg-transparent border-none flex items-center justify-center p-0.5 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed" [class.text-gray-400]="!isLoading()" [class.hover:text-red-500]="!isLoading()" [class.cursor-pointer]="!isLoading()" title="Xóa file">
                 <mat-icon class="h-3.5 w-3.5 flex items-center justify-center" style="font-size: 14px; line-height: 14px; width: 14px; height: 14px;">close</mat-icon>
               </button>
             </div>
@@ -159,11 +162,18 @@
             [(ngModel)]="url"
             aria-label="Nhập đường dẫn website cần dịch"
             (keyup.enter)="translate()"
+            [readonly]="isLoading()"
             class="flex-1 border-none py-2 md:py-2.5 text-sm md:text-base outline-none bg-transparent w-full placeholder:text-gray-500 min-w-[50px] truncate" 
             [placeholder]="uploadedHtmlFile() ? 'Dán URL gốc của website vào đây...' : 'Dán link website tại đây...'">
 
-          <label class="flex shrink-0 relative group cursor-pointer text-gray-400 hover:text-gray-600 p-2 items-center justify-center transition-all active:scale-95">
-            <input type="file" aria-label="Tải lên file tài liệu định dạng HTML" accept=".html,.htm" class="hidden" (change)="onFileSelected($event)">
+          <label class="flex shrink-0 relative group p-2 items-center justify-center transition-all"
+                 [class.active:scale-95]="!isLoading()"
+                 [class.cursor-pointer]="!isLoading()"
+                 [class.text-gray-400]="!isLoading()"
+                 [class.hover:text-gray-600]="!isLoading()"
+                 [class.opacity-40]="isLoading()"
+                 [class.cursor-not-allowed]="isLoading()">
+            <input type="file" aria-label="Tải lên file tài liệu định dạng HTML" accept=".html,.htm" class="hidden" (change)="onFileSelected($event)" [disabled]="isLoading()">
             <mat-icon class="w-5 h-5 flex items-center justify-center -rotate-45 block" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px; display: block;">attach_file</mat-icon>
             <!-- Custom Tooltip -->
             <div class="absolute top-full right-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[280px] md:w-[320px] bg-[#1A1A1B] text-white text-[11px] md:text-xs leading-relaxed p-2.5 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 delay-500 z-50 pointer-events-none text-center font-medium">
@@ -395,7 +405,7 @@
         </button>
       </div>
       <div class="leading-relaxed hidden sm:block">
-        v1.0.28 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+        v1.0.29 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
         <a href="https://blog.wpsila.com/app-dich-website-tu-anh-sang-viet/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn sử dụng</a>
       </div>
     </div>
