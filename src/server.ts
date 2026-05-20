@@ -31,7 +31,7 @@ app.use(express.json({ limit: '50mb' }));
 
 app.post('/api/translate', async (req: Request, res: Response) => {
   try {
-    const { markdownContent, systemInstruction, userPrompt, temperature, model } = req.body;
+    const { markdownContent, systemInstruction, userPrompt, temperature, model, useSearchGrounding } = req.body;
 
     if (!markdownContent) {
       res.status(400).json({ error: 'Nội dung cần dịch là bắt buộc' });
@@ -45,13 +45,20 @@ app.post('/api/translate', async (req: Request, res: Response) => {
 
     const fullPrompt = `${userPrompt}\n\n${markdownContent}`;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const config: any = {
+      systemInstruction: systemInstruction,
+      temperature: temperature || 0.5,
+    };
+
+    if (useSearchGrounding) {
+      config.tools = [{ googleSearch: {} }];
+    }
+
     const result = await ai.models.generateContent({
       model: model || 'gemini-pro-latest',
       contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
-      config: {
-        systemInstruction: systemInstruction,
-        temperature: temperature || 0.5,
-      }
+      config: config
     });
 
     let text = result.text || '';

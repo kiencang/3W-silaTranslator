@@ -338,7 +338,8 @@ export class App {
           systemInstruction: this.cachedSi,
           userPrompt: this.cachedPrompt,
           temperature: this.temperature(),
-          model: this.selectedModel()
+          model: this.selectedModel(),
+          useSearchGrounding: this.useSearchGrounding()
         })
       );
 
