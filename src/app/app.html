@@ -271,7 +271,7 @@
                 (click)="onSearchLinkClick()"
                 class="flex items-center justify-between w-full p-3 hover:bg-indigo-50/80 rounded-lg group transition-colors no-underline">
                 <div class="flex items-center gap-3 overflow-hidden">
-                  <div class="bg-indigo-100 text-indigo-600 p-2 rounded-full shrink-0">
+                  <div class="w-9 h-9 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-full shrink-0">
                     <mat-icon class="flex items-center justify-center font-bold h-5 w-5" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">search</mat-icon>
                   </div>
                   <div class="flex flex-col overflow-hidden text-left">
@@ -367,7 +367,7 @@
         </button>
       </div>
       <div class="leading-relaxed text-gray-400 text-[11px] truncate mx-auto md:mx-0">
-        v1.0.33 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+        v1.0.34 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
         <a href="https://blog.wpsila.com/app-dich-website-tu-anh-sang-viet/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn sử dụng</a>
       </div>
 
@@ -382,9 +382,8 @@
             <div class="relative inline-flex h-3.5 w-7 shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none"
                  [class.bg-blue-600]="useSearchGrounding()"
                  [class.bg-gray-300]="!useSearchGrounding()">
-              <span class="pointer-events-none inline-block h-2.5 w-2.5 transform rounded-full bg-white shadow ring-0 transition-transform duration-200 ease-in-out absolute left-[2px]"
-                    [class.translate-x-3.5]="useSearchGrounding()"
-                    [class.translate-x-0]="!useSearchGrounding()"></span>
+              <span class="pointer-events-none inline-block h-2.5 w-2.5 rounded-full bg-white shadow ring-0 transition-transform duration-200 ease-in-out absolute left-[2px]"
+                    [style.transform]="useSearchGrounding() ? 'translateX(14px)' : 'translateX(0)'"></span>
             </div>
             
             <span class="text-[11px] font-bold transition-colors tracking-wide"
@@ -409,8 +408,8 @@
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h3 id="share-modal-title" class="text-lg font-bold text-[#1A1A1B] flex items-center gap-1">Chia sẻ <span class="font-black text-lg tracking-tight"><span class="text-slate-900">3W</span>&nbsp;<span class="text-indigo-600">sila</span><span class="text-rose-600">Translator</span></span></h3>
-          <button (click)="isShareModalOpen.set(false)" aria-label="Đóng cửa sổ chia sẻ" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors p-1 rounded-md hover:bg-gray-100">
-            <mat-icon class="flex items-center justify-center h-6 w-6" style="font-size: 24px; line-height: 24px; width: 24px; height: 24px;">close</mat-icon>
+          <button (click)="isShareModalOpen.set(false)" aria-label="Đóng cửa sổ chia sẻ" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100">
+            <mat-icon class="flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
           </button>
         </div>
 
@@ -465,8 +464,8 @@
               </button>
             }
           </div>
-          <button (click)="isHistoryModalOpen.set(false)" aria-label="Đóng cửa sổ lịch sử" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors p-1 rounded-md hover:bg-gray-100">
-            <mat-icon class="flex items-center justify-center h-6 w-6" style="font-size: 24px; line-height: 24px; width: 24px; height: 24px;">close</mat-icon>
+          <button (click)="isHistoryModalOpen.set(false)" aria-label="Đóng cửa sổ lịch sử" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100">
+            <mat-icon class="flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
           </button>
         </div>
 
@@ -522,8 +521,8 @@
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h3 id="modal-title" class="text-lg font-bold text-[#1A1A1B]">Cài đặt Website ưa thích</h3>
-          <button (click)="isSitesModalOpen.set(false)" aria-label="Đóng cửa sổ cài đặt" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors p-1 rounded-md hover:bg-gray-100">
-            <mat-icon class="flex items-center justify-center h-6 w-6" style="font-size: 24px; line-height: 24px; width: 24px; height: 24px;">close</mat-icon>
+          <button (click)="isSitesModalOpen.set(false)" aria-label="Đóng cửa sổ cài đặt" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100">
+            <mat-icon class="flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
           </button>
         </div>
 
@@ -577,8 +576,8 @@
             <mat-icon class="text-indigo-600">vpn_key</mat-icon>
             Cấu hình Gemini API Key
           </h3>
-          <button (click)="isApiKeyModalOpen.set(false)" aria-label="Đóng cửa sổ" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors p-1 rounded-md hover:bg-gray-100">
-            <mat-icon class="flex items-center justify-center h-6 w-6" style="font-size: 24px; line-height: 24px; width: 24px; height: 24px;">close</mat-icon>
+          <button (click)="isApiKeyModalOpen.set(false)" aria-label="Đóng cửa sổ" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100">
+            <mat-icon class="flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
           </button>
         </div>
 
