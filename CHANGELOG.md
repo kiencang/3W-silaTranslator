@@ -8,6 +8,7 @@ và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0
 ## [v1.0.33] - 2026-05-21
 ### Fixed
 - Thiết lập cài đặt khóa API dùng riêng.
+- Loại bỏ temperature.
 
 ## [v1.0.32] - 2026-05-20
 ### Fixed
