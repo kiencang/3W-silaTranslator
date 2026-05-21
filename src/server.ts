@@ -27,19 +27,37 @@ const ai = new GoogleGenAI({
   }
 });
 
+// Hàm hỗ trợ lấy instance GoogleGenAI phù hợp với khóa API của người dùng hoặc hệ thống
+const getAIInstance = (req: Request) => {
+  const userApiKey = req.headers['x-user-api-key'] as string;
+  if (userApiKey && userApiKey.trim()) {
+    return new GoogleGenAI({
+      apiKey: userApiKey.trim(),
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        }
+      }
+    });
+  }
+  return ai;
+};
+
 app.use(express.json({ limit: '50mb' }));
 
 app.post('/api/translate', async (req: Request, res: Response) => {
   try {
-    const { markdownContent, systemInstruction, userPrompt, temperature, model, useSearchGrounding } = req.body;
+    const { markdownContent, systemInstruction, userPrompt, model, useSearchGrounding } = req.body;
 
     if (!markdownContent) {
       res.status(400).json({ error: 'Nội dung cần dịch là bắt buộc' });
       return;
     }
 
-    if (!GEMINI_API_KEY) {
-      res.status(500).json({ error: 'GEMINI_API_KEY chưa được cấu hình trên máy chủ.' });
+    const userApiKey = req.headers['x-user-api-key'] as string;
+    const hasApiKey = (userApiKey && userApiKey.trim()) || GEMINI_API_KEY;
+    if (!hasApiKey) {
+      res.status(400).json({ error: 'Chưa cấu hình API Key. Kính mời quý khách nhấp vào biểu tượng chiếc chìa khóa ở góc trên để cấu hình API Key cá nhân.' });
       return;
     }
 
@@ -48,14 +66,15 @@ app.post('/api/translate', async (req: Request, res: Response) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const config: any = {
       systemInstruction: systemInstruction,
-      temperature: temperature || 0.5,
+      thinkingConfig: { thinkingLevel: 'HIGH' }
     };
 
     if (useSearchGrounding) {
       config.tools = [{ googleSearch: {} }];
     }
 
-    const result = await ai.models.generateContent({
+    const requestAi = getAIInstance(req);
+    const result = await requestAi.models.generateContent({
       model: model || 'gemini-flash-latest',
       contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
       config: config
@@ -88,19 +107,21 @@ app.post('/api/translate-query', async (req: Request, res: Response) => {
       return;
     }
 
-    if (!GEMINI_API_KEY) {
-      res.status(500).json({ error: 'GEMINI_API_KEY chưa được cấu hình trên máy chủ.' });
+    const userApiKey = req.headers['x-user-api-key'] as string;
+    const hasApiKey = (userApiKey && userApiKey.trim()) || GEMINI_API_KEY;
+    if (!hasApiKey) {
+      res.status(400).json({ error: 'Chưa cấu hình API Key. Kính mời quý khách nhấp vào biểu tượng chiếc chìa khóa ở góc trên để cấu hình API Key cá nhân.' });
       return;
     }
 
     const prompt = `${userPrompt}\n[${query}]`;
 
-    const result = await ai.models.generateContent({
+    const requestAi = getAIInstance(req);
+    const result = await requestAi.models.generateContent({
       model: 'gemini-flash-latest',
       contents: prompt,
       config: {
-        systemInstruction: systemInstruction,
-        temperature: 0.2
+        systemInstruction: systemInstruction
       }
     });
 

@@ -30,7 +30,6 @@ export class App {
   private historyService = inject(HistoryService);
 
   url = signal('');
-  temperature = signal(0.5);
   isLoading = signal(false);
   error = signal('');
   translatedHtml = signal<SafeHtml | null>(null);
@@ -86,6 +85,11 @@ export class App {
   private cachedTemplateCss = '';
   private cachedTemplateJs = '';
 
+  isApiKeyModalOpen = signal(false);
+  userApiKey = signal('');
+  tempApiKey = '';
+  isKeyVisible = signal(false);
+
   constructor() {
     if (typeof window !== 'undefined' && window.localStorage) {
       const savedSites = localStorage.getItem('wpsila_fav_sites');
@@ -99,7 +103,34 @@ export class App {
           // Ignore parse errors
         }
       }
+      const savedKey = localStorage.getItem('user_gemini_api_key');
+      if (savedKey) {
+        this.userApiKey.set(savedKey);
+        this.tempApiKey = savedKey;
+      }
     }
+  }
+
+  openApiKeyModal() {
+    this.tempApiKey = this.userApiKey();
+    this.isKeyVisible.set(false);
+    this.isApiKeyModalOpen.set(true);
+  }
+
+  saveApiKey(key: string) {
+    const trimmedKey = key.trim();
+    this.userApiKey.set(trimmedKey);
+    this.tempApiKey = trimmedKey;
+    if (typeof window !== 'undefined' && window.localStorage) {
+      if (trimmedKey) {
+        localStorage.setItem('user_gemini_api_key', trimmedKey);
+        this.showToast('Đã lưu API Key riêng của bạn thành công!', 'success');
+      } else {
+        localStorage.removeItem('user_gemini_api_key');
+        this.showToast('Đã xóa API Key riêng. Hệ thống quay về dùng API Key mặc định.', 'info');
+      }
+    }
+    this.isApiKeyModalOpen.set(false);
   }
 
   onFileSelected(event: Event) {
@@ -332,15 +363,19 @@ export class App {
       const markdownContent = `# ${extraction.title}\n\n${extraction.content}`;
 
       // 3. Translate content via server-side proxy
+      const headersObject: Record<string, string> = {};
+      if (this.userApiKey()) {
+        headersObject['x-user-api-key'] = this.userApiKey();
+      }
+
       const translationResponse = await firstValueFrom(
         this.http.post<{translatedMarkdown: string}>('/api/translate', {
           markdownContent,
           systemInstruction: this.cachedSi,
           userPrompt: this.cachedPrompt,
-          temperature: this.temperature(),
           model: this.selectedModel(),
           useSearchGrounding: this.useSearchGrounding()
-        })
+        }, { headers: headersObject })
       );
 
       const translatedMarkdown = translationResponse.translatedMarkdown || '';
@@ -422,7 +457,7 @@ export class App {
         .replace(/{{ORIGINAL_URL}}/g, this.url())
         .replace('{{DATE}}', dateStr)
         .replace('{{MODEL}}', this.selectedModel())
-        .replace('{{TEMP}}', this.temperature().toString())
+        .replace('{{TEMP}}', 'N/A')
         .replace('{{TOKENS_IN}}', tokensIn.toString())
         .replace('{{TOKENS_OUT}}', tokensOut.toString())
         .replace('{{TRANSLATED_CONTENT}}', finalHtml);
@@ -516,13 +551,18 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
 
       const prompt = `Provide the single best English search query translation for the following Vietnamese query. Output ONLY the raw English text, nothing else:\n[${query}]`;
 
+      const headersObject: Record<string, string> = {};
+      if (this.userApiKey()) {
+        headersObject['x-user-api-key'] = this.userApiKey();
+      }
+
       // Call server proxy
       const response = await firstValueFrom(
         this.http.post<{translatedQuery: string}>('/api/translate-query', {
           query,
           systemInstruction,
           userPrompt: prompt
-        })
+        }, { headers: headersObject })
       );
 
       const translatedQuery = response.translatedQuery || '';
