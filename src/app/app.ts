@@ -316,19 +316,25 @@ export class App {
       if (err.error && err.error.error) {
         // Backend returned a specified error logic (Length limit, not readerable)
         errorMessage = err.error.error;
-      } else if (errString.includes('parsing') || errString.includes('http failure during parsing')) {
-        errorMessage = 'Hệ thống đang trích xuất dữ liệu chậm do website nguồn phản hồi lâu hoặc máy chủ đang tải nặng. Vui lòng đợi trong giây lát và thử lại nhé!';
-      } else if (errString.includes('429') || errString.includes('quota') || errString.includes('exhausted')) {
-        errorMessage = 'Bạn đã vượt quá giới hạn dịch miễn phí của AI. Vui lòng thử lại sau hoặc kiểm tra lại API Key.';
-      } else if (errString.includes('api key not valid') || errString.includes('api_key_invalid')) {
-        errorMessage = 'API Key không hợp lệ. Vui lòng kiểm tra lại API Key trong phần Settings (biểu tượng bánh răng) -> Secrets.';
-      } else if (errString.includes('extract') || errString.includes('fetch') || errString.includes('could not extract')) {
-        errorMessage = 'Không thể đọc nội dung từ liên kết này. Trang web có thể yêu cầu đăng nhập hoặc chặn truy cập.';
-      } else if (errString.includes('network') || errString.includes('failed to fetch')) {
-        errorMessage = 'Lỗi kết nối mạng. Vui lòng kiểm tra lại internet của bạn.';
-      } else if (errString.includes('safety') || errString.includes('blocked')) {
-        errorMessage = 'AI từ chối dịch nội dung này do vi phạm chính sách an toàn.';
       } else if (err.message) {
+        errorMessage = err.message;
+      }
+
+      const checkString = errorMessage.toLowerCase() + ' ' + errString;
+
+      if (checkString.includes('api key not valid') || checkString.includes('api_key_invalid') || (checkString.includes('api key') && checkString.includes('not valid'))) {
+        errorMessage = 'API Key không hợp lệ. Vui lòng kiểm tra lại khóa API ở phần thiết lập API Key cá nhân, khả năng cao là bạn nhập nhầm.';
+      } else if (checkString.includes('parsing') || checkString.includes('http failure during parsing')) {
+        errorMessage = 'Hệ thống đang trích xuất dữ liệu chậm do website nguồn phản lâu hoặc máy chủ đang tải nặng. Vui lòng đợi trong giây lát và thử lại nhé!';
+      } else if (checkString.includes('429') || checkString.includes('quota') || checkString.includes('exhausted')) {
+        errorMessage = 'Bạn đã vượt quá giới hạn dịch miễn phí của AI. Vui lòng thử lại sau hoặc kiểm tra lại API Key. Bạn có thể nhập API Key riêng để có thể dùng thoải mái hơn.';
+      } else if (checkString.includes('extract') || checkString.includes('fetch') || checkString.includes('could not extract')) {
+        errorMessage = 'Không thể đọc nội dung từ liên kết này. Trang web có thể yêu cầu đăng nhập hoặc chặn truy cập. Bạn nên tải nội dung trang web về và up file tải về lên ứng dụng để dịch.';
+      } else if (checkString.includes('network') || checkString.includes('failed to fetch')) {
+        errorMessage = 'Lỗi kết nối mạng. Vui lòng kiểm tra lại internet của bạn.';
+      } else if (checkString.includes('safety') || checkString.includes('blocked')) {
+        errorMessage = 'AI từ chối dịch nội dung này do vi phạm chính sách an toàn.';
+      } else if (err.message && errorMessage === err.message) {
         errorMessage = `Lỗi: ${err.message}`;
       }
 
@@ -389,14 +395,24 @@ export class App {
       let errorMessage = 'Có lỗi xảy ra trong quá trình dịch. Vui lòng thử lại.';
       const errString = err.toString().toLowerCase();
 
-      if (errString.includes('429') || errString.includes('quota') || errString.includes('exhausted')) {
-        errorMessage = 'Bạn đã vượt quá giới hạn dịch miễn phí của AI. Vui lòng thử lại sau.';
-      } else if (errString.includes('api key not valid') || errString.includes('api_key_invalid')) {
-        errorMessage = 'API Key không hợp lệ. Vui lòng kiểm tra lại trong phần Cài đặt.';
-      } else if (errString.includes('network') || errString.includes('failed to fetch')) {
+      if (err.error && err.error.error) {
+        errorMessage = err.error.error;
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+
+      const checkString = errorMessage.toLowerCase() + ' ' + errString;
+
+      if (checkString.includes('api key not valid') || checkString.includes('api_key_invalid') || (checkString.includes('api key') && checkString.includes('not valid'))) {
+        errorMessage = 'API Key không hợp lệ. Vui lòng kiểm tra lại khóa API ở phần thiết lập API Key cá nhân, khả năng cao là bạn nhập nhầm.';
+      } else if (checkString.includes('429') || checkString.includes('quota') || checkString.includes('exhausted')) {
+        errorMessage = 'Bạn đã vượt quá giới hạn dịch miễn phí của AI. Vui lòng thử lại sau hoặc kiểm tra lại API Key. Bạn có thể nhập API Key riêng để có thể dùng thoải mái hơn.';
+      } else if (checkString.includes('network') || checkString.includes('failed to fetch')) {
         errorMessage = 'Lỗi kết nối mạng. Vui lòng kiểm tra lại internet của bạn.';
-      } else if (errString.includes('safety') || errString.includes('blocked')) {
+      } else if (checkString.includes('safety') || checkString.includes('blocked')) {
         errorMessage = 'Từ khóa bị AI từ chối dịch do vi phạm chính sách an toàn.';
+      } else if (err.message && errorMessage === err.message) {
+        errorMessage = `Lỗi: ${err.message}`;
       }
 
       this.showToast(errorMessage, 'error');
