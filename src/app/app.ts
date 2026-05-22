@@ -3,11 +3,20 @@ import {RouterOutlet} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
-import {firstValueFrom} from 'rxjs';
 import {marked} from 'marked';
 
 import {MatIconModule} from '@angular/material/icon';
 import {HistoryService, TranslationHistoryItem} from './history.service';
+import {FooterComponent} from './footer.component';
+import {HeaderComponent} from './header.component';
+import {ShareModalComponent} from './share-modal.component';
+import {HistoryModalComponent} from './history-modal.component';
+import {SitesModalComponent} from './sites-modal.component';
+import {ApiKeyModalComponent} from './api-key-modal.component';
+import {InitialViewComponent} from './initial-view.component';
+import {ResultViewComponent} from './result-view.component';
+import {TranslationApiService} from './translation-api.service';
+import {DocumentUtilService} from './document-util.service';
 
 export interface Toast {
   id: number;
@@ -20,7 +29,7 @@ export interface Toast {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule, MatIconModule],
+  imports: [RouterOutlet, FormsModule, MatIconModule, FooterComponent, HeaderComponent, ShareModalComponent, HistoryModalComponent, SitesModalComponent, ApiKeyModalComponent, InitialViewComponent, ResultViewComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -28,6 +37,8 @@ export class App {
   private http = inject(HttpClient);
   private sanitizer = inject(DomSanitizer);
   private historyService = inject(HistoryService);
+  private translationApi = inject(TranslationApiService);
+  private documentUtil = inject(DocumentUtilService);
 
   url = signal('');
   isLoading = signal(false);
@@ -58,16 +69,10 @@ export class App {
 
   favoriteSites = signal<string[]>([]);
   isSitesModalOpen = signal(false);
-  modalSiteInputs = signal<{id: number, url: string}[]>([]);
-  private modalInputIdCounter = 0;
   
   isShareModalOpen = signal(false);
-  isCopied = signal(false);
   
   isHistoryModalOpen = signal(false);
-  historyItems = this.historyService.historyItems;
-  confirmDeleteId = signal<number | null>(null);
-  confirmDeleteAll = signal(false);
   
   formattedTime = computed(() => {
     const t = this.translationTime();
@@ -79,16 +84,9 @@ export class App {
   private toastIdCounter = 0;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private timerInterval: any;
-  private cachedSi = '';
-  private cachedPrompt = '';
-  private cachedTemplateHtml = '';
-  private cachedTemplateCss = '';
-  private cachedTemplateJs = '';
 
   isApiKeyModalOpen = signal(false);
   userApiKey = signal('');
-  tempApiKey = '';
-  isKeyVisible = signal(false);
 
   constructor() {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -106,21 +104,21 @@ export class App {
       const savedKey = localStorage.getItem('user_gemini_api_key');
       if (savedKey) {
         this.userApiKey.set(savedKey);
-        this.tempApiKey = savedKey;
       }
     }
   }
 
+  openSitesModal() {
+    this.isSitesModalOpen.set(true);
+  }
+
   openApiKeyModal() {
-    this.tempApiKey = this.userApiKey();
-    this.isKeyVisible.set(false);
     this.isApiKeyModalOpen.set(true);
   }
 
   saveApiKey(key: string) {
     const trimmedKey = key.trim();
     this.userApiKey.set(trimmedKey);
-    this.tempApiKey = trimmedKey;
     if (typeof window !== 'undefined' && window.localStorage) {
       if (trimmedKey) {
         localStorage.setItem('user_gemini_api_key', trimmedKey);
@@ -158,96 +156,7 @@ export class App {
     this.uploadedHtmlContent.set('');
   }
 
-  getDomainName(url: string): string {
-    try {
-      let cleanUrl = url.trim();
-      if (!/^https?:\/\//i.test(cleanUrl)) {
-        cleanUrl = 'https://' + cleanUrl;
-      }
-      const domain = new URL(cleanUrl).hostname;
-      return domain.replace(/^www\./i, '');
-    } catch {
-      return url;
-    }
-  }
-
-  copyShareLink() {
-    const shareUrl = 'https://aistudio.google.com/apps/4cc7e19e-46dd-4d38-8617-ba38ef1c80c3?showAssistant=true&showPreview=true&fullscreenApplet=true';
-    navigator.clipboard.writeText(shareUrl).then(() => {
-      this.isCopied.set(true);
-      setTimeout(() => {
-        this.isCopied.set(false);
-      }, 3000);
-    }).catch(() => {
-      // Fallback
-      const textArea = document.createElement("textarea");
-      textArea.value = shareUrl;
-      document.body.appendChild(textArea);
-      textArea.select();
-      try {
-        document.execCommand('copy');
-        this.isCopied.set(true);
-        setTimeout(() => {
-          this.isCopied.set(false);
-        }, 3000);
-      } catch {
-        // Ignore fallback errors
-      }
-      document.body.removeChild(textArea);
-    });
-  }
-
-  openSitesModal() {
-    const current = this.favoriteSites();
-    let initialInputs: {id: number, url: string}[] = [];
-    if (current.length === 0) {
-      initialInputs = [
-        { id: this.modalInputIdCounter++, url: '' },
-        { id: this.modalInputIdCounter++, url: '' },
-        { id: this.modalInputIdCounter++, url: '' }
-      ];
-    } else {
-      initialInputs = current.map(url => ({ id: this.modalInputIdCounter++, url }));
-    }
-    this.modalSiteInputs.set(initialInputs);
-    this.isSitesModalOpen.set(true);
-    
-    // Trap focus/Auto focus
-    setTimeout(() => {
-      const firstInput = document.getElementById(`modal-input-${initialInputs[0]?.id}`);
-      if (firstInput) {
-        firstInput.focus();
-      }
-    }, 100);
-  }
-
-  addModalInput() {
-    if (this.modalSiteInputs().length < 10) {
-      this.modalSiteInputs.update(inputs => [...inputs, { id: this.modalInputIdCounter++, url: '' }]);
-    }
-  }
-
-  removeModalInput(id: number) {
-    this.modalSiteInputs.update(inputs => inputs.filter(item => item.id !== id));
-  }
-
-  updateModalInput(id: number, value: string) {
-    this.modalSiteInputs.update(inputs => 
-      inputs.map(item => item.id === id ? { ...item, url: value } : item)
-    );
-  }
-
-  saveSites() {
-    const validSites = this.modalSiteInputs()
-      .map(item => item.url.trim())
-      .filter(url => url.length > 0)
-      .map(url => {
-        if (!/^https?:\/\//i.test(url)) {
-          return 'https://' + url;
-        }
-        return url;
-      });
-
+  saveSites(validSites: string[]) {
     this.favoriteSites.set(validSites);
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.setItem('wpsila_fav_sites', JSON.stringify(validSites));
@@ -281,17 +190,6 @@ export class App {
       }
       return current.filter(t => t.id !== id);
     });
-  }
-
-  async fetchPrompts() {
-    const bypassCache = `?v=${new Date().getTime()}`;
-    // Always fetch latest to ensure UI updates apply immediately without requiring a full page refresh
-    this.cachedSi = await firstValueFrom(this.http.get('/prompts/web_system_instructions.md' + bypassCache, { responseType: 'text' }));
-    this.cachedPrompt = await firstValueFrom(this.http.get('/prompts/web_prompt.md' + bypassCache, { responseType: 'text' }));
-    
-    this.cachedTemplateHtml = await firstValueFrom(this.http.get('/template/reader.html' + bypassCache, { responseType: 'text' }));
-    this.cachedTemplateCss = await firstValueFrom(this.http.get('/template/reader.css' + bypassCache, { responseType: 'text' }));
-    this.cachedTemplateJs = await firstValueFrom(this.http.get('/template/reader.js' + bypassCache, { responseType: 'text' }));
   }
 
   async translate() {
@@ -343,18 +241,10 @@ export class App {
 
     try {
       // 0. Fetch prompts
-      await this.fetchPrompts();
+      await this.translationApi.fetchPrompts();
 
       // 1. Extract content via our server proxy (passing HTML content if user uploaded a file)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const extractPayload: any = { url: originalUrl };
-      if (this.uploadedHtmlContent()) {
-        extractPayload.htmlContent = this.uploadedHtmlContent();
-      }
-
-      const extraction = await firstValueFrom(
-        this.http.post<{title: string, content: string, youtubeVideos?: string[]}>('/api/extract', extractPayload)
-      );
+      const extraction = await this.translationApi.extractContent(originalUrl, this.uploadedHtmlContent());
       
       this.translatedTitle.set(extraction.title);
 
@@ -363,19 +253,11 @@ export class App {
       const markdownContent = `# ${extraction.title}\n\n${extraction.content}`;
 
       // 3. Translate content via server-side proxy
-      const headersObject: Record<string, string> = {};
-      if (this.userApiKey()) {
-        headersObject['x-user-api-key'] = this.userApiKey();
-      }
-
-      const translationResponse = await firstValueFrom(
-        this.http.post<{translatedMarkdown: string}>('/api/translate', {
-          markdownContent,
-          systemInstruction: this.cachedSi,
-          userPrompt: this.cachedPrompt,
-          model: this.selectedModel(),
-          useSearchGrounding: this.useSearchGrounding()
-        }, { headers: headersObject })
+      const translationResponse = await this.translationApi.translateContent(
+        markdownContent, 
+        this.selectedModel(), 
+        this.useSearchGrounding(), 
+        this.userApiKey()
       );
 
       const translatedMarkdown = translationResponse.translatedMarkdown || '';
@@ -392,68 +274,17 @@ export class App {
       let finalHtml = await marked.parse(translatedMarkdown);
 
       // 5. Restore YouTube Videos
-      if (extraction.youtubeVideos && extraction.youtubeVideos.length > 0) {
-        extraction.youtubeVideos.forEach((videoHtml, i) => {
-          // Bọc lại bằng wrapper để tối ưu hiển thị và thêm Fallback Offline
-          const uniqueId = Math.random().toString(36).substring(2, 9) + i;
-          let videoSrc = '';
-          let videoId = '';
-          const srcMatch = videoHtml.match(/src="([^"]+)"/i);
-          if (srcMatch && srcMatch[1]) {
-            videoSrc = srcMatch[1];
-            // Fix luôn lỗi đường dẫn file:// nếu code nhúng bị thiếu https:
-            if (videoSrc.startsWith('//')) {
-              videoSrc = 'https:' + videoSrc;
-              videoHtml = videoHtml.replace(srcMatch[1], videoSrc);
-            }
-            // Trích xuất ID youtube để lấy Thumbnail
-            const idMatch = videoSrc.match(/(?:embed\/|v=|\/v\/|youtu\.be\/|\/e\/)([^"&?/\s]{11})/);
-            if (idMatch && idMatch[1]) {
-              videoId = idMatch[1];
-            }
-          }
-          
-          const watchUrl = videoId ? `https://www.youtube.com/watch?v=${videoId}` : (videoSrc || '#');
-          const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '';
+      finalHtml = this.documentUtil.processYoutubeIframes(finalHtml, extraction.youtubeVideos);
 
-          const responsiveVideoHtml = `<div id="yt-wrap-${uniqueId}" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px; margin: 24px 0px; background: #000;">
-            <div id="yt-iframe-container-${uniqueId}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-              ${videoHtml.replace(/<iframe /gi, '<iframe style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;" ')}
-            </div>
-            <div id="yt-fallback-${uniqueId}" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('${thumbnailUrl}'); background-size: cover; background-position: center;">
-              <a href="${watchUrl}" target="_blank" style="position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: white; font-family: sans-serif; height: 100%; width: 100%;">
-                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3);" onmouseover="this.style.background='rgba(0,0,0,0.1)'" onmouseout="this.style.background='rgba(0,0,0,0.3)'"></div>
-                <svg width="68" height="48" viewBox="0 0 68 48" style="position: relative; z-index: 2;"><path d="M66.5 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.1 34 .1 34 .1s-21.79 0-27.08 1.45C3.98 2.33 2.27 4.81 1.49 7.74.1 13.03.1 24 .1 24s0 10.97 1.39 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.9 34 47.9 34 47.9s21.79 0 27.08-1.45c2.93-.78 4.64-3.26 5.42-6.19C67.9 34.97 67.9 24 67.9 24s0-10.97-1.39-16.26z" fill="#FF0000"/><path d="M27 34l18-10-18-10v20z" fill="#FFFFFF"/></svg>
-                <span style="position: relative; z-index: 2; margin-top: 12px; font-weight: 500; font-size: 15px; text-shadow: 0 1px 4px rgba(0,0,0,0.8); background: rgba(0,0,0,0.7); padding: 4px 12px; border-radius: 20px;">Xem trên YouTube</span>
-              </a>
-            </div>
-            <script>
-              (function() {
-                if (window.location.protocol === 'file:') {
-                  var iframeContainer = document.getElementById('yt-iframe-container-${uniqueId}');
-                  var fallback = document.getElementById('yt-fallback-${uniqueId}');
-                  if (iframeContainer) iframeContainer.remove();
-                  if (fallback) fallback.style.display = 'flex';
-                }
-              })();
-            </script>
-          </div>`;
-          // marked sẽ render `[SILA_YOUTUBE_0]` thành <code>[SILA_YOUTUBE_0]</code>
-          const regexStr = `<p><code>\\[SILA_YOUTUBE_${i}\\]<\\/code><\\/p>|<code>\\[SILA_YOUTUBE_${i}\\]<\\/code>|\\[SILA_YOUTUBE_${i}\\]`;
-          const regex = new RegExp(regexStr, 'gi');
-          finalHtml = finalHtml.replace(regex, responsiveVideoHtml);
-        });
-      }
-
-      const tokensIn = Math.round(markdownContent.length / 4);
-      const tokensOut = Math.round(translatedMarkdown.length / 4);
+      const tokensIn = Math.round(this.documentUtil.countWords(markdownContent) * 1.4);
+      const tokensOut = Math.round(this.documentUtil.countWords(translatedMarkdown) * 1.5);
       const now = new Date();
       const dateStr = `${now.toLocaleDateString('vi-VN')} | Giờ: ${now.toLocaleTimeString('vi-VN')}`;
 
-      const finalDoc = this.cachedTemplateHtml
+      const finalDoc = this.translationApi.cachedTemplateHtml
         .replace('{{TITLE}}', translatedTitleString)
-        .replace('{{CSS_CONTENT}}', this.cachedTemplateCss)
-        .replace('{{JS_CONTENT}}', this.cachedTemplateJs)
+        .replace('{{CSS_CONTENT}}', this.translationApi.cachedTemplateCss)
+        .replace('{{JS_CONTENT}}', this.translationApi.cachedTemplateJs)
         .replace(/{{ORIGINAL_URL}}/g, this.url())
         .replace('{{DATE}}', dateStr)
         .replace('{{MODEL}}', this.selectedModel())
@@ -540,31 +371,8 @@ export class App {
     this.isSearchLoading.set(true);
 
     try {
-      const systemInstruction = `Bạn là một AI chuyên dịch truy vấn tìm kiếm (search queries) từ tiếng Việt sang tiếng Anh. Nhiệm vụ DUY NHẤT của bạn là trả về MỘT (1) truy vấn tìm kiếm tiếng Anh hiệu quả nhất, dựa trên đánh giá của bạn về ý định (search intent) và cách tìm kiếm phổ biến nhất trong tiếng Anh.
-
-QUY TẮC BẮT BUỘC TUÂN THỦ:
-1.  **CHỈ MỘT KẾT QUẢ:** Luôn luôn và chỉ luôn trả về DUY NHẤT MỘT chuỗi văn bản là bản dịch truy vấn tốt nhất. KHÔNG được đưa ra nhiều lựa chọn.
-2.  **CHỈ VĂN BẢN THUẦN TÚY:** Kết quả trả về CHỈ BAO GỒM văn bản tiếng Anh đã dịch. TUYỆT ĐỐI KHÔNG thêm bất kỳ lời chào, lời giải thích, ghi chú, dấu ngoặc kép bao quanh, định dạng markdown, hoặc bất kỳ ký tự/từ ngữ nào khác ngoài chính truy vấn đã dịch.
-3.  **ƯU TIÊN HIỆU QUẢ TÌM KIẾM:** Mục tiêu là tạo ra truy vấn mà người dùng tiếng Anh thực sự sẽ gõ vào máy tìm kiếm. Ưu tiên từ khóa cốt lõi, ý định, sự ngắn gọn, và các cụm từ tìm kiếm phổ biến (how to, best, near me, price, review, etc.).
-4.  **ĐỘ CHÍNH XÁC VỀ Ý ĐỊNH:** Nắm bắt chính xác nhất ý định đằng sau truy vấn gốc tiếng Việt. Nếu mơ hồ, hãy chọn cách diễn giải phổ biến hoặc khả năng cao nhất.
-5.  **ĐỊNH DẠNG ĐẦU RA:** Đảm bảo đầu ra là một chuỗi văn bản thuần túy (plain text string) duy nhất, sẵn sàng để sao chép và dán trực tiếp vào thanh tìm kiếm.`;
-
-      const prompt = `Provide the single best English search query translation for the following Vietnamese query. Output ONLY the raw English text, nothing else:\n[${query}]`;
-
-      const headersObject: Record<string, string> = {};
-      if (this.userApiKey()) {
-        headersObject['x-user-api-key'] = this.userApiKey();
-      }
-
-      // Call server proxy
-      const response = await firstValueFrom(
-        this.http.post<{translatedQuery: string}>('/api/translate-query', {
-          query,
-          systemInstruction,
-          userPrompt: prompt
-        }, { headers: headersObject })
-      );
-
+      // Call server proxy via translationApi
+      const response = await this.translationApi.translateSearchQuery(query, this.userApiKey());
       const translatedQuery = response.translatedQuery || '';
       
       // Group 3: Display results
@@ -597,63 +405,6 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
     }
   }
 
-  private slugify(text: string): string {
-    return text.toString().toLowerCase()
-      .normalize('NFD') // Normalize to decomposed form
-      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
-      .replace(/đ/g, 'd').replace(/Đ/g, 'D') // Handle Vietnamese 'đ'
-      .replace(/[^a-z0-9 -]/g, '') // Keep only letters, numbers, spaces, and hyphens
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
-      .replace(/-+/g, '-') // Collapse multiple hyphens
-      .replace(/^-+|-+$/g, ''); // Remove leading and trailing hyphens
-  }
-
-  private generateFilename(): string {
-    let filename = '';
-    
-    // 1. Try to extract translated title from HTML
-    const htmlContent = this.rawHtmlString();
-    if (htmlContent) {
-      const titleMatch = htmlContent.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
-      if (titleMatch && titleMatch[1]) {
-        filename = this.slugify(titleMatch[1].trim());
-      }
-    }
-    
-    // 2. Fallback to English URL part
-    if (!filename) {
-      const currentUrl = this.url().trim();
-      if (currentUrl) {
-        try {
-          const urlObj = new URL(currentUrl.startsWith('http') ? currentUrl : 'https://' + currentUrl);
-          const pathSegments = urlObj.pathname.split('/').filter(Boolean);
-          if (pathSegments.length > 0) {
-            let lastSegment = pathSegments[pathSegments.length - 1];
-            // Remove file extension if present
-            lastSegment = lastSegment.replace(/\.[a-z0-9]+$/i, '');
-            if (lastSegment) {
-              filename = 'vi_' + this.slugify(lastSegment);
-            }
-          }
-        } catch {
-          // Ignore invalid URLs
-        }
-      }
-    }
-    
-    // 3. Ultimate fallback
-    if (!filename) {
-      filename = `ban-dich-${new Date().getTime()}`;
-    }
-    
-    // 4. Truncate to a reasonable length limit (e.g., 60 characters)
-    if (filename.length > 60) {
-      filename = filename.substring(0, 60).replace(/-+$/, '');
-    }
-    
-    return `${filename}.html`;
-  }
-
   closeTranslation() {
     this.fullHtmlString.set(null);
     this.translatedHtml.set(null);
@@ -667,7 +418,7 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = this.generateFilename();
+    a.download = this.documentUtil.generateFilename(this.rawHtmlString(), this.url().trim());
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -684,38 +435,5 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
     this.translatedHtml.set(this.sanitizer.bypassSecurityTrustHtml(item.htmlContent));
     this.isHistoryModalOpen.set(false);
     this.showToast('Đã tải lại bản dịch từ lịch sử', 'success');
-  }
-
-  deleteHistoryItem(id: number, event: Event) {
-    event.stopPropagation();
-    if (this.confirmDeleteId() === id) {
-      this.historyService.deleteHistory(id);
-      this.confirmDeleteId.set(null);
-    } else {
-      this.confirmDeleteId.set(id);
-      // Auto cancel after 3s
-      setTimeout(() => {
-        if (this.confirmDeleteId() === id) {
-          this.confirmDeleteId.set(null);
-        }
-      }, 3000);
-    }
-  }
-
-  deleteAllHistory() {
-    if (this.confirmDeleteAll()) {
-      this.historyService.clearAllHistory();
-      this.confirmDeleteAll.set(false);
-    } else {
-      this.confirmDeleteAll.set(true);
-      setTimeout(() => {
-        this.confirmDeleteAll.set(false);
-      }, 3000);
-    }
-  }
-
-  formatTimestamp(ts: number): string {
-    const d = new Date(ts);
-    return `${d.toLocaleDateString('vi-VN')} ${d.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}`;
   }
 }

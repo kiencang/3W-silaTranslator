@@ -9,176 +9,23 @@
     </div>
   }
 
-  <header class="flex-none bg-white/90 backdrop-blur-md sticky top-0 z-50 px-4 md:px-10 transition-all duration-500 ease-in-out origin-top border-[#E5E7EB]"
-          [class.py-2]="!isZenMode()" [class.border-b]="!isZenMode()"
-          [class.max-h-[200px]]="!isZenMode()" [class.opacity-100]="!isZenMode()" [class.overflow-visible]="!isZenMode()"
-          [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.py-0]="isZenMode()" [class.border-none]="isZenMode()" [class.overflow-hidden]="isZenMode()">
-    <div class="max-w-[1240px] mx-auto flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 md:gap-8">
-      
-      <!-- Logo & Temperature Block -->
-      <div class="flex flex-col items-center md:items-start justify-center gap-1.5 md:gap-2">
-        <!-- Logo -->
-        <div class="font-sans font-black text-lg md:text-xl tracking-tight whitespace-nowrap cursor-default select-none">
-          <span class="text-slate-900">3W</span>&nbsp;<span class="text-indigo-600">sila</span><span class="text-rose-600">Translator</span>
-        </div>
-        
-        <!-- Controls: API Key -->
-        <div class="flex flex-row gap-4 items-center">
-          <!-- +API Key Config -->
-          <div class="relative group flex items-center justify-center">
-            <button (click)="openApiKeyModal()"
-                    aria-label="Cài đặt khóa API cá nhân"
-                    [disabled]="isLoading() || isSearchLoading()"
-                    class="flex items-center gap-1.5 p-0 transition-all border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed bg-transparent">
-              <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;" [class.text-indigo-600]="userApiKey()" [class.text-gray-400]="!userApiKey()">vpn_key</mat-icon>
-              <span class="text-[11px] font-bold transition-colors tracking-wide"
-                    [class.text-indigo-600]="userApiKey()"
-                    [class.text-gray-400]="!userApiKey()">
-                    {{ userApiKey() ? 'Đang dùng API Key của bạn' : 'Key hệ thống' }}
-              </span>
-            </button>
-            
-            <!-- Tooltip -->
-            <div class="absolute top-full mt-2 w-64 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-lg text-center left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0">
-              <strong [class.text-indigo-400]="userApiKey()">{{ userApiKey() ? 'Khóa cá nhân đang kích hoạt' : 'Khóa hệ thống mặc định' }}</strong>. Bấm để tự nhập khóa Gemini API Key miễn phí của bạn giúp quá trình dịch ổn định hơn.
-              <div class="absolute bottom-full left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0 border-4 border-transparent border-b-gray-900"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Model Selection -->
-      <div class="flex items-center justify-center">
-        <div class="flex items-center bg-gray-100/80 p-0.5 rounded-full shadow-inner border border-gray-200">
-          <!-- Pro Model Button -->
-          <button 
-            (click)="selectedModel.set('gemini-pro-latest')"
-            [disabled]="isLoading() || isSearchLoading()"
-            class="group relative flex items-center justify-center px-4 py-1 rounded-full transition-all duration-300 border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            [class.bg-white]="selectedModel() === 'gemini-pro-latest'"
-            [class.shadow-sm]="selectedModel() === 'gemini-pro-latest'"
-            [class.text-indigo-600]="selectedModel() === 'gemini-pro-latest'"
-            [class.bg-transparent]="selectedModel() !== 'gemini-pro-latest'"
-            [class.text-gray-400]="selectedModel() !== 'gemini-pro-latest'"
-            [class.hover:text-gray-600]="selectedModel() !== 'gemini-pro-latest' && !isLoading() && !isSearchLoading()"
-            aria-label="Chọn model Gemini Pro (Dịch chất lượng cao)">
-            <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">psychology</mat-icon>
-            
-            <!-- Tooltip -->
-            <div class="absolute top-full mt-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-center z-10">
-              <strong class="text-indigo-400">Gemini Pro</strong><br/>
-              Khuyên dùng. Nhấn mạnh vào chất lượng bản dịch.
-              <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
-            </div>
-          </button>
-
-          <!-- Flash Model Button -->
-          <button 
-            (click)="selectedModel.set('gemini-flash-latest')"
-            [disabled]="isLoading() || isSearchLoading()"
-            class="group relative flex items-center justify-center px-4 py-1 rounded-full transition-all duration-300 border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            [class.bg-white]="selectedModel() === 'gemini-flash-latest'"
-            [class.shadow-sm]="selectedModel() === 'gemini-flash-latest'"
-            [class.text-amber-500]="selectedModel() === 'gemini-flash-latest'"
-            [class.bg-transparent]="selectedModel() !== 'gemini-flash-latest'"
-            [class.text-gray-400]="selectedModel() !== 'gemini-flash-latest'"
-            [class.hover:text-gray-600]="selectedModel() !== 'gemini-flash-latest' && !isLoading() && !isSearchLoading()"
-            aria-label="Chọn model Gemini Flash (Dịch cực nhanh)">
-            <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">bolt</mat-icon>
-            
-             <!-- Tooltip -->
-             <div class="absolute top-full mt-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-center z-10">
-              <strong class="text-amber-400">Gemini Flash</strong><br/>
-              Tốc độ dịch cực nhanh. Phù hợp báo chí cơ bản.
-              <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      <!-- Search Bar Block -->
-      <div class="flex-1 w-full max-w-full md:max-w-[480px] lg:max-w-[600px] xl:max-w-[840px] bg-[#F3F4F6] p-1.5 md:rounded-full rounded-2xl border border-transparent focus-within:border-[#E5E7EB] focus-within:bg-white focus-within:shadow-sm flex flex-col md:flex-row items-stretch md:items-center transition-all gap-1.5 md:gap-0 mx-auto md:mx-0">
-        <div class="flex-1 flex items-center min-w-0 px-2 md:px-3">
-          @if (uploadedHtmlFile()) {
-            <div class="hidden md:flex items-center bg-gray-200/60 border border-gray-200 rounded-md px-2 py-1 gap-1.5 mr-2 shrink-0 shadow-sm animate-in fade-in zoom-in duration-200">
-              <span class="text-[13px] text-gray-700 font-medium truncate max-w-[80px] md:max-w-[130px]" [title]="uploadedHtmlFile()?.name">📄 {{ uploadedHtmlFile()?.name }}</span>
-              <button (click)="removeUploadedFile()" aria-label="Xóa file đã tải lên" [disabled]="isLoading()" class="bg-transparent border-none flex items-center justify-center p-0.5 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed" [class.text-gray-400]="!isLoading()" [class.hover:text-red-500]="!isLoading()" [class.cursor-pointer]="!isLoading()" title="Xóa file">
-                <mat-icon class="h-3.5 w-3.5 flex items-center justify-center" style="font-size: 14px; line-height: 14px; width: 14px; height: 14px;">close</mat-icon>
-              </button>
-            </div>
-          }
-          <input 
-            type="text" 
-            [(ngModel)]="url"
-            aria-label="Nhập đường dẫn website cần dịch"
-            (keyup.enter)="translate()"
-            [readonly]="isLoading()"
-            class="flex-1 border-none py-2 md:py-2.5 text-sm md:text-base outline-none bg-transparent w-full placeholder:text-gray-500 min-w-[50px] truncate" 
-            [placeholder]="uploadedHtmlFile() ? 'Dán URL gốc của website vào đây...' : 'Dán link website tại đây...'">
-
-          @if (url()) {
-            <button (click)="url.set('')" 
-                    [disabled]="isLoading()"
-                    aria-label="Xóa đường dẫn" 
-                    class="text-gray-400 bg-transparent border-none flex items-center justify-center p-1.5 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed mx-1 shrink-0"
-                    [class.hover:bg-gray-200]="!isLoading()"
-                    [class.hover:text-gray-600]="!isLoading()"
-                    [class.cursor-pointer]="!isLoading()">
-              <mat-icon class="h-4 w-4 flex items-center justify-center" style="font-size: 18px; line-height: 18px; width: 18px; height: 18px;">close</mat-icon>
-            </button>
-          }
-
-          <label class="flex shrink-0 relative group p-2 items-center justify-center transition-all"
-                 [class.active:scale-95]="!isLoading()"
-                 [class.cursor-pointer]="!isLoading()"
-                 [class.text-gray-400]="!isLoading()"
-                 [class.hover:text-gray-600]="!isLoading()"
-                 [class.opacity-40]="isLoading()"
-                 [class.cursor-not-allowed]="isLoading()">
-            <input type="file" aria-label="Tải lên file tài liệu định dạng HTML" accept=".html,.htm" class="hidden" (change)="onFileSelected($event)" [disabled]="isLoading()">
-            <mat-icon class="w-5 h-5 flex items-center justify-center -rotate-45 block" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px; display: block;">attach_file</mat-icon>
-            <!-- Custom Tooltip -->
-            <div class="absolute top-full right-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[280px] md:w-[320px] bg-[#1A1A1B] text-white text-[11px] md:text-xs leading-relaxed p-2.5 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 delay-500 z-50 pointer-events-none text-center font-medium">
-              Tải lên file bài viết (.html) nếu ứng dụng bị chặn không thể lấy được nội dung hoặc yêu cầu đăng nhập. (Nhấn Ctrl+S/Cmd+S tại trang gốc để lưu, chọn 'HTML only/chỉ HTML')
-              <div class="absolute bottom-full right-2 md:right-auto md:left-1/2 md:-translate-x-1/2 -mb-[1px] border-4 border-transparent border-b-[#1A1A1B]"></div>
-            </div>
-          </label>
-        </div>
-        
-        <div class="flex items-center justify-end px-2 md:px-0">
-          <button 
-            (click)="translate()"
-            [disabled]="isLoading() || !isValidUrlInput()"
-            [class.bg-[#0066FF]]="!uploadedHtmlFile()"
-            [class.hover:bg-blue-700]="!uploadedHtmlFile()"
-            [class.bg-[#8B5CF6]]="uploadedHtmlFile()"
-            [class.hover:bg-[#7C3AED]]="uploadedHtmlFile()"
-            [class.shadow-[0_0_15px_rgba(0,102,255,0.6)]]="isValidUrlInput() && !isLoading() && !uploadedHtmlFile() && !fullHtmlString()"
-            [class.shadow-[0_0_15px_rgba(139,92,246,0.6)]]="isValidUrlInput() && !isLoading() && uploadedHtmlFile() && !fullHtmlString()"
-            class="w-full md:w-auto text-white border-none py-2 md:py-2.5 px-6 md:px-8 md:rounded-full rounded-xl font-semibold text-sm md:text-base cursor-pointer transition-all duration-300 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed ml-1"
-            [class.active:scale-95]="!isLoading() && isValidUrlInput()"
-            [attr.aria-label]="uploadedHtmlFile() ? 'Dịch từ file HTML đã chọn' : 'Bắt đầu dịch đường dẫn website'">
-            @if (isLoading()) {
-              <div class="flex items-center justify-center gap-2">
-                <mat-icon class="animate-spin text-white flex items-center justify-center h-4 w-4" style="font-size: 16px; line-height: 16px; width: 16px; height: 16px;">autorenew</mat-icon>
-                <span>Đang dịch...</span>
-              </div>
-            } @else {
-              <div class="flex items-center justify-center gap-2">
-                @if (uploadedHtmlFile()) {
-                  <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">description</mat-icon>
-                  <span>Dịch File</span>
-                } @else {
-                  <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">public</mat-icon>
-                  <span>Dịch Web</span>
-                }
-              </div>
-            }
-          </button>
-        </div>
-      </div>
-    </div>
-  </header>
+  <app-header 
+    [isZenMode]="isZenMode()"
+    [userApiKey]="userApiKey()"
+    [isLoading]="isLoading()"
+    [isSearchLoading]="isSearchLoading()"
+    [selectedModel]="selectedModel()"
+    [uploadedHtmlFile]="uploadedHtmlFile()"
+    [url]="url()"
+    [isValidUrlInput]="isValidUrlInput()"
+    [fullHtmlString]="fullHtmlString()"
+    (openApiKeyModal)="openApiKeyModal()"
+    (selectedModelChange)="selectedModel.set($event)"
+    (urlChange)="url.set($event)"
+    (removeUploadedFile)="removeUploadedFile()"
+    (fileSelected)="onFileSelected($event)"
+    (translate)="translate()">
+  </app-header>
 
   <main class="flex-1 flex flex-col w-full" 
         [class.px-4]="!fullHtmlString() || isLoading()" 
@@ -219,421 +66,62 @@
     }
 
     @if (!fullHtmlString() && !isLoading()) {
-      <div class="w-full flex-1 flex flex-col items-center justify-center gap-6 px-4 relative overflow-hidden">
-        
-        <!-- Giant Watermark: Search Icon -->
-        <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden">
-          <mat-icon class="text-slate-900 opacity-[0.02] -mt-10" style="font-size: 450px; line-height: 450px; width: 450px; height: 450px;">search</mat-icon>
-        </div>
-
-        <div class="text-center space-y-2 mb-2 relative z-10">
-          <h1 class="text-3xl md:text-4xl font-extrabold text-[#1A1A1B] tracking-tight">Dịch Từ Khóa Google</h1>
-          <p class="text-gray-500 text-sm md:text-base font-medium max-w-md mx-auto">Nhập từ khóa tiếng Việt, chúng tôi sẽ giúp bạn tìm kiếm các bài viết tiếng Anh!</p>
-        </div>
-
-        <div class="w-full max-w-3xl bg-white p-2 border border-gray-200 shadow-sm sm:rounded-full rounded-2xl flex flex-col sm:flex-row items-stretch focus-within:ring-4 focus-within:ring-gray-100 focus-within:border-gray-300 transition-all relative z-30">
-          <div class="flex-1 flex items-center px-4 py-3 sm:py-0">
-            <mat-icon class="text-gray-400 shrink-0 flex items-center justify-center h-5 w-5" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">search</mat-icon>
-            <input 
-              type="text" 
-              [(ngModel)]="searchQuery"
-              (ngModelChange)="translatedSearchQuery.set('')"
-              aria-label="Nhập từ khóa tiếng Việt để tìm kiếm bài viết nước ngoài"
-              (keyup.enter)="translateSearchQuery()"
-              class="flex-1 w-full ml-3 border-none outline-none text-lg bg-transparent text-[#1A1A1B] placeholder:text-gray-400" 
-              placeholder="VD: văn hóa làm việc tại Nhật Bản có gì thú vị..." />
-          </div>
-          <button 
-            (click)="translateSearchQuery()"
-            aria-label="Dịch từ khóa và tìm kiếm"
-            [disabled]="isSearchLoading() || !searchQuery()"
-            class="mt-2 sm:mt-0 w-full sm:w-auto bg-[#1A1A1B] text-white border-none py-2.5 px-6 sm:rounded-full rounded-xl font-semibold text-sm md:text-base cursor-pointer hover:bg-black hover:shadow-md transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            [class.active:scale-95]="!isSearchLoading() && searchQuery()">
-            @if (isSearchLoading()) {
-              <div class="flex items-center justify-center gap-2">
-                <mat-icon class="animate-spin text-white flex items-center justify-center h-4 w-4" style="font-size: 16px; line-height: 16px; width: 16px; height: 16px;">autorenew</mat-icon>
-                <span>Đang dịch...</span>
-              </div>
-            } @else {
-              <div class="flex items-center justify-center gap-2">
-                <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">translate</mat-icon>
-                <span>Dịch Từ Khóa</span>
-              </div>
-            }
-          </button>
-          
-          @if (translatedSearchQuery()) {
-            <div class="absolute top-[calc(100%+8px)] left-0 right-0 bg-white border border-gray-200 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.15)] rounded-xl p-1 z-50 animate-in slide-in-from-top-2 fade-in duration-200">
-              <a 
-                [href]="'https://www.google.com/search?q=' + translatedSearchQuery()" 
-                target="_blank"
-                rel="noopener noreferrer"
-                (click)="onSearchLinkClick()"
-                class="flex items-center justify-between w-full p-3 hover:bg-indigo-50/80 rounded-lg group transition-colors no-underline">
-                <div class="flex items-center gap-3 overflow-hidden">
-                  <div class="w-9 h-9 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-full shrink-0">
-                    <mat-icon class="flex items-center justify-center font-bold h-5 w-5" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">search</mat-icon>
-                  </div>
-                  <div class="flex flex-col overflow-hidden text-left">
-                    <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Kết quả dịch tiếng Anh</span>
-                    <span class="font-medium text-lg text-[#1A1A1B] truncate">{{ translatedSearchQuery() }}</span>
-                  </div>
-                </div>
-                <div class="text-indigo-600 shrink-0 flex items-center gap-1.5 text-sm font-semibold bg-white shadow-sm border border-indigo-100 px-3 py-1.5 rounded-md transition-shadow group-hover:shadow-md">
-                  Click để mở tab mới
-                  <mat-icon class="flex items-center justify-center h-4 w-4" style="font-size: 16px; line-height: 16px; width: 16px; height: 16px;">open_in_new</mat-icon>
-                </div>
-              </a>
-            </div>
-          }
-        </div>
-
-        <!-- Favorite Sites Section -->
-        <div class="mt-8 w-full max-w-3xl flex flex-col items-center gap-4 relative z-10">
-          @if (favoriteSites().length === 0) {
-            <button (click)="openSitesModal()" class="text-[#0066FF] hover:text-blue-700 font-medium text-sm md:text-base border-none bg-transparent cursor-pointer underline underline-offset-4 transition-colors">
-              + Thêm danh sách website ưa thích
-            </button>
-          } @else {
-            <div class="w-full flex flex-col items-center gap-4">
-              <div class="flex items-center gap-2">
-                <span class="text-sm md:text-base text-gray-600 font-semibold">Danh sách website ưa thích</span>
-                <button (click)="openSitesModal()" aria-label="Quản lý danh sách website ưa thích" title="Quản lý danh sách" class="p-1.5 text-gray-400 hover:text-[#0066FF] bg-transparent border-none cursor-pointer transition-colors rounded-full hover:bg-blue-50">
-                  <mat-icon class="flex items-center justify-center text-gray-400 h-4 w-4" style="font-size: 18px; line-height: 18px; width: 18px; height: 18px; margin-right: 2px;">settings</mat-icon>
-                </button>
-              </div>
-              <div class="flex flex-wrap justify-center gap-3">
-                @for (site of favoriteSites(); track site) {
-                  <a [href]="site" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-4 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-200 text-gray-700 text-sm font-medium rounded-full transition-colors no-underline shadow-sm hover:shadow">
-                    <mat-icon class="text-gray-500 flex items-center justify-center h-4 w-4" style="font-size: 16px; line-height: 16px; width: 16px; height: 16px;">language</mat-icon>
-                    {{ getDomainName(site) }}
-                  </a>
-                }
-              </div>
-            </div>
-          }
-        </div>
-
-      </div>
+      <app-initial-view
+        [searchQuery]="searchQuery()"
+        [translatedSearchQuery]="translatedSearchQuery()"
+        [isSearchLoading]="isSearchLoading()"
+        [favoriteSites]="favoriteSites()"
+        (searchQueryChange)="searchQuery.set($event)"
+        (translatedSearchQueryChange)="translatedSearchQuery.set($event)"
+        (translateSearch)="translateSearchQuery()"
+        (searchLinkClick)="onSearchLinkClick()"
+        (openSitesModal)="openSitesModal()">
+      </app-initial-view>
     }
 
     @if (fullHtmlString() && !isLoading()) {
-      <div class="w-full flex-1 flex flex-col bg-white">
-        <div class="px-5 border-[#E5E7EB] flex justify-between items-center bg-[#F8F9FA] shrink-0 sticky z-40 transition-all duration-500 ease-in-out origin-top"
-             [class.top-[72px]]="!isZenMode()" [class.md:top-[68px]]="!isZenMode()" [class.top-0]="isZenMode()"
-             [class.py-2]="!isZenMode()" [class.md:py-2.5]="!isZenMode()" [class.border-b]="!isZenMode()"
-             [class.max-h-[100px]]="!isZenMode()" [class.opacity-100]="!isZenMode()" [class.overflow-visible]="!isZenMode()"
-             [class.py-0]="isZenMode()" [class.border-none]="isZenMode()" [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.overflow-hidden]="isZenMode()">
-          <div class="flex items-center gap-2 md:gap-3 flex-1 overflow-hidden mr-4">
-            <button (click)="closeTranslation()" aria-label="Đóng bản dịch" title="Đóng bản dịch" class="p-1.5 md:p-2 text-gray-500 hover:text-gray-900 bg-gray-200/80 hover:bg-gray-300 rounded-full transition-colors border-none cursor-pointer flex items-center justify-center shrink-0">
-              <mat-icon class="h-4 w-4 md:h-5 md:w-5 flex items-center justify-center font-bold" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
-            </button>
-            <h2 class="text-base md:text-lg font-bold truncate text-[#1A1A1B] flex-1 m-0">{{ translatedTitle() }}</h2>
-          </div>
-          <div class="flex items-center gap-2 md:gap-3 shrink-0">
-            <button (click)="isZenMode.set(true)" aria-label="Kích hoạt chế độ đọc tĩnh tâm" title="Mở rộng toàn màn hình" class="p-1.5 md:p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors border-none cursor-pointer flex items-center justify-center active:scale-95 bg-transparent">
-              <mat-icon class="w-6 h-6 md:w-7 md:h-7 flex items-center justify-center" style="font-size: 24px; line-height: 24px; width: 24px; height: 24px;">fullscreen</mat-icon>
-            </button>
-            <button (click)="downloadHtml()" aria-label="Tải bản dịch định dạng HTML về máy" class="bg-[#10B981] text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium hover:bg-[#059669] transition-colors whitespace-nowrap flex items-center gap-1.5 md:gap-2 shadow-sm text-sm border-none cursor-pointer active:scale-95">
-              <mat-icon class="h-4 w-4 md:h-5 md:w-5 flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">file_download</mat-icon>
-              <span class="font-semibold">Download</span>
-            </button>
-          </div>
-        </div>
-        <div class="flex-1 w-full bg-white transition-all duration-500 ease-in-out">
-          <iframe [srcdoc]="fullHtmlString()" title="Nội dung bản dịch tiếng Việt" class="w-full border-none block transition-all duration-500 ease-in-out" 
-                  [style.height]="isZenMode() ? '100vh' : 'calc(100vh - 140px)'"></iframe>
-        </div>
-      </div>
+      <app-result-view
+        [isZenMode]="isZenMode()"
+        [translatedTitle]="translatedTitle()"
+        [fullHtmlString]="fullHtmlString()"
+        (closeTranslation)="closeTranslation()"
+        (enableZenMode)="isZenMode.set(true)"
+        (downloadHtml)="downloadHtml()">
+      </app-result-view>
     }
 
 
   </main>
 
   <!-- Footer -->
-  <footer class="flex-none text-center py-2 md:py-3 text-xs text-gray-500 transition-all duration-500 ease-in-out font-medium"
-          [class.border-t]="!isZenMode()" [class.border-[#E5E7EB]]="!isZenMode()"
-          [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.py-0]="isZenMode()" [class.md:py-0]="isZenMode()" [class.overflow-hidden]="isZenMode()" [class.border-none]="isZenMode()"
-          [class.max-h-[100px]]="!isZenMode()" [class.opacity-100]="!isZenMode()">
-    <div class="max-w-[1240px] mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-2">
-        <button (click)="isHistoryModalOpen.set(true)" aria-label="Lịch sử dịch" [disabled]="isLoading() || isSearchLoading()" class="inline-flex items-center justify-center gap-1.5 text-gray-600 bg-white border border-gray-200 transition-all font-medium cursor-pointer px-3 py-1 rounded-lg shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100" [class.hover:text-[#0066FF]]="!isLoading() && !isSearchLoading()" [class.hover:border-[#0066FF]]="!isLoading() && !isSearchLoading()" [class.hover:bg-blue-50]="!isLoading() && !isSearchLoading()">
-          <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;">history</mat-icon>
-          <span>History</span>
-        </button>
-        <button (click)="isShareModalOpen.set(true)" aria-label="Chia sẻ công cụ" class="inline-flex items-center justify-center gap-1.5 text-gray-600 hover:text-[#0066FF] bg-white border border-gray-200 hover:border-[#0066FF] hover:bg-blue-50 transition-all font-medium cursor-pointer px-3 py-1 rounded-lg shadow-sm">
-          <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;">share</mat-icon>
-          <span>Share</span>
-        </button>
-      </div>
-      <div class="leading-relaxed text-gray-400 text-[11px] truncate mx-auto md:mx-0">
-        v1.0.34 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
-        <a href="https://blog.wpsila.com/app-dich-website-tu-anh-sang-viet/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn sử dụng</a>
-      </div>
-
-      <!-- +Search Grounding at the far right -->
-      <div class="flex items-center justify-end shrink-0">
-        <div class="relative group flex items-center justify-center">
-          <button (click)="useSearchGrounding.set(!useSearchGrounding())"
-                  aria-label="Tính năng tra cứu Google Search"
-                  [disabled]="isLoading() || isSearchLoading()"
-                  class="flex items-center gap-1.5 p-1 transition-all border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed bg-transparent">
-            
-            <div class="relative inline-flex h-3.5 w-7 shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none"
-                 [class.bg-blue-600]="useSearchGrounding()"
-                 [class.bg-gray-300]="!useSearchGrounding()">
-              <span class="pointer-events-none inline-block h-2.5 w-2.5 rounded-full bg-white shadow ring-0 transition-transform duration-200 ease-in-out absolute left-[2px]"
-                    [style.transform]="useSearchGrounding() ? 'translateX(14px)' : 'translateX(0)'"></span>
-            </div>
-            
-            <span class="text-[11px] font-bold transition-colors tracking-wide"
-                  [class.text-blue-600]="useSearchGrounding()"
-                  [class.text-gray-500]="!useSearchGrounding()">SEARCH Grounding</span>
-          </button>
-          
-          <!-- Tooltip above button for footer -->
-          <div class="absolute bottom-full mb-2 w-72 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-lg text-center right-0">
-            <strong [class.text-blue-400]="useSearchGrounding()" [class.text-gray-400]="!useSearchGrounding()">[{{ useSearchGrounding() ? 'Đang Bật' : 'Đang Tắt' }}]</strong> Bổ sung công cụ tìm kiếm cho AI trong quá trình dịch, sẽ tốn token/thời gian hơn. Chỉ nên bật với bài có tính học thuật cao hoặc thời sự cần cập nhật thời gian thực. Tính năng này có thể bị hạn chế với tài khoản miễn phí.
-            <div class="absolute top-full right-4 border-4 border-transparent border-t-gray-900"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <app-footer 
+    [isZenMode]="isZenMode()" 
+    [isLoading]="isLoading()" 
+    [isSearchLoading]="isSearchLoading()" 
+    [useSearchGrounding]="useSearchGrounding()"
+    (openHistory)="isHistoryModalOpen.set(true)"
+    (openShare)="isShareModalOpen.set(true)"
+    (toggleSearchGrounding)="useSearchGrounding.set($event)">
+  </app-footer>
 
   <!-- Share Modal -->
   @if (isShareModalOpen()) {
-    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
-      <div class="bg-white w-full max-w-[480px] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
-        <!-- Header -->
-        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h3 id="share-modal-title" class="text-lg font-bold text-[#1A1A1B] flex items-center gap-1">Chia sẻ <span class="font-black text-lg tracking-tight"><span class="text-slate-900">3W</span>&nbsp;<span class="text-indigo-600">sila</span><span class="text-rose-600">Translator</span></span></h3>
-          <button (click)="isShareModalOpen.set(false)" aria-label="Đóng cửa sổ chia sẻ" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100">
-            <mat-icon class="flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
-          </button>
-        </div>
-
-        <!-- Body -->
-        <div class="px-6 py-5 flex flex-col gap-4">
-          <p class="text-sm text-gray-600 leading-relaxed">
-            3W silaTranslator là công cụ miễn phí, dựa trên gói miễn phí mà AI Studio cung cấp, đủ dịch khoảng 20 bài viết / ngày bằng model AI Gemini mới nhất.
-          </p>
-          
-          <div class="flex items-center gap-2 mt-2">
-            <input type="text"
-                   readonly
-                   [value]="'https://aistudio.google.com/apps/4cc7e19e...'"
-                   class="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-500 font-mono outline-none cursor-default select-all">
-            <button (click)="copyShareLink()" aria-label="Sao chép đường dẫn" class="shrink-0 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all text-white border-none cursor-pointer"
-                    [class.bg-[#0066FF]]="!isCopied()" [class.hover:bg-blue-700]="!isCopied()"
-                    [class.bg-[#10B981]]="isCopied()">
-              @if (isCopied()) {
-                <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 18px;">check</mat-icon>
-                <span>Đã copy!</span>
-              } @else {
-                <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 18px;">content_copy</mat-icon>
-                <span>Copy link</span>
-              }
-            </button>
-          </div>
-          
-          <p class="text-xs text-left text-gray-400 mt-1 italic">
-            Bạn có thể copy đường dẫn chia sẻ cho người khác cùng dùng.
-          </p>
-        </div>
-      </div>
-    </div>
+    <app-share-modal (closeModal)="isShareModalOpen.set(false)"></app-share-modal>
   }
 
   <!-- History Modal -->
   @if (isHistoryModalOpen()) {
-    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="history-modal-title">
-      <div class="bg-white w-full max-w-[600px] max-h-[85vh] rounded-2xl shadow-2xl flex flex-col">
-        <!-- Header -->
-        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">
-          <div class="flex items-center gap-3">
-            <h3 id="history-modal-title" class="text-lg font-bold text-[#1A1A1B]">Lịch sử dịch</h3>
-            @if (historyItems().length > 0) {
-              <button (click)="deleteAllHistory()" class="text-xs px-2 py-1.5 rounded-lg bg-white text-red-600 hover:bg-red-50 transition-colors border border-red-200 cursor-pointer flex items-center gap-1 font-medium shadow-sm">
-                @if (confirmDeleteAll()) {
-                  <span>Xác nhận xóa hết?</span>
-                } @else {
-                  <mat-icon style="font-size: 14px; width: 14px; height: 14px; line-height: 14px;">delete_sweep</mat-icon>
-                  <span>Xóa tất cả</span>
-                }
-              </button>
-            }
-          </div>
-          <button (click)="isHistoryModalOpen.set(false)" aria-label="Đóng cửa sổ lịch sử" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100">
-            <mat-icon class="flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
-          </button>
-        </div>
-
-        <!-- Warning block -->
-        <div class="px-6 py-3 bg-amber-50 shrink-0 border-b border-amber-100">
-          <p class="text-[13px] text-amber-800 leading-relaxed m-0 flex gap-2">
-            <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 18px; margin-top: 2px" class="shrink-0 text-amber-600">warning_amber</mat-icon>
-            <span>Danh sách 10 bài viết gần nhất bạn dịch, được <strong>lưu cục bộ</strong> trên <strong>trình duyệt đang dùng</strong> để tiện xem lại. Hãy chủ động "Tải bản dịch" để lưu trữ lâu dài, danh sách này có thể bị mất nếu bạn xóa dữ liệu web.</span>
-          </p>
-        </div>
-
-        <!-- Body -->
-        <div class="px-2 py-2 overflow-y-auto flex-1">
-          @if (historyItems().length === 0) {
-            <div class="text-center py-12 text-gray-500">
-              <mat-icon style="font-size: 48px; width: 48px; height: 48px; line-height: 48px; margin-bottom: 8px" class="opacity-20 text-gray-400">history</mat-icon>
-              <p class="mt-2 text-sm text-gray-500 font-medium">Chưa có lịch sử dịch nào.</p>
-            </div>
-          } @else {
-            <div class="flex flex-col gap-1">
-              @for (item of historyItems(); track item.id) {
-                <div tabindex="0" (keyup.enter)="loadHistoryItem(item)" class="group flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer border border-transparent hover:border-gray-200" (click)="loadHistoryItem(item)">
-                  <div class="flex-1 min-w-0 pr-4">
-                    <h4 class="text-[15px] font-semibold text-gray-900 truncate mb-1" [title]="item.title">{{ item.title }}</h4>
-                    <div class="flex items-center gap-2 text-xs text-gray-500 font-medium">
-                      <span class="truncate max-w-[200px]" [title]="item.url">{{ item.url }}</span>
-                      <span class="shrink-0 opacity-40">&bull;</span>
-                      <span class="shrink-0 flex items-center gap-1"><mat-icon style="font-size: 11px; width: 11px; height: 11px; line-height: 11px;">schedule</mat-icon>{{ formatTimestamp(item.timestamp) }}</span>
-                    </div>
-                  </div>
-                  <div class="shrink-0">
-                    <button (click)="deleteHistoryItem(item.id!, $event)" class="px-2 py-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100 bg-transparent cursor-pointer flex items-center justify-center relative overflow-hidden" [class.bg-red-50]="confirmDeleteId() === item.id!" [class.text-red-600]="confirmDeleteId() === item.id!" [class.border-red-200]="confirmDeleteId() === item.id!">
-                      @if (confirmDeleteId() === item.id!) {
-                        <span class="text-[11px] font-bold px-1 uppercase tracking-wide">Xóa?</span>
-                      } @else {
-                        <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">delete_outline</mat-icon>
-                      }
-                    </button>
-                  </div>
-                </div>
-              }
-            </div>
-          }
-        </div>
-      </div>
-    </div>
+    <app-history-modal (closeModal)="isHistoryModalOpen.set(false)" (loadHistory)="loadHistoryItem($event)"></app-history-modal>
   }
 
   <!-- Sites Modal -->
   @if (isSitesModalOpen()) {
-    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-        <!-- Header -->
-        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h3 id="modal-title" class="text-lg font-bold text-[#1A1A1B]">Cài đặt Website ưa thích</h3>
-          <button (click)="isSitesModalOpen.set(false)" aria-label="Đóng cửa sổ cài đặt" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100">
-            <mat-icon class="flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
-          </button>
-        </div>
-
-        <!-- Body -->
-        <div class="px-6 py-5 overflow-y-auto flex-1 flex flex-col gap-3">
-          @for (item of modalSiteInputs(); track item.id; let idx = $index) {
-            <div class="flex items-center gap-2">
-              <span class="text-gray-400 font-mono text-sm w-5 text-right">{{idx + 1}}.</span>
-              <input type="text"
-                     [id]="'modal-input-' + item.id"
-                     aria-label="Đường dẫn website"
-                     [ngModel]="item.url" 
-                     (ngModelChange)="updateModalInput(item.id, $event)"
-                     placeholder="https://..."
-                     class="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-[#1A1A1B] outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF] transition-all">
-              <button (click)="removeModalInput(item.id)" aria-label="Xóa đường dẫn này" class="text-gray-300 hover:text-red-500 bg-transparent border-none cursor-pointer p-1.5 rounded-md hover:bg-red-50 transition-colors" title="Xóa">
-                <mat-icon class="flex items-center justify-center h-5 w-5" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">delete</mat-icon>
-              </button>
-            </div>
-          }
-
-          @if (modalSiteInputs().length < 10) {
-            <button (click)="addModalInput()" aria-label="Thêm ô nhập website mới" class="mt-2 self-start flex items-center gap-1.5 text-sm font-medium text-[#0066FF] hover:text-blue-700 bg-transparent border-none cursor-pointer hover:underline underline-offset-2 transition-all">
-              <mat-icon class="flex items-center justify-center h-4 w-4" style="font-size: 16px; line-height: 16px; width: 16px; height: 16px;">add</mat-icon>
-              Thêm website khác
-            </button>
-          }
-          
-          <p class="text-xs text-center text-gray-400 mt-4 px-4 leading-relaxed">
-            Dữ liệu được lưu trữ an toàn ngay trên trình duyệt hiện tại để bảo vệ quyền riêng tư của bạn.
-          </p>
-        </div>
-
-        <!-- Footer -->
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end">
-          <button (click)="saveSites()" aria-label="Lưu danh sách website" class="bg-[#0066FF] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:shadow-md transition-all cursor-pointer border-none active:scale-95">
-            Lưu danh sách
-          </button>
-        </div>
-      </div>
-    </div>
+    <app-sites-modal [favoriteSites]="favoriteSites()" (closeModal)="isSitesModalOpen.set(false)" (saveSitesData)="saveSites($event)"></app-sites-modal>
   }
 
   <!-- API Key Modal -->
   @if (isApiKeyModalOpen()) {
-    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="api-modal-title">
-      <div class="bg-white w-full max-w-[480px] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
-        <!-- Header -->
-        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h3 id="api-modal-title" class="text-lg font-bold text-[#1A1A1B] flex items-center gap-2">
-            <mat-icon class="text-indigo-600">vpn_key</mat-icon>
-            Cấu hình Gemini API Key
-          </h3>
-          <button (click)="isApiKeyModalOpen.set(false)" aria-label="Đóng cửa sổ" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100">
-            <mat-icon class="flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
-          </button>
-        </div>
-
-        <!-- Body -->
-        <div class="px-6 py-5 flex flex-col gap-4">
-          <div class="text-sm text-gray-600 leading-relaxed space-y-2">
-            <p>
-              Tự cấu hình khóa API (Gemini API Key) riêng để dịch ổn định, không lo hết giới hạn lượt dịch từ hệ thống chung.
-            </p>
-            <p class="flex items-center gap-2 flex-wrap">
-              @if (userApiKey()) {
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold border border-indigo-100">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse"></span>
-                  Đang dùng API Key của bạn
-                </span>
-              } @else {
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-semibold border border-gray-200">
-                  Đang dùng API Key hệ thống
-                </span>
-              }
-              <span class="text-gray-300">|</span>
-              <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 transition-colors font-medium hover:underline text-xs flex items-center gap-0.5">
-                <mat-icon style="font-size: 14px; width: 14px; height: 14px; line-height: 14px;">help_outline</mat-icon> Hướng dẫn nhanh
-              </a>
-            </p>
-          </div>
-          
-          <div class="flex flex-col gap-1.5">
-            <label for="api-key-input" class="text-xs font-bold text-gray-500 uppercase tracking-wider">Gemini API Key cá nhân</label>
-            <div class="relative flex items-center">
-              <input [type]="isKeyVisible() ? 'text' : 'password'"
-                     id="api-key-input"
-                     [(ngModel)]="tempApiKey"
-                     placeholder="AIzaSy..."
-                     class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-3 pr-10 py-2.5 text-sm text-[#1A1A1B] outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF] transition-all font-mono">
-              <button (click)="isKeyVisible.set(!isKeyVisible())" type="button" class="absolute right-2.5 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer flex items-center justify-center p-1">
-                <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 18px;">{{ isKeyVisible() ? 'visibility_off' : 'visibility' }}</mat-icon>
-              </button>
-            </div>
-            <p class="text-[11px] text-gray-400 leading-relaxed italic">
-              Khóa API của bạn được lưu <strong>cục bộ tuyệt đối</strong> trong trình duyệt của bạn (`LocalStorage`), không lưu trữ trên bất kỳ máy chủ nào khác.
-            </p>
-          </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
-          <button (click)="saveApiKey('')" [disabled]="!userApiKey()" class="text-xs px-3 py-2 rounded-lg bg-white text-red-600 hover:bg-red-50 transition-colors border border-red-200 cursor-pointer font-medium disabled:opacity-40 disabled:cursor-not-allowed">
-            Xóa Key cá nhân
-          </button>
-          <button (click)="saveApiKey(tempApiKey)" class="bg-[#0066FF] text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:shadow-md transition-all cursor-pointer border-none active:scale-95">
-            Lưu cấu hình
-          </button>
-        </div>
-      </div>
-    </div>
+    <app-api-key-modal [userApiKey]="userApiKey()" (closeModal)="isApiKeyModalOpen.set(false)" (saveApiKey)="saveApiKey($event)"></app-api-key-modal>
   }
 </div>
 <router-outlet />
