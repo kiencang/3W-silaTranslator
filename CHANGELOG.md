@@ -8,6 +8,7 @@ và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0
 ## [v1.0.37] - 2026-05-23
 ### Fixed
 - Điều chỉnh thông báo Toast nhỏ liên quan đến thông báo lỗi khi server chưa kịp phản hồi.
+- Điều chỉnh thông báo Toast liên quan đến phần thông báo hết ngưỡng miễn phí tùy thuộc vào việc đã nhập khóa API hay chưa?
 
 ## [v1.0.36] - 2026-05-22
 ### Fixed
