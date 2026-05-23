@@ -28,7 +28,7 @@ import { MatIconModule } from '@angular/material/icon';
                       aria-label="Cài đặt khóa API cá nhân"
                       [disabled]="isLoading() || isSearchLoading()"
                       class="flex items-center gap-1.5 p-0 transition-all border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed bg-transparent">
-                <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;" [class.text-indigo-600]="userApiKey()" [class.text-gray-400]="!userApiKey()">vpn_key</mat-icon>
+                <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px; color: #B87333;">vpn_key</mat-icon>
                 <span class="text-[11px] font-bold transition-colors tracking-wide"
                       [class.text-indigo-600]="userApiKey()"
                       [class.text-gray-400]="!userApiKey()">

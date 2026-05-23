@@ -11,9 +11,9 @@
 
   <app-header 
     [isZenMode]="isZenMode()"
-    [userApiKey]="userApiKey()"
+    [userApiKey]="storageManager.userApiKey()"
     [isLoading]="isLoading()"
-    [isSearchLoading]="isSearchLoading()"
+    [isSearchLoading]="searchTranslationTracker.isSearchLoading()"
     [selectedModel]="selectedModel()"
     [uploadedHtmlFile]="uploadedHtmlFile()"
     [url]="url()"
@@ -31,50 +31,19 @@
         [class.px-4]="!fullHtmlString() || isLoading()" 
         [class.md:px-10]="!fullHtmlString() || isLoading()"
         [class.items-center]="!fullHtmlString() || isLoading()">    @if (isLoading()) {
-      <div class="w-full max-w-[1000px] relative bg-white rounded-2xl border border-[#E5E7EB] shadow-sm overflow-hidden p-6 md:p-10 min-h-[300px] my-auto flex-none">
-        <!-- Skeleton Article (Background) -->
-        <div class="animate-pulse opacity-50 select-none">
-          <!-- Title -->
-          <div class="h-10 bg-[#E5E7EB] rounded-xl w-3/4 mb-4"></div>
-          <!-- Meta / Date -->
-          <div class="h-4 bg-[#E5E7EB] rounded-md w-1/4 mb-5"></div>
-          
-          <!-- Paragraphs -->
-          <div class="space-y-4 mb-4">
-            <div class="h-4 bg-[#E5E7EB] rounded-md w-full"></div>
-            <div class="h-4 bg-[#E5E7EB] rounded-md w-[95%]"></div>
-            <div class="h-4 bg-[#E5E7EB] rounded-md w-[85%]"></div>
-          </div>
-          
-          <div class="space-y-4">
-            <div class="h-4 bg-[#E5E7EB] rounded-md w-[90%]"></div>
-            <div class="h-4 bg-[#E5E7EB] rounded-md w-full"></div>
-            <div class="h-4 bg-[#E5E7EB] rounded-md w-[80%]"></div>
-          </div>
-        </div>
-
-        <!-- Timer Overlay (Foreground) -->
-        <div class="absolute inset-0 flex flex-col items-center justify-center bg-white/40 backdrop-blur-[2px]">
-          <div class="text-4xl md:text-5xl font-mono font-bold text-[#0066FF] tracking-widest mb-4 drop-shadow-sm">
-            {{ formattedTime() }}
-          </div>
-          <p class="text-[#1A1A1B] font-medium text-sm md:text-base px-6 py-3 bg-white/90 rounded-full shadow-lg border border-gray-100/50">
-            AI đang phân tích và dịch nội dung. Vui lòng đợi 1 - 2 phút...
-          </p>
-        </div>
-      </div>
+      <app-translation-loading [formattedTime]="formattedTime()"></app-translation-loading>
     }
 
     @if (!fullHtmlString() && !isLoading()) {
       <app-initial-view
-        [searchQuery]="searchQuery()"
-        [translatedSearchQuery]="translatedSearchQuery()"
-        [isSearchLoading]="isSearchLoading()"
-        [favoriteSites]="favoriteSites()"
-        (searchQueryChange)="searchQuery.set($event)"
-        (translatedSearchQueryChange)="translatedSearchQuery.set($event)"
-        (translateSearch)="translateSearchQuery()"
-        (searchLinkClick)="onSearchLinkClick()"
+        [searchQuery]="searchTranslationTracker.searchQuery()"
+        [translatedSearchQuery]="searchTranslationTracker.translatedSearchQuery()"
+        [isSearchLoading]="searchTranslationTracker.isSearchLoading()"
+        [favoriteSites]="storageManager.favoriteSites()"
+        (searchQueryChange)="searchTranslationTracker.setSearchQuery($event)"
+        (translatedSearchQueryChange)="searchTranslationTracker.translatedSearchQuery.set($event)"
+        (translateSearch)="searchTranslationTracker.translateSearchQuery(storageManager.userApiKey())"
+        (searchLinkClick)="searchTranslationTracker.onSearchLinkClick()"
         (openSitesModal)="openSitesModal()">
       </app-initial-view>
     }
@@ -97,7 +66,7 @@
   <app-footer 
     [isZenMode]="isZenMode()" 
     [isLoading]="isLoading()" 
-    [isSearchLoading]="isSearchLoading()" 
+    [isSearchLoading]="searchTranslationTracker.isSearchLoading()" 
     [useSearchGrounding]="useSearchGrounding()"
     (openHistory)="isHistoryModalOpen.set(true)"
     (openShare)="isShareModalOpen.set(true)"
@@ -116,38 +85,14 @@
 
   <!-- Sites Modal -->
   @if (isSitesModalOpen()) {
-    <app-sites-modal [favoriteSites]="favoriteSites()" (closeModal)="isSitesModalOpen.set(false)" (saveSitesData)="saveSites($event)"></app-sites-modal>
+    <app-sites-modal [favoriteSites]="storageManager.favoriteSites()" (closeModal)="isSitesModalOpen.set(false)" (saveSitesData)="saveSites($event)"></app-sites-modal>
   }
 
   <!-- API Key Modal -->
   @if (isApiKeyModalOpen()) {
-    <app-api-key-modal [userApiKey]="userApiKey()" (closeModal)="isApiKeyModalOpen.set(false)" (saveApiKey)="saveApiKey($event)"></app-api-key-modal>
+    <app-api-key-modal [userApiKey]="storageManager.userApiKey()" (closeModal)="isApiKeyModalOpen.set(false)" (saveApiKey)="saveApiKey($event)"></app-api-key-modal>
   }
 </div>
 <router-outlet />
 
-<!-- Toast Notifications Container -->
-<div class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none">
-  @for (toast of toasts(); track toast.id) {
-    <div class="pointer-events-auto flex items-start gap-3 px-4 py-3 rounded-xl shadow-lg text-white text-sm font-medium min-w-[280px] max-w-[420px] animate-toast-slide-in relative group"
-         [attr.role]="toast.type === 'error' ? 'alert' : 'status'"
-         [attr.aria-live]="toast.type === 'error' ? 'assertive' : 'polite'"
-         [class.bg-[#10B981]]="toast.type === 'success'"
-         [class.bg-[#EF4444]]="toast.type === 'error'"
-         [class.bg-[#3B82F6]]="toast.type === 'info'">
-      @if (toast.type === 'success') {
-        <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0 mt-1"></div>
-      } @else if (toast.type === 'error') {
-        <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0 animate-pulse mt-1"></div>
-      } @else {
-        <div class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] shrink-0 mt-1"></div>
-      }
-      <div class="flex-1 leading-relaxed pr-6">{{ toast.message }}</div>
-      
-      <!-- Close Button -->
-      <button (click)="removeToast(toast.id)" aria-label="Đóng thông báo" class="absolute right-2 top-2 shrink-0 p-1 rounded-md opacity-60 hover:opacity-100 hover:bg-white/20 transition-all cursor-pointer border-none bg-transparent text-white flex justify-center items-center">
-        <mat-icon class="flex items-center justify-center h-4 w-4" style="font-size: 16px; line-height: 16px; width: 16px; height: 16px;">close</mat-icon>
-      </button>
-    </div>
-  }
-</div>
+<app-toast></app-toast>
