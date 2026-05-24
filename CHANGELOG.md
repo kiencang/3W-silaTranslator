@@ -9,6 +9,8 @@ và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0
 ### Fixed
 - Cập nhật cho Toast phù hợp hơn (cho phần nhập text vào input nhập URL).
 - Tinh chỉnh giao diện (cho phần tìm kiếm từ khóa).
+- Tinh chỉnh tooltip model.
+- Chỉnh tên modal Quản lý website ưa thích.
 
 ## [v1.0.37] - 2026-05-24
 ### Fixed
