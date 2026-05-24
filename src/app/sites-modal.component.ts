@@ -16,7 +16,7 @@ interface SiteInput {
       <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h3 id="modal-title" class="text-lg font-bold text-[#1A1A1B]">Cài đặt Website ưa thích</h3>
+          <h3 id="modal-title" class="text-lg font-bold text-[#1A1A1B]">Quản lý website ưa thích</h3>
           <button (click)="closeModal.emit()" aria-label="Đóng cửa sổ cài đặt" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100">
             <mat-icon class="flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
           </button>

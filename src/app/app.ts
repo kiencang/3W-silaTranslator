@@ -130,7 +130,7 @@ export class App {
         throw new Error();
       }
     } catch {
-      this.toastService.showToast('URL không hợp lệ. Vui lòng nhập một đường dẫn hợp lệ (vd: vnexpress.net/...).', 'error');
+      this.toastService.showToast('URL không hợp lệ. Vui lòng nhập một đường dẫn hợp lệ (vd: https://www.theguardian.com/thefilter/...).', 'error');
       return;
     }
 

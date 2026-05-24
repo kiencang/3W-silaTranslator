@@ -65,7 +65,7 @@ import { MatIconModule } from '@angular/material/icon';
               <!-- Tooltip -->
               <div class="absolute top-full mt-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-center z-10">
                 <strong class="text-indigo-400">Gemini Pro</strong><br/>
-                Khuyên dùng. Nhấn mạnh vào chất lượng bản dịch.
+                Nhấn mạnh vào chất lượng bản dịch, nhưng chi phí cao hơn.
                 <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
               </div>
             </button>
@@ -87,7 +87,7 @@ import { MatIconModule } from '@angular/material/icon';
                <!-- Tooltip -->
                <div class="absolute top-full mt-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-center z-10">
                 <strong class="text-amber-400">Gemini Flash</strong><br/>
-                Tốc độ dịch cực nhanh. Phù hợp báo chí cơ bản.
+                Tốc độ dịch nhanh. Đủ tốt trong phần lớn trường hợp.
                 <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
               </div>
             </button>
