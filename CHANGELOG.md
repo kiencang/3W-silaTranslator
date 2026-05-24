@@ -7,7 +7,8 @@ và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0
 
 ## [v1.0.38] - 2026-05-24
 ### Fixed
-- Cập nhật cho Toast phù hợp hơn.
+- Cập nhật cho Toast phù hợp hơn (cho phần nhập text vào input nhập URL).
+- Tinh chỉnh giao diện (cho phần tìm kiếm từ khóa).
 
 ## [v1.0.37] - 2026-05-24
 ### Fixed
