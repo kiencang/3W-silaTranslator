@@ -5,6 +5,10 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.38] - 2026-05-24
+### Fixed
+- Cập nhật cho Toast phù hợp hơn.
+
 ## [v1.0.37] - 2026-05-24
 ### Fixed
 - Điều chỉnh thông báo Toast nhỏ liên quan đến thông báo lỗi khi server chưa kịp phản hồi.
