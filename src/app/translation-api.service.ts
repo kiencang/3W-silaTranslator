@@ -1,6 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { Readability, isProbablyReaderable } from '@mozilla/readability';
+import TurndownService from 'turndown';
 
 @Injectable({
   providedIn: 'root'
@@ -25,14 +27,107 @@ export class TranslationApiService {
   }
 
   async extractContent(url: string, htmlContent?: string) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const payload: any = { url };
-    if (htmlContent) {
-      payload.htmlContent = htmlContent;
+    let rawHtml = htmlContent || '';
+
+    if (!htmlContent) {
+      if (url) {
+        const payload = { url };
+        // Fetch raw HTML through our server to bypass CORS
+        const res = await firstValueFrom(
+          this.http.post<{rawHtml: string}>('/api/fetch-html', payload)
+        );
+        rawHtml = res.rawHtml;
+      } else {
+        throw new Error('URL or HTML content is required');
+      }
     }
-    return firstValueFrom(
-      this.http.post<{title: string, content: string, youtubeVideos?: string[]}>('/api/extract', payload)
-    );
+
+    let cleanHtml = rawHtml
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
+      .replace(/<!--[\s\S]*?-->/g, '');
+
+    if (cleanHtml.length > 5000000) {
+      throw new Error('Mã nguồn trang web này quá lớn (vượt quá 5MB). Trình duyệt từ chối phân tích để tránh rủi ro tràn bộ nhớ. Vui lòng chọn một bài viết thông thường.');
+    }
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(cleanHtml, 'text/html');
+
+    const images = Array.from(doc.querySelectorAll('img'));
+    for (const img of images) {
+      const parentLink = img.closest('a');
+      if (parentLink) {
+        const textContent = parentLink.textContent || '';
+        if (textContent.trim().length === 0) {
+          parentLink.replaceWith(img);
+        }
+      }
+    }
+
+    const EXPECTED_BLOCK_TAGS = ['DIV', 'P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'SECTION', 'ARTICLE', 'UL', 'OL', 'LI', 'BLOCKQUOTE', 'FIGURE'];
+    const links = Array.from(doc.querySelectorAll('a'));
+    for (const link of links) {
+      if (!link.parentNode) continue;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const hasBlockChildren = Array.from(link.children).some((child: any) => EXPECTED_BLOCK_TAGS.includes(child.tagName?.toUpperCase()));
+      if (hasBlockChildren) {
+        while (link.firstChild) {
+          link.parentNode.insertBefore(link.firstChild, link);
+        }
+        link.parentNode.removeChild(link);
+      }
+    }
+
+    if (!isProbablyReaderable(doc)) {
+      let errorMessage = 'Trang web này không có cấu trúc của một bài viết/bài báo. Vui lòng thử lại với một link nội dung cụ thể.';
+      
+      const firewallKeywords = ['cloudflare', 'complete the challenge', 'unusual activity', 'access denied', 'prove you are human', 'robot check'];
+      const lowerHtml = cleanHtml.toLowerCase();
+      
+      if (firewallKeywords.some(keyword => lowerHtml.includes(keyword))) {
+        errorMessage += ' Trang web này có thể đang sử dụng tường lửa chống Bot chặn tự động trích xuất nội dung. Chúng tôi không thể truy cập bài viết.';
+      }
+      
+      throw new Error(errorMessage);
+    }
+
+    const reader = new Readability(doc);
+    const article = reader.parse();
+
+    if (!article || !article.content) {
+      throw new Error('Không thể trích xuất nội dung chính từ URL này');
+    }
+
+    const turndownService = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced' });
+
+    const youtubeVideos: string[] = [];
+    turndownService.addRule('youtubeIframe', {
+      filter: ['iframe'],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      replacement: function (content, node: any) {
+        const src = node.getAttribute('src') || '';
+        if (src.includes('youtube.com') || src.includes('youtu.be')) {
+          const index = youtubeVideos.length;
+          const html = node.outerHTML || `<iframe src="${src}" width="${node.getAttribute('width') || '100%'}" height="${node.getAttribute('height') || '400'}" frameborder="0" allowfullscreen></iframe>`;
+          youtubeVideos.push(html);
+          return `\n\n\`[SILA_YOUTUBE_${index}]\`\n\n`;
+        }
+        return '';
+      }
+    });
+
+    const markdownContent = turndownService.turndown(article.content);
+
+    if (markdownContent.length > 100000) {
+      throw new Error('Bài viết này quá dài (vượt quá 100,000 ký tự). Vui lòng chọn bài viết ngắn hơn để đảm bảo chất lượng bản dịch.');
+    }
+
+    return { 
+      title: article.title || 'Untitled Article',
+      content: markdownContent,
+      youtubeVideos: youtubeVideos
+    };
   }
 
   async translateContent(markdownContent: string, selectedModel: string, useSearchGrounding: boolean, userApiKey: string) {
