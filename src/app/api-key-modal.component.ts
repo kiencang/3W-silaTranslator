@@ -24,7 +24,7 @@ import { MatIconModule } from '@angular/material/icon';
         <div class="px-6 py-5 flex flex-col gap-4">
           <div class="text-sm text-gray-600 leading-relaxed space-y-2">
             <p>
-              Thêm khóa API (Gemini API Key) riêng của bạn, để việc dịch được ổn định, không lo hết giới hạn lượt dịch từ hệ thống chung. Vào phần "Hướng dẫn nhanh" ngay bên dưới để tạo Key miễn phí trên AI Studio. Hoặc một cách đơn giản hơn là "Remix" công cụ này về tài khoản của bạn, lúc đó tự động API Key hệ thống chính là Key riêng của bạn.
+              Để sử dụng công cụ dịch web này bạn cần khóa API Key của Gemini. Bạn hãy vào link "Nơi lấy API Key Gemini" để thao tác. Bạn chỉ cần tạo Key miễn phí là đủ dùng.
             </p>
             <p class="flex items-center gap-2 flex-wrap">
               @if (userApiKey()) {
@@ -32,14 +32,15 @@ import { MatIconModule } from '@angular/material/icon';
                   <span class="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse"></span>
                   Đang dùng API Key của bạn
                 </span>
+                <span class="text-gray-300">|</span>
               } @else {
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-semibold border border-gray-200">
-                  Đang dùng API Key hệ thống
+                  Bạn chưa nhập API Key cho ứng dụng
                 </span>
+                <span class="text-gray-300">|</span>
               }
-              <span class="text-gray-300">|</span>
               <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 transition-colors font-medium hover:underline text-xs flex items-center gap-0.5">
-                <mat-icon style="font-size: 14px; width: 14px; height: 14px; line-height: 14px;">help_outline</mat-icon> Hướng dẫn nhanh
+                <mat-icon style="font-size: 14px; width: 14px; height: 14px; line-height: 14px;">help_outline</mat-icon> Nơi lấy API Key Gemini
               </a>
             </p>
           </div>

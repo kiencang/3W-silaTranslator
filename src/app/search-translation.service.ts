@@ -60,15 +60,19 @@ export class SearchTranslationService {
       
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.error('Search Translation error:', err);
       let errorMessage = 'Có lỗi xảy ra trong quá trình dịch. Vui lòng thử lại.';
-      const errString = err.toString().toLowerCase();
-
+      
       if (err.error && err.error.error) {
         errorMessage = err.error.error;
       } else if (err.message) {
         errorMessage = err.message;
       }
+
+      if (!errorMessage.includes('Chưa cấu hình API Key')) {
+        console.error('Search Translation error:', err);
+      }
+      
+      const errString = err.toString().toLowerCase();
 
       const checkString = errorMessage.toLowerCase() + ' ' + errString;
 

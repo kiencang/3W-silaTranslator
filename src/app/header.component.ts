@@ -32,13 +32,13 @@ import { MatIconModule } from '@angular/material/icon';
                 <span class="text-[11px] font-bold transition-colors tracking-wide"
                       [class.text-indigo-600]="userApiKey()"
                       [class.text-gray-400]="!userApiKey()">
-                      {{ userApiKey() ? 'Đang dùng API Key của bạn' : 'Key hệ thống' }}
+                      {{ userApiKey() ? 'Đang dùng API Key của bạn' : 'Nhập API Key' }}
                 </span>
               </button>
               
               <!-- Tooltip -->
               <div class="absolute top-full mt-2 w-64 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-lg text-center left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0">
-                <strong [class.text-indigo-400]="userApiKey()">{{ userApiKey() ? 'Khóa cá nhân đang kích hoạt' : 'Khóa hệ thống mặc định' }}</strong>. Bấm để tự nhập khóa Gemini API Key miễn phí của bạn giúp quá trình dịch ổn định hơn.
+                <strong [class.text-indigo-400]="userApiKey()">{{ userApiKey() ? 'Khóa cá nhân đang kích hoạt' : 'Chưa có API Key' }}</strong>. Bấm để tự nhập khóa Gemini API Key của bạn để sử dụng tính năng dịch.
                 <div class="absolute bottom-full left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0 border-4 border-transparent border-b-gray-900"></div>
               </div>
             </div>

@@ -22,7 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
           </button>
         </div>
         <div class="leading-relaxed text-gray-400 text-[11px] truncate mx-auto md:mx-0">
-          v1.0.38 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+          v1.0.39 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
           <a href="https://blog.wpsila.com/app-dich-website-tu-anh-sang-viet/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn sử dụng</a>
         </div>
 

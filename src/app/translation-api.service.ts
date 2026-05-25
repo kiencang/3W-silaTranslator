@@ -36,23 +36,66 @@ export class TranslationApiService {
   }
 
   async translateContent(markdownContent: string, selectedModel: string, useSearchGrounding: boolean, userApiKey: string) {
-    const headersObject: Record<string, string> = {};
-    if (userApiKey) {
-      headersObject['x-user-api-key'] = userApiKey;
+    if (!userApiKey || !userApiKey.trim()) {
+      throw new Error('Chưa cấu hình API Key. Kính mời quý khách nhấp vào biểu tượng chiếc chìa khóa ở góc trên để cấu hình API Key cá nhân.');
     }
 
-    return firstValueFrom(
-      this.http.post<{translatedMarkdown: string}>('/api/translate', {
-        markdownContent,
-        systemInstruction: this.cachedSi,
-        userPrompt: this.cachedPrompt,
-        model: selectedModel,
-        useSearchGrounding
-      }, { headers: headersObject })
-    );
+    const fullPrompt = `${this.cachedPrompt}\n\n${markdownContent}`;
+    const model = selectedModel || 'gemini-flash-latest';
+    const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${userApiKey.trim()}`;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const payload: any = {
+      systemInstruction: {
+        parts: [{ text: this.cachedSi }]
+      },
+      contents: [{
+        role: "user",
+        parts: [{ text: fullPrompt }]
+      }]
+    };
+
+    if (useSearchGrounding) {
+      payload.tools = [{ googleSearch: {} }];
+    }
+
+    try {
+      const response = await fetch(baseUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error?.message || `HTTP ${response.status}`);
+      }
+
+      const result = await response.json();
+      const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      
+      const cleanedText = text.replace(/^```markdown\n?/, '').replace(/\n?```$/, '');
+
+      return { translatedMarkdown: cleanedText };
+    } catch (error: any) {
+      console.error('Translation Error:', error);
+      let errorMessage = error.message || 'Lỗi trong quá trình dịch';
+      
+      if (errorMessage.includes('429') || errorMessage.includes('Quota') || errorMessage.includes('RESOURCE_EXHAUSTED')) {
+        errorMessage = 'Bạn đã vượt quá giới hạn lượt sử dụng Google Gemini API (Lỗi 429). Vui lòng chờ khoảng 1 phút rồi thử lại, hoặc kiểm tra lại gói cước API của bạn.';
+      }
+      
+      throw new Error(errorMessage);
+    }
   }
 
   async translateSearchQuery(query: string, userApiKey: string) {
+    if (!userApiKey || !userApiKey.trim()) {
+      throw new Error('Chưa cấu hình API Key. Kính mời quý khách nhấp vào biểu tượng chiếc chìa khóa ở góc trên để cấu hình API Key cá nhân.');
+    }
+
     const systemInstruction = `Bạn là một AI chuyên dịch truy vấn tìm kiếm (search queries) từ tiếng Việt sang tiếng Anh. Nhiệm vụ DUY NHẤT của bạn là trả về MỘT (1) truy vấn tìm kiếm tiếng Anh hiệu quả nhất, dựa trên đánh giá của bạn về ý định (search intent) và cách tìm kiếm phổ biến nhất trong tiếng Anh.
 
 QUY TẮC BẮT BUỘC TUÂN THỦ:
@@ -63,18 +106,48 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
 5.  **ĐỊNH DẠNG ĐẦU RA:** Đảm bảo đầu ra là một chuỗi văn bản thuần túy (plain text string) duy nhất, sẵn sàng để sao chép và dán trực tiếp vào thanh tìm kiếm.`;
 
     const prompt = `Provide the single best English search query translation for the following Vietnamese query. Output ONLY the raw English text, nothing else:\n[${query}]`;
+    const model = 'gemini-flash-latest';
+    const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${userApiKey.trim()}`;
 
-    const headersObject: Record<string, string> = {};
-    if (userApiKey) {
-      headersObject['x-user-api-key'] = userApiKey;
+    const payload = {
+      systemInstruction: {
+        parts: [{ text: systemInstruction }]
+      },
+      contents: [{
+        role: "user",
+        parts: [{ text: prompt }]
+      }]
+    };
+
+    try {
+      const response = await fetch(baseUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error?.message || `HTTP ${response.status}`);
+      }
+
+      const result = await response.json();
+      const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      
+      const cleanedText = text.replace(/^```[a-z]*\n?/, '').replace(/\n?```$/, '').trim();
+
+      return { translatedQuery: cleanedText };
+    } catch (error: any) {
+      console.error('Query Translation Error:', error);
+      let errorMessage = error.message || 'Lỗi dịch từ khóa';
+      
+      if (errorMessage.includes('429') || errorMessage.includes('Quota') || errorMessage.includes('RESOURCE_EXHAUSTED')) {
+        errorMessage = 'Bạn đã vượt quá giới hạn lượt sử dụng Google Gemini API (Lỗi 429). Vui lòng chờ khoảng 1 phút rồi thử lại.';
+      }
+      
+      throw new Error(errorMessage);
     }
-
-    return firstValueFrom(
-      this.http.post<{translatedQuery: string}>('/api/translate-query', {
-        query,
-        systemInstruction,
-        userPrompt: prompt
-      }, { headers: headersObject })
-    );
   }
 }
