@@ -54,6 +54,39 @@ export class TranslationApiService {
     const parser = new DOMParser();
     const doc = parser.parseFromString(cleanHtml, 'text/html');
 
+    // MỚI: Tuyệt đối hóa các URL tương đối
+    if (url) {
+      try {
+        const baseUrlObj = new URL(url);
+        
+        const anchors = Array.from(doc.querySelectorAll('a'));
+        for (const a of anchors) {
+          const href = a.getAttribute('href');
+          if (href && !href.startsWith('javascript:') && !href.startsWith('mailto:') && !href.startsWith('#')) {
+            try {
+              a.setAttribute('href', new URL(href, baseUrlObj).href);
+            } catch (e) {
+              // Ignore invalid URLs
+            }
+          }
+        }
+        
+        const imgs = Array.from(doc.querySelectorAll('img'));
+        for (const img of imgs) {
+          const src = img.getAttribute('src');
+          if (src && !src.startsWith('data:')) {
+            try {
+              img.setAttribute('src', new URL(src, baseUrlObj).href);
+            } catch (e) {
+              // Ignore invalid URLs
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Invalid base URL:', e);
+      }
+    }
+
     const images = Array.from(doc.querySelectorAll('img'));
     for (const img of images) {
       const parentLink = img.closest('a');
@@ -86,7 +119,7 @@ export class TranslationApiService {
       const lowerHtml = cleanHtml.toLowerCase();
       
       if (firewallKeywords.some(keyword => lowerHtml.includes(keyword))) {
-        errorMessage += ' Trang web này có thể đang sử dụng tường lửa chống Bot chặn tự động trích xuất nội dung. Chúng tôi không thể truy cập bài viết.';
+        errorMessage += ' Trang web này có thể đang sử dụng tường lửa chống Bot chặn tự động trích xuất nội dung. Chúng tôi không thể truy cập bài viết. Bạn có thể mở liên kết, nhấn Ctrl+S (hoặc Cmd+S) để lưu trang web (chỉ HTML) về máy dưới dạng file .html, sau đó dùng nút "Tải lên" (kẹp ghim) để dịch nhé!';
       }
       
       throw new Error(errorMessage);

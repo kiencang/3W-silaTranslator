@@ -44,6 +44,7 @@ export class App {
 
   url = signal('');
   isLoading = signal(false);
+  highlightFileUpload = signal(false);
   error = signal('');
   translatedHtml = signal<SafeHtml | null>(null);
   translatedTitle = signal('');
@@ -192,6 +193,9 @@ export class App {
       // 4. Convert translated Markdown back to HTML
       let finalHtml = await marked.parse(translatedMarkdown);
 
+      // Add target="_blank" to all links so they open in a new tab
+      finalHtml = finalHtml.replace(/<a\s+(?![^>]*\btarget=)/gi, '<a target="_blank" rel="noopener noreferrer" ');
+
       // 5. Restore YouTube Videos
       finalHtml = this.documentUtil.processYoutubeIframes(finalHtml, extraction.youtubeVideos);
 
@@ -244,20 +248,26 @@ export class App {
 
       const checkString = errorMessage.toLowerCase() + ' ' + errString;
 
-      if (checkString.includes('api key not valid') || checkString.includes('api_key_invalid') || (checkString.includes('api key') && checkString.includes('not valid'))) {
+      let shouldHighlightFile = false;
+
+      // Detect actual client network error (cannot connect to our backend)
+      const isClientNetworkError = err.name === 'HttpErrorResponse' && err.status === 0;
+
+      if (isClientNetworkError) {
+        errorMessage = 'Lỗi kết nối mạng. Vui lòng kiểm tra lại internet của bạn.';
+      } else if (checkString.includes('api key not valid') || checkString.includes('api_key_invalid') || (checkString.includes('api key') && checkString.includes('not valid'))) {
         errorMessage = 'API Key không hợp lệ. Vui lòng kiểm tra lại khóa API ở phần thiết lập API Key cá nhân, khả năng cao là bạn nhập nhầm.';
       } else if (checkString.includes('parsing') || checkString.includes('http failure during parsing')) {
-        errorMessage = 'Hệ thống đang trích xuất dữ liệu chậm do website nguồn phản lâu hoặc máy chủ đang tải nặng. Vui lòng đợi trong giây lát và thử lại nhé!';
+        errorMessage = 'Hệ thống đang trích xuất dữ liệu chậm do website nguồn phản hồi lâu hoặc máy chủ đang tải nặng. Vui lòng đợi trong giây lát và thử lại nhé!';
       } else if (checkString.includes('429') || checkString.includes('quota') || checkString.includes('exhausted')) {
-        if (this.storageManager.userApiKey()) {
-          errorMessage = 'API bạn nhập đã hết ngưỡng miễn phí. Hãy quay lại sử dụng sau hoặc nhập API khác còn ngưỡng miễn phí ngày.';
-        } else {
-          errorMessage = 'Bạn đã vượt quá giới hạn dịch miễn phí của AI chung của hệ thống. Vui lòng thử lại sau. Bạn có thể nhập API Key riêng để có thể dùng thoải mái hơn.';
-        }
-      } else if (checkString.includes('extract') || checkString.includes('fetch') || checkString.includes('could not extract')) {
-        errorMessage = 'Không thể đọc nội dung từ liên kết này. Trang web có thể yêu cầu đăng nhập hoặc chặn truy cập. Bạn nên tải nội dung trang web về và up file tải về lên ứng dụng để dịch.';
-      } else if (checkString.includes('network') || checkString.includes('failed to fetch')) {
-        errorMessage = 'Lỗi kết nối mạng. Vui lòng kiểm tra lại internet của bạn.';
+        errorMessage = 'API bạn nhập đã hết ngưỡng miễn phí hoặc vượt quá giới hạn lượt sử dụng. Hãy quay lại dùng sau hoặc dùng API Key khác.';
+      } else if (checkString.includes('tường lửa') || checkString.includes('trích xuất nội dung chính') || checkString.includes('không thể truy cập')) {
+        shouldHighlightFile = true;
+        // Keep the original detailed message from translation-api.service.ts
+      } else if (checkString.includes('extract') || checkString.includes('could not extract') || checkString.includes('fetch')) {
+        // Any fetch error from the server (like "Failed to fetch URL" or "fetch failed") means the target site blocked us
+        errorMessage = 'Không thể đọc nội dung từ liên kết này. Trang web có thể yêu cầu đăng nhập hoặc chặn truy cập. Bạn nên tải nội dung trang web về (chỉ HTML) và up file tải về lên ứng dụng (qua nút kẹp ghim) để dịch.';
+        shouldHighlightFile = true;
       } else if (checkString.includes('safety') || checkString.includes('blocked')) {
         errorMessage = 'AI từ chối dịch nội dung này do vi phạm chính sách an toàn.';
       } else if (err.message && errorMessage === err.message) {
@@ -266,6 +276,13 @@ export class App {
 
       this.toastService.showToast(errorMessage, 'error');
       this.error.set(errorMessage);
+      
+      if (shouldHighlightFile) {
+        this.highlightFileUpload.set(true);
+        setTimeout(() => {
+          this.highlightFileUpload.set(false);
+        }, 15000);
+      }
     } finally {
       this.timerService.stopTimer();
       this.isLoading.set(false);

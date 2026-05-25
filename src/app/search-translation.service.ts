@@ -81,11 +81,7 @@ export class SearchTranslationService {
       } else if (checkString.includes('parsing') || checkString.includes('http failure during parsing')) {
         errorMessage = 'Yêu cầu bị gián đoạn do máy chủ phản hồi chậm hoặc đang khởi động lại (Cold Start). Vui lòng nhấn "Dịch Từ Khóa" một lần nữa nhé!';
       } else if (checkString.includes('429') || checkString.includes('quota') || checkString.includes('exhausted')) {
-        if (userApiKey) {
-          errorMessage = 'API bạn nhập đã hết ngưỡng miễn phí. Hãy quay lại sử dụng sau hoặc nhập API khác còn ngưỡng miễn phí ngày.';
-        } else {
-          errorMessage = 'Bạn đã vượt quá giới hạn dịch miễn phí của AI chung của hệ thống. Vui lòng thử lại sau. Bạn có thể nhập API Key riêng để có thể dùng thoải mái hơn.';
-        }
+        errorMessage = 'API bạn nhập đã hết ngưỡng miễn phí hoặc vượt quá giới hạn lượt sử dụng. Hãy quay lại dùng sau hoặc dùng API Key khác.';
       } else if (checkString.includes('network') || checkString.includes('failed to fetch')) {
         errorMessage = 'Lỗi kết nối mạng. Vui lòng kiểm tra lại internet của bạn.';
       } else if (checkString.includes('safety') || checkString.includes('blocked')) {

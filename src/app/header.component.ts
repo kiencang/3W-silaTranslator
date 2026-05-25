@@ -129,13 +129,19 @@ import { MatIconModule } from '@angular/material/icon';
               </button>
             }
 
-            <label class="flex shrink-0 relative group p-2 items-center justify-center transition-all"
+            <label class="flex shrink-0 relative group p-2 items-center justify-center transition-all duration-300"
+                   [class.animate-pulse]="highlightFileUpload()"
+                   [class.text-rose-500]="highlightFileUpload()"
+                   [class.scale-125]="highlightFileUpload()"
                    [class.active:scale-95]="!isLoading()"
                    [class.cursor-pointer]="!isLoading()"
-                   [class.text-gray-400]="!isLoading()"
-                   [class.hover:text-gray-600]="!isLoading()"
+                   [class.text-gray-400]="!isLoading() && !highlightFileUpload()"
+                   [class.hover:text-gray-600]="!isLoading() && !highlightFileUpload()"
                    [class.opacity-40]="isLoading()"
                    [class.cursor-not-allowed]="isLoading()">
+              @if (highlightFileUpload()) {
+                <div class="absolute inset-0 bg-rose-500/20 rounded-full animate-ping pointer-events-none"></div>
+              }
               <input type="file" aria-label="Tải lên file tài liệu định dạng HTML" accept=".html,.htm" class="hidden" (change)="fileSelected.emit($event)" [disabled]="isLoading()">
               <mat-icon class="w-5 h-5 flex items-center justify-center -rotate-45 block" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px; display: block;">attach_file</mat-icon>
               <!-- Custom Tooltip -->
@@ -192,6 +198,7 @@ export class HeaderComponent {
   url = input.required<string>();
   isValidUrlInput = input.required<boolean>();
   fullHtmlString = input.required<unknown>();
+  highlightFileUpload = input<boolean>(false);
 
   openApiKeyModal = output<void>();
   selectedModelChange = output<'gemini-pro-latest' | 'gemini-flash-latest'>();

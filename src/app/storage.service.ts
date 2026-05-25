@@ -56,7 +56,7 @@ export class StorageService {
         this.toastService.showToast('Đã lưu API Key riêng của bạn thành công!', 'success');
       } else {
         localStorage.removeItem('user_gemini_api_key');
-        this.toastService.showToast('Đã xóa API Key riêng. Hệ thống quay về dùng API Key mặc định.', 'info');
+        this.toastService.showToast('Đã xóa API Key.', 'info');
       }
     }
   }
