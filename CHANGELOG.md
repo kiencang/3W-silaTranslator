@@ -9,7 +9,7 @@ và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0
 ### Fixed
 - Xử lý các đường dẫn tương đối trong nội dung, chuyển nó thành đường dẫn tuyệt đối.
 - Mở các link ở tab mới.
-- Thêm cảnh báo rõ ràng hơn mỗi khi không fetch được nội dung gốc (do bị chặn).
+- Thêm cảnh báo rõ ràng hơn ở kẹp ghim mỗi khi không fetch được nội dung gốc (do bị chặn) để người dùng dễ hiểu hơn họ phải làm gì.
 
 ## [1.0.40] - 2026-05-25
 ### Fixed
