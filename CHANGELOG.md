@@ -8,6 +8,7 @@ và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0
 ## [1.0.41] - 2026-05-25
 ### Fixed
 - Xử lý các đường dẫn tương đối trong nội dung, chuyển nó thành đường dẫn tuyệt đối.
+- Mở các link ở tab mới.
 
 ## [1.0.40] - 2026-05-25
 ### Fixed
