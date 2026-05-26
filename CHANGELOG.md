@@ -9,6 +9,7 @@ và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0
 ### Fixed
 - Tự động xuống dòng cho các link quá dài.
 - Thay đổi thông báo thời gian dịch từ 1 - 2 phút thành từ 2 - 5 phút để phản ánh đúng thực tế hơn.
+- Khắc phục vấn đề các bảng bị quá hẹp gây ép tiêu đề cột.
 
 ## [1.0.41] - 2026-05-25
 ### Fixed
