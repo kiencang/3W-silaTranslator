@@ -153,7 +153,7 @@ html.high-contrast-mode #reset-settings, html.dark-mode #reset-settings { color:
 
 /* Prompt and old metadata styles removed */
 
-article { background-color: var(--article-bg-color); color: var(--text-color); padding: 25px 40px; border-radius: 8px; box-shadow: 0 2px 5px var(--article-shadow-color); max-width: var(--content-max-width); margin-left: auto; margin-right: auto; transition: all 0.3s ease; }
+article { background-color: var(--article-bg-color); color: var(--text-color); padding: 25px 40px; border-radius: 8px; box-shadow: 0 2px 5px var(--article-shadow-color); max-width: var(--content-max-width); margin-left: auto; margin-right: auto; transition: all 0.3s ease; overflow-wrap: anywhere; }
 
 .metadata-accordion { margin-bottom: 2em; border: 1px dashed var(--subtle-border-color); border-radius: 4px; background-color: var(--metadata-info-bg); transition: all 0.3s ease; }
 .metadata-accordion summary { font-weight: bold; font-size: 0.9em; padding: 10px 15px; cursor: pointer; color: var(--text-color); outline: none; transition: background-color 0.2s ease; border-bottom: none !important; margin: 0 !important; border-radius: 4px; }
@@ -214,11 +214,10 @@ article details[open] summary { border-bottom: 1px solid var(--border-color); ma
 article summary:focus-visible { outline: 2px solid var(--link-color); outline-offset: 2px; }
 article address { font-style: normal; margin: 1em 0; line-height: inherit; }
 
-.table-container-sila-trans { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1em; border: 1px solid var(--border-color); border-radius: 4px; transition: border-color 0.3s ease; }
-.table-container-sila-trans table { width: 100%; border-collapse: collapse; }
-.table-container-sila-trans th, .table-container-sila-trans td { padding: 8px 12px; border: 1px solid var(--border-color); vertical-align: top; transition: border-color 0.3s ease; }
-.table-container-sila-trans th { background-color: var(--controls-bg-color); font-weight: bold; transition: background-color 0.3s ease; color: var(--text-color); }
-html.high-contrast-mode .table-container-sila-trans th { color: var(--text-color); }
+article table { display: block; max-width: 100%; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1em; border: 1px solid var(--border-color); border-radius: 4px; border-collapse: collapse; transition: border-color 0.3s ease; }
+article th, article td { padding: 8px 12px; border: 1px solid var(--border-color); vertical-align: top; transition: border-color 0.3s ease; min-width: 150px; }
+article th { background-color: var(--controls-bg-color); font-weight: bold; transition: background-color 0.3s ease; color: var(--text-color); white-space: nowrap; }
+html.high-contrast-mode article th { color: var(--text-color); }
 article caption { padding: 0.5em 0; font-style: italic; color: var(--text-color); opacity: 0.8; text-align: center; transition: color 0.3s ease; }
 
 .info-icon-sila-trans { display: inline-block; margin-left: 5px; width: 16px; height: 16px; line-height: 16px; text-align: center; font-size: 11px; font-weight: bold; color: #fff; background-color: var(--info-icon-bg-color); border-radius: 50%; cursor: help; position: relative; vertical-align: middle; transition: all 0.3s ease; }

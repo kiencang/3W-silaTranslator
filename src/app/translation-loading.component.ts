@@ -35,7 +35,7 @@ import { Component, input } from '@angular/core';
           {{ formattedTime() }}
         </div>
         <p class="text-[#1A1A1B] font-medium text-sm md:text-base px-6 py-3 bg-white/90 rounded-full shadow-lg border border-gray-100/50">
-          AI đang phân tích và dịch nội dung. Vui lòng đợi 1 - 2 phút...
+          AI đang phân tích và dịch nội dung. Vui lòng đợi 2 - 5 phút...
         </p>
       </div>
     </div>
