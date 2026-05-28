@@ -5,6 +5,10 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.44] - 2026-05-28
+### Fixed
+- Sửa menu điều chỉnh font, chiều rộng, giãn dòng sang bên phải thay vì nằm trên top để đỡ mất diện tích.
+
 ## [1.0.43] - 2026-05-28
 ### Fixed
 - Render HTML cũng chuyển cho phía Client thay vì để phía Server.
