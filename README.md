@@ -1,7 +1,8 @@
 # 3W-silaTranslator
 Ứng dụng dịch web từ tiếng Anh sang tiếng Việt. Nó sử dụng SI/Prompt mẫu `SI-Prompt-WEB-EV-Translate` (v1.0.4) ở đây: https://github.com/kiencang/SI-Prompt-WEB-EV-Translate
 
-Link ứng dụng: https://ai.studio/apps/4cc7e19e-46dd-4d38-8617-ba38ef1c80c3?fullscreenApplet=true
+- Link ứng dụng: https://ai.studio/apps/4cc7e19e-46dd-4d38-8617-ba38ef1c80c3?fullscreenApplet=true
+- Hướng dẫn sử dụng: https://web-translator.wpsila.com/
 
 ## Tuyên bố từ chối trách nhiệm
 Công cụ này có thể được sử dụng cho mục đích nghiên cứu và học tập cá nhân.
