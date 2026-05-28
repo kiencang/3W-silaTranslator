@@ -13,40 +13,74 @@
 </head>
 <body>
     <div id="progress-bar-container"><div id="progress-bar"></div></div>
-    <div id="accessibility-controls">
-        <div>
-            <button id="decrease-font" title="Giảm cỡ chữ">-</button>
-            <span>Cỡ chữ</span>
-            <button id="increase-font" title="Tăng cỡ chữ">+</button>
+    <div id="accessibility-container" aria-label="Tùy chỉnh hiển thị">
+        <button id="acc-toggle-button" aria-expanded="false" aria-controls="accessibility-controls" title="Cấu hình hiển thị">
+            <svg class="ctrl-gears" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+        </button>
+        <div id="accessibility-title" aria-hidden="true">Cấu hình</div>
+        <div id="accessibility-controls">
+            <div class="control-row">
+                <span class="control-label" title="Cỡ chữ">
+                    <svg class="control-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+                </span>
+                <div class="control-actions">
+                    <button id="decrease-font" title="Giảm cỡ chữ">-</button>
+                    <button id="increase-font" title="Tăng cỡ chữ">+</button>
+                </div>
+            </div>
+            <div class="control-row">
+                <span class="control-label" title="Chiều rộng">
+                    <svg class="control-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"></line><polyline points="8 8 4 12 8 16"></polyline><polyline points="16 8 20 12 16 16"></polyline></svg>
+                </span>
+                <div class="control-actions">
+                    <button id="decrease-width" title="Giảm chiều rộng">-</button>
+                    <button id="increase-width" title="Tăng chiều rộng">+</button>
+                </div>
+            </div>
+            <div class="control-row">
+                <span class="control-label" title="Giãn dòng">
+                    <svg class="control-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="12" x2="9" y2="12"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
+                </span>
+                <div class="control-actions">
+                    <button id="decrease-line-height" title="Giảm giãn dòng">-</button>
+                    <button id="increase-line-height" title="Tăng giãn dòng">+</button>
+                </div>
+            </div>
+            <div class="control-row col">
+                <div class="control-label-wrapper">
+                    <span class="control-label" title="Kiểu chữ">
+                        <svg class="control-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    </span>
+                    <span class="text-label">Kiểu chữ</span>
+                </div>
+                <select id="font-select" name="font-select" title="Chọn kiểu chữ">
+                    <option value="Be Vietnam Pro" selected>Be VN Pro</option>
+                    <option value="Lexend">Lexend</option>
+                    <option value="Roboto">Roboto</option>
+                    <option value="Inter">Inter</option>
+                    <option value="Source Sans 3">Source Sans 3</option>
+                    <option value="Merriweather">Merriweather</option>
+                </select>
+            </div>
+            <div class="control-row col">
+                <div class="control-label-wrapper">
+                    <span class="control-label" title="Chế độ nền">
+                        <svg class="control-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M12 18a6 6 0 1 0 0-12v12z"></path></svg>
+                    </span>
+                    <span class="text-label">Chế độ nền</span>
+                </div>
+                <div class="theme-buttons">
+                    <button id="toggle-light-mode" title="Trắng (Sáng)" aria-pressed="false">☀️</button>
+                    <button id="toggle-dark-mode" title="Đen (Tối)" aria-pressed="false">🌙</button>
+                    <button id="toggle-sepia-mode" title="Sepia" aria-pressed="false">📜</button>
+                    <button id="toggle-high-contrast-mode" title="Tương phản" aria-pressed="false">HC</button>
+                </div>        
+            </div>
+            <button id="reset-settings" title="Đặt lại tất cả hiển thị về mặc định">Mặc định</button>
         </div>
-        <div>
-            <button id="decrease-width" title="Giảm chiều rộng">-</button>
-            <span>Chiều rộng</span>
-            <button id="increase-width" title="Tăng chiều rộng">+</button>
-        </div>
-        <div>
-            <button id="decrease-line-height" title="Giảm giãn dòng">-</button>
-            <span>Giãn dòng</span>
-            <button id="increase-line-height" title="Tăng giãn dòng">+</button>
-        </div>
-        <div>
-            <label for="font-select">Font chữ:</label>
-            <select id="font-select" name="font-select" title="Chọn kiểu chữ">
-                <option value="Be Vietnam Pro" selected>Mặc định (Be VN Pro)</option>
-                <option value="Lexend">Lexend</option>
-                <option value="Roboto">Roboto</option>
-                <option value="Inter">Inter</option>
-                <option value="Source Sans 3">Source Sans 3</option>
-                <option value="Merriweather">Merriweather (Có chân)</option>
-            </select>
-        </div>
-        <div>
-            <button id="toggle-light-mode" title="Chuyển chế độ Sáng" aria-pressed="false">☀️</button>
-            <button id="toggle-dark-mode" title="Chuyển chế độ Tối" aria-pressed="false">🌙</button>
-            <button id="toggle-sepia-mode" title="Chuyển chế độ Sepia" aria-pressed="false">📜</button>
-            <button id="toggle-high-contrast-mode" title="Chuyển chế độ Tương phản cao" aria-pressed="false">HC</button>
-        </div>        
-        <button id="reset-settings" title="Đặt lại tất cả tùy chỉnh hiển thị về mặc định">Về Như Cũ</button>
     </div>
 
     <article itemprop="articleBody">

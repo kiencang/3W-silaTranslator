@@ -216,7 +216,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const tocToggleButton = document.createElement('button');
         tocToggleButton.id = 'toc-toggle-button';
-        tocToggleButton.textContent = '+';
+        
+        // Beautiful SVG icons
+        const listIcon = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="toc-icon-svg"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>`;
+        const closeIcon = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="toc-icon-svg"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+        
+        tocToggleButton.innerHTML = listIcon;
         tocToggleButton.title = 'Mở/Đóng Mục lục';
         tocToggleButton.setAttribute('aria-expanded', 'false');
         tocToggleButton.setAttribute('aria-controls', 'toc-list');
@@ -272,14 +277,35 @@ document.addEventListener('DOMContentLoaded', function () {
             tocToggleButton.addEventListener('click', () => {
                 const isExpanded = tocContainer.classList.toggle('toc-expanded');
                 tocToggleButton.setAttribute('aria-expanded', isExpanded);
-                tocToggleButton.textContent = isExpanded ? '−' : '+';
+                tocToggleButton.innerHTML = isExpanded ? closeIcon : listIcon;
                 tocTitle.setAttribute('aria-hidden', !isExpanded);
             });
         }
     }
 
+    function initializeAccessibilitySidebar() {
+        const container = document.getElementById('accessibility-container');
+        const toggleBtn = document.getElementById('acc-toggle-button');
+        if (!container || !toggleBtn) return;
+
+        toggleBtn.addEventListener('click', function(event) {
+            event.stopPropagation();
+            const isExpanded = container.classList.toggle('acc-expanded');
+            toggleBtn.setAttribute('aria-expanded', isExpanded.toString());
+        });
+
+        // Close when clicking outside of the accessibility panel
+        document.addEventListener('click', function(event) {
+            if (!container.contains(event.target) && container.classList.contains('acc-expanded')) {
+                container.classList.remove('acc-expanded');
+                toggleBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+
     loadPreferences();
     if (readingTimeValueSpan) calculateReadingTime();
     initializeTableOfContents();
+    initializeAccessibilitySidebar();
     updateProgressBar();
 });

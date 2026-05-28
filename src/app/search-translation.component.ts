@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
   template: `
     <div class="w-full flex-col flex gap-0 px-4 relative">
       <div class="text-center space-y-2 mb-2 relative z-10 mt-8">
-        <h1 class="text-3xl md:text-4xl font-extrabold text-[#1A1A1B] tracking-tight">Dịch Từ Khóa Google</h1>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-[#1A1A1B] tracking-tight">Dịch Từ Khóa</h1>
         <p class="text-gray-500 text-sm md:text-base font-medium max-w-md mx-auto">Nhập từ khóa tiếng Việt, chúng tôi sẽ giúp bạn<br><strong>tìm kiếm</strong> các bài viết tiếng Anh!</p>
       </div>
 
