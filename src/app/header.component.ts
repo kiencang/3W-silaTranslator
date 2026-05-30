@@ -54,8 +54,8 @@ import { MatIconModule } from '@angular/material/icon';
               [disabled]="isLoading() || isSearchLoading()"
               class="group relative flex items-center justify-center px-4 py-1 rounded-full transition-all duration-300 border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               [class.bg-white]="selectedModel() === 'gemini-pro-latest'"
-              [class.shadow-sm]="selectedModel() === 'gemini-pro-latest'"
-              [class.text-indigo-600]="selectedModel() === 'gemini-pro-latest'"
+              [style.box-shadow]="selectedModel() === 'gemini-pro-latest' ? '0 0 15px rgba(147, 51, 234, 0.4)' : 'none'"
+              [class.text-purple-600]="selectedModel() === 'gemini-pro-latest'"
               [class.bg-transparent]="selectedModel() !== 'gemini-pro-latest'"
               [class.text-gray-400]="selectedModel() !== 'gemini-pro-latest'"
               [class.hover:text-gray-600]="selectedModel() !== 'gemini-pro-latest' && !isLoading() && !isSearchLoading()"
@@ -64,7 +64,7 @@ import { MatIconModule } from '@angular/material/icon';
               
               <!-- Tooltip -->
               <div class="absolute top-full mt-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-center z-10">
-                <strong class="text-indigo-400">Gemini Pro</strong><br/>
+                <strong class="text-purple-400">Gemini Pro</strong><br/>
                 Nhấn mạnh vào chất lượng bản dịch, nhưng chi phí cao hơn.
                 <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
               </div>
@@ -76,7 +76,7 @@ import { MatIconModule } from '@angular/material/icon';
               [disabled]="isLoading() || isSearchLoading()"
               class="group relative flex items-center justify-center px-4 py-1 rounded-full transition-all duration-300 border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               [class.bg-white]="selectedModel() === 'gemini-flash-latest'"
-              [class.shadow-sm]="selectedModel() === 'gemini-flash-latest'"
+              [style.box-shadow]="selectedModel() === 'gemini-flash-latest' ? '0 0 15px rgba(245, 158, 11, 0.4)' : 'none'"
               [class.text-amber-500]="selectedModel() === 'gemini-flash-latest'"
               [class.bg-transparent]="selectedModel() !== 'gemini-flash-latest'"
               [class.text-gray-400]="selectedModel() !== 'gemini-flash-latest'"

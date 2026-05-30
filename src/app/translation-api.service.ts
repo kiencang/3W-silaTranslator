@@ -180,7 +180,12 @@ export class TranslationApiService {
       contents: [{
         role: "user",
         parts: [{ text: fullPrompt }]
-      }]
+      }],
+      generationConfig: {
+        thinkingConfig: {
+          thinkingLevel: "HIGH"
+        }
+      }
     };
 
     if (useSearchGrounding) {
@@ -237,14 +242,19 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
     const model = 'gemini-flash-latest';
     const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${userApiKey.trim()}`;
 
-    const payload = {
+    const payload: any = {
       systemInstruction: {
         parts: [{ text: systemInstruction }]
       },
       contents: [{
         role: "user",
         parts: [{ text: prompt }]
-      }]
+      }],
+      generationConfig: {
+        thinkingConfig: {
+          thinkingLevel: "HIGH"
+        }
+      }
     };
 
     try {
