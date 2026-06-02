@@ -5,6 +5,11 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.47] - 2026-06-02
+### Fixed
+- Cập nhật phần hướng dẫn Remix công cụ;
+- Nút share chứa link xem trước chính xác hơn.
+
 ## [1.0.46] - 2026-05-31
 ### Fixed
 - Điều chỉnh vị trí button mục lục & chỉnh giao diện ở gần top hơn.
