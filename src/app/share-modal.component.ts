@@ -25,7 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
           <div class="flex items-center gap-2 mt-2">
             <input type="text"
                    readonly
-                   [value]="'https://aistudio.google.com/apps/4cc7e19e...'"
+                   [value]="'https://aistudio.google.com/apps/4cc7e19e-46dd-4d38-8617-ba38ef1c80c3'"
                    class="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-500 font-mono outline-none cursor-default select-all">
             <button (click)="copyShareLink()" aria-label="Sao chép đường dẫn" class="shrink-0 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all text-white border-none cursor-pointer"
                     [class.bg-[#0066FF]]="!isCopied()" [class.hover:bg-blue-700]="!isCopied()"
@@ -53,7 +53,7 @@ export class ShareModalComponent {
   isCopied = signal(false);
 
   copyShareLink() {
-    navigator.clipboard.writeText('https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%2215xZgP6Xy_c2oP9wG2aL_HkI-Xp8Wn3lO%22%5D,%22action%22:%22open%22,%22userId%22:%22108152345681023249764%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing').then(() => {
+    navigator.clipboard.writeText('https://aistudio.google.com/apps/4cc7e19e-46dd-4d38-8617-ba38ef1c80c3?showAssistant=true&showPreview=true&fullscreenApplet=true').then(() => {
       this.isCopied.set(true);
       setTimeout(() => this.isCopied.set(false), 2000);
     });

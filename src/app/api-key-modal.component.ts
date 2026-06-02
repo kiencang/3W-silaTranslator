@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [MatIconModule, FormsModule],
   template: `
     <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="api-modal-title">
-      <div class="bg-white w-full max-w-[480px] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="bg-white w-full max-w-[552px] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h3 id="api-modal-title" class="text-lg font-bold text-[#1A1A1B] flex items-center gap-2">
@@ -23,9 +23,17 @@ import { MatIconModule } from '@angular/material/icon';
         <!-- Body -->
         <div class="px-6 py-5 flex flex-col gap-4">
           <div class="text-sm text-gray-600 leading-relaxed space-y-2">
-            <p>
-              Để sử dụng công cụ dịch web này bạn cần khóa API Key của Gemini. Bạn hãy vào link "Nơi lấy API Key Gemini" để thao tác. Bạn chỉ cần tạo Key miễn phí là đủ dùng.
-            </p>
+            <div class="flex flex-col gap-2">
+              <p>
+                Để sử dụng công cụ dịch web này bạn cần khóa API Key của Gemini. Bạn hãy vào link "Nơi lấy API Key Gemini" để thao tác. Bạn chỉ cần tạo Key miễn phí là đủ dùng.
+              </p>
+              <p>
+                Ngoài ra bạn cần remix công cụ này về AI Studio cá nhân để tránh bị quá tải do nhiều người dùng cùng lúc. Tại app này bạn nhìn phía trên bên phải, có nút remix, hãy click vào đó để sao chép ứng dụng về AI Studio của bạn:
+              </p>
+              <div class="flex justify-center my-2">
+                <img src="/remix-3w.png" alt="Hướng dẫn remix" class="max-w-full h-auto rounded border border-gray-200" referrerpolicy="no-referrer" />
+              </div>
+            </div>
             <p class="flex items-center gap-2 flex-wrap">
               @if (userApiKey()) {
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold border border-indigo-100">
