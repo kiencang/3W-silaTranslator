@@ -9,8 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
     <footer class="flex-none text-center py-2 md:py-3 text-xs text-gray-500 transition-all duration-500 ease-in-out font-medium"
             [class.border-t]="!isZenMode()" [class.border-[#E5E7EB]]="!isZenMode()"
             [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.py-0]="isZenMode()" [class.md:py-0]="isZenMode()" [class.overflow-hidden]="isZenMode()" [class.border-none]="isZenMode()"
-            [class.max-h-[100px]]="!isZenMode()" [class.opacity-100]="!isZenMode()">
-      <div class="max-w-[1240px] mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            [class.max-h-[200px]]="!isZenMode()" [class.opacity-100]="!isZenMode()">
+      <div class="max-w-[1240px] mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4">
         <div class="flex items-center gap-2">
           <button (click)="openHistory.emit()" aria-label="Lịch sử dịch" [disabled]="isLoading() || isSearchLoading()" class="inline-flex items-center justify-center gap-1.5 text-gray-600 bg-white border border-gray-200 transition-all font-medium cursor-pointer px-3 py-1 rounded-lg shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100" [class.hover:text-[#0066FF]]="!isLoading() && !isSearchLoading()" [class.hover:border-[#0066FF]]="!isLoading() && !isSearchLoading()" [class.hover:bg-blue-50]="!isLoading() && !isSearchLoading()">
             <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;">history</mat-icon>
@@ -21,7 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
             <span>Share</span>
           </button>
         </div>
-        <div class="leading-relaxed text-gray-400 text-[11px] truncate mx-auto md:mx-0">
+        <div class="leading-relaxed text-gray-400 text-[11px] text-center mx-auto md:mx-0">
           v1.0.47 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
           <a href="https://web-translator.wpsila.com/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn sử dụng</a>
         </div>
