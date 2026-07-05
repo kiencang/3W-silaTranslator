@@ -37,8 +37,12 @@ import { MatIconModule } from '@angular/material/icon';
               </button>
               
               <!-- Tooltip -->
-              <div class="absolute top-full mt-2 w-64 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-lg text-left left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0">
-                <strong [class.text-indigo-400]="userApiKey()">{{ userApiKey() ? 'Khóa cá nhân đang kích hoạt' : 'Chưa có API Key' }}</strong>. Bấm để tự nhập khóa Gemini API Key của bạn để sử dụng tính năng dịch.
+              <div class="absolute top-full mt-2 w-72 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-lg text-left left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0">
+                @if (userApiKey()) {
+                  <strong class="text-indigo-400">[Khóa cá nhân đang kích hoạt]</strong> - Bạn đã nhập API Key thành công, bạn có thể đổi hoặc xóa khóa API nếu muốn.
+                } @else {
+                  <strong>[Chưa có API Key]</strong> - Hãy nhập khóa Gemini API Key của bạn để sử dụng tính năng dịch.
+                }
                 <div class="absolute bottom-full left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0 border-4 border-transparent border-b-gray-900"></div>
               </div>
             </div>
@@ -63,7 +67,7 @@ import { MatIconModule } from '@angular/material/icon';
               <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">psychology</mat-icon>
               
               <!-- Tooltip -->
-              <div class="absolute top-full mt-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-left z-10">
+              <div class="absolute top-full mt-2 w-60 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-left z-10">
                 <strong class="text-purple-400">Gemini Pro</strong><br/>
                 Nhấn mạnh vào chất lượng bản dịch, nhưng tốc độ dịch chậm hơn.
                 <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
@@ -85,7 +89,7 @@ import { MatIconModule } from '@angular/material/icon';
               <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">bolt</mat-icon>
               
                <!-- Tooltip -->
-               <div class="absolute top-full mt-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-left z-10">
+               <div class="absolute top-full mt-2 w-56 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-left z-10">
                 <strong class="text-amber-400">Gemini Flash</strong><br/>
                 Tốc độ dịch nhanh. Đủ tốt trong phần lớn trường hợp.
                 <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>

@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
             <mat-icon class="text-indigo-600">vpn_key</mat-icon>
             Cấu hình Gemini API Key
           </h3>
-          <button (click)="closeModal.emit()" aria-label="Đóng cửa sổ" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100">
+          <button (click)="closeModal.emit()" aria-label="Đóng cửa sổ" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
             <mat-icon class="flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
           </button>
         </div>
@@ -76,7 +76,7 @@ import { MatIconModule } from '@angular/material/icon';
           <button (click)="saveApiKey.emit('')" [disabled]="!userApiKey()" class="text-xs px-3 py-2 rounded-lg bg-white text-red-600 hover:bg-red-50 transition-colors border border-red-200 cursor-pointer font-medium disabled:opacity-40 disabled:cursor-not-allowed">
             Xóa Key cá nhân
           </button>
-          <button (click)="saveApiKey.emit(tempApiKey)" class="bg-[#0066FF] text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:shadow-md transition-all cursor-pointer border-none active:scale-95">
+          <button (click)="saveApiKey.emit(tempApiKey)" class="bg-[#0066FF] text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 hover:shadow-md transition-all cursor-pointer border-none active:scale-95">
             Lưu cấu hình
           </button>
         </div>

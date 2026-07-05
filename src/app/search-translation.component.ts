@@ -60,12 +60,12 @@ import { MatIconModule } from '@angular/material/icon';
                   <mat-icon class="flex items-center justify-center font-bold h-5 w-5" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">search</mat-icon>
                 </div>
                 <div class="flex flex-col overflow-hidden text-left">
-                  <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Kết quả dịch tiếng Anh</span>
+                  <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Từ khóa tiếng Anh tương ứng</span>
                   <span class="font-medium text-lg text-[#1A1A1B] truncate">{{ translatedSearchQuery() }}</span>
                 </div>
               </div>
               <div class="text-indigo-600 shrink-0 flex items-center gap-1.5 text-sm font-semibold bg-white shadow-sm border border-indigo-100 px-3 py-1.5 rounded-md transition-shadow group-hover:shadow-md">
-                Click để mở tab mới
+                Click để mở tab tìm kiếm mới
                 <mat-icon class="flex items-center justify-center h-4 w-4" style="font-size: 16px; line-height: 16px; width: 16px; height: 16px;">open_in_new</mat-icon>
               </div>
             </a>

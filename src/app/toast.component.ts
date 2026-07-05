@@ -26,7 +26,7 @@ import {ToastService} from './toast.service';
           <div class="flex-1 leading-relaxed pr-6">{{ toast.message }}</div>
           
           <!-- Close Button -->
-          <button (click)="toastService.removeToast(toast.id)" aria-label="Đóng thông báo" class="absolute right-2 top-2 shrink-0 p-1 rounded-md opacity-60 hover:opacity-100 hover:bg-white/20 transition-all cursor-pointer border-none bg-transparent text-white flex justify-center items-center">
+          <button (click)="toastService.removeToast(toast.id)" aria-label="Đóng thông báo" class="absolute right-2 top-1/2 -translate-y-1/2 shrink-0 w-6 h-6 rounded-full opacity-60 hover:opacity-100 hover:bg-white/20 transition-all cursor-pointer border-none bg-transparent text-white flex justify-center items-center">
             <mat-icon class="flex items-center justify-center h-4 w-4" style="font-size: 16px; line-height: 16px; width: 16px; height: 16px;">close</mat-icon>
           </button>
         </div>

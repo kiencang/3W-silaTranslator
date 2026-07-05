@@ -17,7 +17,7 @@ interface SiteInput {
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h3 id="modal-title" class="text-lg font-bold text-[#1A1A1B]">Quản lý website ưa thích</h3>
-          <button (click)="closeModal.emit()" aria-label="Đóng cửa sổ cài đặt" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100">
+          <button (click)="closeModal.emit()" aria-label="Đóng cửa sổ cài đặt" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
             <mat-icon class="flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
           </button>
         </div>
@@ -54,7 +54,7 @@ interface SiteInput {
 
         <!-- Footer -->
         <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end">
-          <button (click)="saveSites()" aria-label="Lưu danh sách website" class="bg-[#0066FF] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:shadow-md transition-all cursor-pointer border-none active:scale-95">
+          <button (click)="saveSites()" aria-label="Lưu danh sách website" class="bg-[#0066FF] text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 hover:shadow-md transition-all cursor-pointer border-none active:scale-95">
             Lưu danh sách
           </button>
         </div>

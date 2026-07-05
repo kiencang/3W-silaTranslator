@@ -24,7 +24,7 @@ import { HistoryService, TranslationHistoryItem } from './history.service';
               </button>
             }
           </div>
-          <button (click)="closeModal.emit()" aria-label="Đóng cửa sổ lịch sử" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100">
+          <button (click)="closeModal.emit()" aria-label="Đóng cửa sổ lịch sử" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
             <mat-icon class="flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
           </button>
         </div>

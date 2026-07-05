@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h3 id="share-modal-title" class="text-lg font-bold text-[#1A1A1B] flex items-center gap-1">Chia sẻ <span class="font-black text-lg tracking-tight"><span class="text-slate-900">3W</span>&nbsp;<span class="text-indigo-600">sila</span><span class="text-rose-600">Translator</span></span></h3>
-          <button (click)="closeModal.emit()" aria-label="Đóng cửa sổ chia sẻ" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100">
+          <button (click)="closeModal.emit()" aria-label="Đóng cửa sổ chia sẻ" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
             <mat-icon class="flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
           </button>
         </div>
