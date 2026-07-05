@@ -23,12 +23,12 @@ import { MatIconModule } from '@angular/material/icon';
           <h2 class="text-base md:text-lg font-bold truncate text-[#1A1A1B] flex-1 m-0">{{ translatedTitle() }}</h2>
         </div>
         <div class="flex items-center gap-2 md:gap-3 shrink-0">
-          <button (click)="enableZenMode.emit()" aria-label="Kích hoạt chế độ đọc tĩnh tâm" title="Mở rộng toàn màn hình" class="p-1.5 md:p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors border-none cursor-pointer flex items-center justify-center active:scale-95 bg-transparent">
-            <mat-icon class="w-6 h-6 md:w-7 md:h-7 flex items-center justify-center" style="font-size: 24px; line-height: 24px; width: 24px; height: 24px;">fullscreen</mat-icon>
-          </button>
           <button (click)="downloadHtml.emit()" aria-label="Tải bản dịch định dạng HTML về máy" class="bg-[#10B981] text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium hover:bg-[#059669] transition-colors whitespace-nowrap flex items-center gap-1.5 md:gap-2 shadow-sm text-sm border-none cursor-pointer active:scale-95">
             <mat-icon class="h-4 w-4 md:h-5 md:w-5 flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">file_download</mat-icon>
             <span class="font-semibold">Download</span>
+          </button>
+          <button (click)="enableZenMode.emit()" aria-label="Kích hoạt chế độ đọc tĩnh tâm" title="Mở rộng toàn màn hình" class="p-1.5 md:p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 bg-white rounded-full transition-colors border border-gray-300 hover:border-indigo-300 cursor-pointer flex items-center justify-center active:scale-95 shadow-sm">
+            <mat-icon class="w-6 h-6 md:w-7 md:h-7 flex items-center justify-center" style="font-size: 24px; line-height: 24px; width: 24px; height: 24px;">fullscreen</mat-icon>
           </button>
         </div>
       </div>

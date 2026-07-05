@@ -22,7 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
           </button>
         </div>
         <div class="leading-relaxed text-gray-400 text-[11px] text-center mx-auto md:mx-0">
-          v1.0.47 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+          v1.0.48 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
           <a href="https://web-translator.wpsila.com/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn sử dụng</a>
         </div>
 
@@ -47,7 +47,7 @@ import { MatIconModule } from '@angular/material/icon';
             </button>
             
             <!-- Tooltip above button for footer -->
-            <div class="absolute bottom-full mb-2 w-72 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-lg text-center right-0">
+            <div class="absolute bottom-full mb-2 w-72 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-lg text-left right-0">
               <strong [class.text-blue-400]="useSearchGrounding()" [class.text-gray-400]="!useSearchGrounding()">[{{ useSearchGrounding() ? 'Đang Bật' : 'Đang Tắt' }}]</strong> Bổ sung công cụ tìm kiếm cho AI trong quá trình dịch, sẽ tốn token/thời gian hơn. Chỉ nên bật với bài có tính học thuật cao hoặc thời sự cần cập nhật thời gian thực. Tính năng này có thể bị hạn chế với tài khoản miễn phí.
               <div class="absolute top-full right-4 border-4 border-transparent border-t-gray-900"></div>
             </div>

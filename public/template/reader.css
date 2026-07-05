@@ -161,8 +161,8 @@ button { font-family: inherit; }
 
 #acc-toggle-button {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -1px;
+    left: -1px;
     width: 40px;
     height: 40px;
     background-color: var(--toc-toggle-bg);
@@ -457,7 +457,7 @@ article caption { padding: 0.5em 0; font-style: italic; color: var(--text-color)
 
 #toc-container { position: fixed; top: 70px; right: 15px; width: var(--toc-width-collapsed); height: var(--toc-width-collapsed); background-color: var(--toc-bg-color); border: 1px solid var(--toc-border-color); border-radius: 5px; box-shadow: 0 2px 5px var(--article-shadow-color); z-index: 1002; overflow: hidden; transition: all 0.3s ease; box-sizing: border-box; }
 #toc-container.toc-expanded { width: var(--toc-width-expanded); height: auto; max-height: calc(100vh - 80px); padding: 10px; }
-#toc-toggle-button { position: absolute; top: 0; left: 0; width: var(--toc-width-collapsed); height: var(--toc-width-collapsed); background-color: var(--toc-toggle-bg); color: var(--toc-toggle-color); border: none; border-radius: 4px 0 0 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; transition: all 0.2s ease; z-index: 2; }
+#toc-toggle-button { position: absolute; top: -1px; left: -1px; width: var(--toc-width-collapsed); height: var(--toc-width-collapsed); background-color: var(--toc-toggle-bg); color: var(--toc-toggle-color); border: none; border-radius: 4px 0 0 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; transition: all 0.2s ease; z-index: 2; }
 #toc-toggle-button:hover { background-color: var(--link-hover-color); }
 html.high-contrast-mode #toc-toggle-button:hover { background-color: var(--link-hover-color); }
 #toc-toggle-button:focus-visible { outline: 2px solid var(--toc-link-color); outline-offset: 1px; }

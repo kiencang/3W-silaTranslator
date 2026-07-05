@@ -37,7 +37,7 @@ import { MatIconModule } from '@angular/material/icon';
               </button>
               
               <!-- Tooltip -->
-              <div class="absolute top-full mt-2 w-64 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-lg text-center left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0">
+              <div class="absolute top-full mt-2 w-64 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-lg text-left left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0">
                 <strong [class.text-indigo-400]="userApiKey()">{{ userApiKey() ? 'Khóa cá nhân đang kích hoạt' : 'Chưa có API Key' }}</strong>. Bấm để tự nhập khóa Gemini API Key của bạn để sử dụng tính năng dịch.
                 <div class="absolute bottom-full left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0 border-4 border-transparent border-b-gray-900"></div>
               </div>
@@ -63,9 +63,9 @@ import { MatIconModule } from '@angular/material/icon';
               <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">psychology</mat-icon>
               
               <!-- Tooltip -->
-              <div class="absolute top-full mt-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-center z-10">
+              <div class="absolute top-full mt-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-left z-10">
                 <strong class="text-purple-400">Gemini Pro</strong><br/>
-                Nhấn mạnh vào chất lượng bản dịch, nhưng chi phí cao hơn.
+                Nhấn mạnh vào chất lượng bản dịch, nhưng tốc độ dịch chậm hơn.
                 <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
               </div>
             </button>
@@ -85,7 +85,7 @@ import { MatIconModule } from '@angular/material/icon';
               <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">bolt</mat-icon>
               
                <!-- Tooltip -->
-               <div class="absolute top-full mt-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-center z-10">
+               <div class="absolute top-full mt-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-lg text-left z-10">
                 <strong class="text-amber-400">Gemini Flash</strong><br/>
                 Tốc độ dịch nhanh. Đủ tốt trong phần lớn trường hợp.
                 <div class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></div>
@@ -145,8 +145,8 @@ import { MatIconModule } from '@angular/material/icon';
               <input type="file" aria-label="Tải lên file tài liệu định dạng HTML" accept=".html,.htm" class="hidden" (change)="fileSelected.emit($event)" [disabled]="isLoading()">
               <mat-icon class="w-5 h-5 flex items-center justify-center -rotate-45 block" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px; display: block;">attach_file</mat-icon>
               <!-- Custom Tooltip -->
-              <div class="absolute top-full right-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[280px] md:w-[320px] bg-[#1A1A1B] text-white text-[11px] md:text-xs leading-relaxed p-2.5 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 delay-500 z-50 pointer-events-none text-center font-medium">
-                Tải lên file bài viết (.html) nếu ứng dụng bị chặn không thể lấy được nội dung hoặc yêu cầu đăng nhập. (Nhấn Ctrl+S/Cmd+S tại trang gốc để lưu, chọn 'HTML only/chỉ HTML')
+              <div class="absolute top-full right-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[280px] md:w-[320px] bg-[#1A1A1B] text-white text-[11px] md:text-xs leading-relaxed p-2.5 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 delay-500 z-50 pointer-events-none text-left font-medium">
+                Tải lên file bài viết (.html) nếu ứng dụng bị chặn không thể lấy được nội dung hoặc yêu cầu đăng nhập. Hướng dẫn: Nhấn Ctrl+S/Cmd+S tại trang gốc để lưu, chọn 'HTML only/chỉ HTML'.
                 <div class="absolute bottom-full right-2 md:right-auto md:left-1/2 md:-translate-x-1/2 -mb-[1px] border-4 border-transparent border-b-[#1A1A1B]"></div>
               </div>
             </label>
