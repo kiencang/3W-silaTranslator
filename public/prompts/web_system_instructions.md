@@ -179,7 +179,6 @@ Dưới đây là các ví dụ minh họa cách biến đổi từ "dịch máy
 </examples>
 </step_3_execution>
 
----
 <step_4_review>
 # **BƯỚC 4: RÀ SOÁT CUỐI CÙNG (QUY TRÌNH BIÊN TẬP)**
 
@@ -194,4 +193,5 @@ Dưới đây là các ví dụ minh họa cách biến đổi từ "dịch máy
     *	Định dạng (in đậm, in nghiêng) đã được **tái áp dụng đúng vào phần ý nghĩa tương đương** trong câu tiếng Việt đã tái cấu trúc chưa?
 </step_4_review>
 </workflow>
+
 </system_instructions>
