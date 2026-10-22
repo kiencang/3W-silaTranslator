@@ -14,16 +14,16 @@ import { MatIconModule } from '@angular/material/icon';
         <div class="flex items-center gap-2">
           <button (click)="openHistory.emit()" aria-label="Lịch sử dịch" [disabled]="isLoading() || isSearchLoading()" class="inline-flex items-center justify-center gap-1.5 text-gray-600 bg-white border border-gray-200 transition-all font-medium cursor-pointer px-3 py-1 rounded-lg shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100" [class.hover:text-[#0066FF]]="!isLoading() && !isSearchLoading()" [class.hover:border-[#0066FF]]="!isLoading() && !isSearchLoading()" [class.hover:bg-blue-50]="!isLoading() && !isSearchLoading()">
             <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;">history</mat-icon>
-            <span>History</span>
+            <span>Lịch sử dịch</span>
           </button>
           <button (click)="openShare.emit()" aria-label="Chia sẻ công cụ" class="inline-flex items-center justify-center gap-1.5 text-gray-600 hover:text-[#0066FF] bg-white border border-gray-200 hover:border-[#0066FF] hover:bg-blue-50 transition-all font-medium cursor-pointer px-3 py-1 rounded-lg shadow-sm">
             <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;">share</mat-icon>
-            <span>Share</span>
+            <span>Chia sẻ</span>
           </button>
         </div>
         <div class="leading-relaxed text-gray-400 text-[11px] text-center mx-auto md:mx-0">
-          v1.0.51 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
-          <a href="https://web-translator.wpsila.com/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn sử dụng</a>
+          v1.0.52 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+          <a href="https://web-translator.wpsila.com/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn dùng</a>
         </div>
 
         <!-- +Search Grounding at the far right -->

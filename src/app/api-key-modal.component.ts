@@ -6,9 +6,12 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-api-key-modal',
   standalone: true,
   imports: [MatIconModule, FormsModule],
+  host: {
+    '(window:keydown.escape)': 'closeModal.emit()'
+  },
   template: `
-    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="api-modal-title">
-      <div class="bg-white w-full max-w-[552px] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="api-modal-title" (click)="closeModal.emit()">
+      <div class="bg-white w-full max-w-[552px] rounded-2xl shadow-2xl overflow-hidden flex flex-col" (click)="$event.stopPropagation()">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h3 id="api-modal-title" class="text-lg font-bold text-[#1A1A1B] flex items-center gap-2">
@@ -47,7 +50,7 @@ import { MatIconModule } from '@angular/material/icon';
                 </span>
                 <span class="text-gray-300">|</span>
               }
-              <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 transition-colors font-medium hover:underline text-xs flex items-center gap-0.5">
+              <a href="https://aistudio.google.com/app/api-keys" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 transition-colors font-medium hover:underline text-xs flex items-center gap-0.5">
                 <mat-icon style="font-size: 14px; width: 14px; height: 14px; line-height: 14px;">help_outline</mat-icon> Nơi lấy API Key Gemini
               </a>
             </p>

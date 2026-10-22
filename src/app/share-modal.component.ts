@@ -5,9 +5,12 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-share-modal',
   standalone: true,
   imports: [MatIconModule],
+  host: {
+    '(window:keydown.escape)': 'closeModal.emit()'
+  },
   template: `
-    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
-      <div class="bg-white w-full max-w-[480px] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="share-modal-title" (click)="closeModal.emit()">
+      <div class="bg-white w-full max-w-[480px] rounded-2xl shadow-2xl overflow-hidden flex flex-col" (click)="$event.stopPropagation()">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h3 id="share-modal-title" class="text-lg font-bold text-[#1A1A1B] flex items-center gap-1">Chia sẻ <span class="font-black text-lg tracking-tight"><span class="text-slate-900">3W</span>&nbsp;<span class="text-indigo-600">sila</span><span class="text-rose-600">Translator</span></span></h3>

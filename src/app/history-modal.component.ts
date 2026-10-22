@@ -6,9 +6,12 @@ import { HistoryService, TranslationHistoryItem } from './history.service';
   selector: 'app-history-modal',
   standalone: true,
   imports: [MatIconModule],
+  host: {
+    '(window:keydown.escape)': 'closeModal.emit()'
+  },
   template: `
-    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="history-modal-title">
-      <div class="bg-white w-full max-w-[600px] max-h-[85vh] rounded-2xl shadow-2xl flex flex-col">
+    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="history-modal-title" (click)="closeModal.emit()">
+      <div class="bg-white w-full max-w-3xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col" (click)="$event.stopPropagation()">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">
           <div class="flex items-center gap-3">
@@ -51,7 +54,7 @@ import { HistoryService, TranslationHistoryItem } from './history.service';
                   <div class="flex-1 min-w-0 pr-4">
                     <h4 class="text-[15px] font-semibold text-gray-900 truncate mb-1" [title]="item.title">{{ item.title }}</h4>
                     <div class="flex items-center gap-2 text-xs text-gray-500 font-medium">
-                      <span class="truncate max-w-[200px]" [title]="item.url">{{ item.url }}</span>
+                      <span class="truncate max-w-[200px] sm:max-w-[300px] md:max-w-[400px]" [title]="item.url">{{ item.url }}</span>
                       <span class="shrink-0 opacity-40">&bull;</span>
                       <span class="shrink-0 flex items-center gap-1"><mat-icon style="font-size: 11px; width: 11px; height: 11px; line-height: 11px;">schedule</mat-icon>{{ formatTimestamp(item.timestamp) }}</span>
                     </div>
@@ -119,22 +122,12 @@ export class HistoryModalComponent {
 
   formatTimestamp(ts: number): string {
     const d = new Date(ts);
-    const now = new Date();
-    
-    // Nếu hôm nay
-    if (d.toDateString() === now.toDateString()) {
-      return d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-    }
-    
-    // Nếu hôm qua
-    const yesterday = new Date(now);
-    yesterday.setDate(now.getDate() - 1);
-    if (d.toDateString() === yesterday.toDateString()) {
-      return 'Hôm qua ' + d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-    }
-    
-    // Cũ hơn
-    return d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }) + ' ' + 
-           d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+    if (isNaN(d.getTime())) return '';
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = String(d.getFullYear()).slice(-2);
+    return `${hours}:${minutes}, ${day}-${month}-${year}`;
   }
 }
