@@ -5,6 +5,12 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.54] - 2026-10-22
+### Fixed
+- Logo có thể click để về giao diện chính của ứng dụng;
+- Dòng text `+ Thêm danh sách website ưu thích` điều chỉnh giảm mức độ nổi bật;
+- Điều chỉnh câu chữ một số chỗ cho rõ ràng (`free tier`) & gọn gàng (`+ Search`) hơn;
+
 ## [1.0.53] - 2026-10-22
 ### Fixed
 - Điều chỉnh thiết kế cho modal Lịch sử dịch để các bài dịch được phân biệt với nhau rõ ràng hơn;
