@@ -5,6 +5,11 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.53] - 2026-10-22
+### Fixed
+- Điều chỉnh thiết kế cho modal Lịch sử dịch để các bài dịch được phân biệt với nhau rõ ràng hơn;
+- Thêm tooltip cho button Download;
+
 ## [1.0.52] - 2026-10-22
 ### Fixed
 - Điều chỉnh nhỏ thiết kế (Việt hóa một số nhãn, tăng độ rộng modal Lịch sử dịch, điều chỉnh link, điều chỉnh hành vi tương tác click ra ngoài modal).
