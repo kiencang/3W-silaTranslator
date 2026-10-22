@@ -41,32 +41,42 @@ import { HistoryService, TranslationHistoryItem } from './history.service';
         </div>
 
         <!-- Body -->
-        <div class="px-2 py-2 overflow-y-auto flex-1">
+        <div class="p-4 md:p-5 overflow-y-auto flex-1 bg-gray-50/50">
           @if (historyItems().length === 0) {
             <div class="text-center py-12 text-gray-500">
               <mat-icon style="font-size: 48px; width: 48px; height: 48px; line-height: 48px; margin-bottom: 8px" class="opacity-20 text-gray-400">history</mat-icon>
               <p class="mt-2 text-sm text-gray-500 font-medium">Chưa có lịch sử dịch nào.</p>
             </div>
           } @else {
-            <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-2.5">
               @for (item of historyItems(); track item.id) {
-                <div tabindex="0" (keyup.enter)="loadHistoryItem(item)" class="group flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer border border-transparent hover:border-gray-200" (click)="loadHistoryItem(item)">
-                  <div class="flex-1 min-w-0 pr-4">
-                    <h4 class="text-[15px] font-semibold text-gray-900 truncate mb-1" [title]="item.title">{{ item.title }}</h4>
+                <div tabindex="0"
+                     (keyup.enter)="loadHistoryItem(item)"
+                     (click)="loadHistoryItem(item)"
+                     class="group flex items-center justify-between p-3.5 bg-white hover:bg-blue-50/40 rounded-xl transition-all duration-200 cursor-pointer border border-gray-200 hover:border-[#0066FF] shadow-sm hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#0066FF]">
+                  <div class="flex-1 min-w-0 pr-3">
+                    <h4 class="text-[15px] font-semibold text-gray-900 group-hover:text-[#0066FF] transition-colors truncate mb-1.5" [title]="item.title">{{ item.title }}</h4>
                     <div class="flex items-center gap-2 text-xs text-gray-500 font-medium">
-                      <span class="truncate max-w-[200px] sm:max-w-[300px] md:max-w-[400px]" [title]="item.url">{{ item.url }}</span>
+                      <span class="truncate max-w-[200px] sm:max-w-[300px] md:max-w-[400px] group-hover:text-blue-700/80 transition-colors" [title]="item.url">{{ item.url }}</span>
                       <span class="shrink-0 opacity-40">&bull;</span>
                       <span class="shrink-0 flex items-center gap-1"><mat-icon style="font-size: 11px; width: 11px; height: 11px; line-height: 11px;">schedule</mat-icon>{{ formatTimestamp(item.timestamp) }}</span>
                     </div>
                   </div>
-                  <div class="shrink-0">
-                    <button (click)="deleteHistoryItem(item.id!, $event)" class="px-2 py-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100 bg-transparent cursor-pointer flex items-center justify-center relative overflow-hidden" [class.bg-red-50]="confirmDeleteId() === item.id!" [class.text-red-600]="confirmDeleteId() === item.id!" [class.border-red-200]="confirmDeleteId() === item.id!">
+                  <div class="shrink-0 flex items-center gap-1.5">
+                    <button (click)="deleteHistoryItem(item.id!, $event)"
+                            aria-label="Xóa bản dịch này khỏi lịch sử"
+                            title="Xóa"
+                            class="px-2 py-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors border border-transparent hover:border-red-100 bg-transparent cursor-pointer flex items-center justify-center relative overflow-hidden"
+                            [class.bg-red-50]="confirmDeleteId() === item.id!"
+                            [class.text-red-600]="confirmDeleteId() === item.id!"
+                            [class.border-red-200]="confirmDeleteId() === item.id!">
                       @if (confirmDeleteId() === item.id!) {
                         <span class="text-[11px] font-bold px-1 uppercase tracking-wide">Xóa?</span>
                       } @else {
                         <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">delete_outline</mat-icon>
                       }
                     </button>
+                    <mat-icon class="text-gray-300 group-hover:text-[#0066FF] transition-all transform group-hover:translate-x-0.5 shrink-0" style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">chevron_right</mat-icon>
                   </div>
                 </div>
               }
