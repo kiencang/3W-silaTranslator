@@ -19,9 +19,8 @@ import { MatIconModule } from '@angular/material/icon';
           <button (click)="goHome.emit()"
                   [disabled]="isLoading() || isSearchLoading()"
                   aria-label="Về trang chủ"
-                  [title]="(isLoading() || isSearchLoading()) ? 'Đang trong quá trình xử lý...' : 'Về trang chủ.'"
-                  class="font-sans font-black text-lg md:text-xl tracking-tight whitespace-nowrap bg-transparent border-none p-0 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 transition-all select-none active:scale-95 text-left group">
-            <span class="text-slate-900">3W</span>&nbsp;<span class="text-indigo-600 group-hover:opacity-80 transition-opacity">sila</span><span class="text-rose-600 group-hover:opacity-80 transition-opacity">Translator</span>
+                  class="font-sans font-black text-lg md:text-xl tracking-tight whitespace-nowrap bg-transparent border-none p-0 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 transition-all select-none enabled:active:scale-95 text-left group">
+            <span class="text-slate-900">3W</span>&nbsp;<span class="text-indigo-600 transition-opacity" [class.group-hover:opacity-80]="!isLoading() && !isSearchLoading()">sila</span><span class="text-rose-600 transition-opacity" [class.group-hover:opacity-80]="!isLoading() && !isSearchLoading()">Translator</span>
           </button>
           
           <!-- Controls: API Key -->

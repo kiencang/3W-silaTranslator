@@ -4,13 +4,15 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
-import express, { Request, Response } from 'express';
+import express from 'express';
 import {join} from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
-const angularApp = new AngularNodeAppEngine();
+const angularApp = new AngularNodeAppEngine({
+  allowedHosts: ['*']
+});
 
 app.use(express.json({ limit: '50mb' }));
 
@@ -70,12 +72,12 @@ app.use((req, res, next) => {
  * Máy chủ sẽ lắng nghe trên cổng được định nghĩa bởi biến môi trường `PORT`, hoặc mặc định là 3000.
  */
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
-  const port = process.env['PORT'] || 3000;
-  app.listen(port, (error) => {
+  const port = Number(process.env['PORT']) || 3000;
+  app.listen(port, '0.0.0.0', (error) => {
     if (error) {
       throw error;
     }
-    console.log(`Máy chủ Node Express đang lắng nghe tại http://localhost:${port}`);
+    console.log(`Máy chủ Node Express đang lắng nghe tại http://0.0.0.0:${port}`);
   });
 }
 

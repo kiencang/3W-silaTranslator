@@ -5,6 +5,11 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.55] - 2026-10-22
+### Fixed
+- Loại bỏ tooltip dư thừa ở phần logo;
+- Hover nút + SEARCH khi đang thực hiện tác vụ sẽ mờ 50% tooltip cho đồng bộ;
+
 ## [1.0.54] - 2026-10-22
 ### Fixed
 - Logo có thể click để về giao diện chính của ứng dụng;

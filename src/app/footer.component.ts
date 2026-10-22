@@ -22,17 +22,17 @@ import { MatIconModule } from '@angular/material/icon';
           </button>
         </div>
         <div class="leading-relaxed text-gray-400 text-[11px] text-center mx-auto md:mx-0">
-          v1.0.54 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+          v1.0.55 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
           <a href="https://web-translator.wpsila.com/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn dùng</a>
         </div>
 
         <!-- +Search Grounding at the far right -->
         <div class="flex items-center justify-end shrink-0">
-          <div class="relative group flex items-center justify-center">
+          <div class="relative flex items-center justify-center">
             <button (click)="toggleSearchGrounding.emit(!useSearchGrounding())"
                     aria-label="Tính năng tra cứu Google Search"
                     [disabled]="isLoading() || isSearchLoading()"
-                    class="flex items-center gap-1.5 p-1 transition-all border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed bg-transparent">
+                    class="group relative flex items-center gap-1.5 p-1 transition-all border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed bg-transparent">
               
               <div class="relative inline-flex h-3.5 w-7 shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none"
                    [class.bg-blue-600]="useSearchGrounding()"
@@ -44,13 +44,13 @@ import { MatIconModule } from '@angular/material/icon';
               <span class="text-[11px] font-bold transition-colors tracking-wide"
                     [class.text-blue-600]="useSearchGrounding()"
                     [class.text-gray-500]="!useSearchGrounding()">+ SEARCH</span>
+
+              <!-- Tooltip above button for footer -->
+              <div class="absolute bottom-full mb-2 w-72 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50 shadow-lg text-left right-0">
+                <strong [class.text-blue-400]="useSearchGrounding()" [class.text-gray-400]="!useSearchGrounding()">[{{ useSearchGrounding() ? 'Đang Bật' : 'Đang Tắt' }}]</strong> Bổ sung công cụ tìm kiếm cho AI trong quá trình dịch, sẽ tốn token/thời gian hơn. Chỉ nên bật với bài có tính học thuật cao hoặc thời sự cần cập nhật thời gian thực. Tính năng này có thể bị hạn chế với tài khoản miễn phí.
+                <div class="absolute top-full right-4 border-4 border-transparent border-t-gray-900"></div>
+              </div>
             </button>
-            
-            <!-- Tooltip above button for footer -->
-            <div class="absolute bottom-full mb-2 w-72 px-3 py-2 bg-gray-900 text-white text-xs leading-relaxed rounded-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-lg text-left right-0">
-              <strong [class.text-blue-400]="useSearchGrounding()" [class.text-gray-400]="!useSearchGrounding()">[{{ useSearchGrounding() ? 'Đang Bật' : 'Đang Tắt' }}]</strong> Bổ sung công cụ tìm kiếm cho AI trong quá trình dịch, sẽ tốn token/thời gian hơn. Chỉ nên bật với bài có tính học thuật cao hoặc thời sự cần cập nhật thời gian thực. Tính năng này có thể bị hạn chế với tài khoản miễn phí.
-              <div class="absolute top-full right-4 border-4 border-transparent border-t-gray-900"></div>
-            </div>
           </div>
         </div>
       </div>
