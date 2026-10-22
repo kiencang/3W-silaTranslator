@@ -3,7 +3,7 @@
 
 <p align="center">
   <img src="images/3w-silaTranslator.png" alt="Giao diện của 3w-silaTranslator...">
-   <br><em>Giao diện của 3w-silaTranslator...</em>
+   <br><em>Giao diện của 3W-silaTranslator...</em>
 </p>
 
 - **Link app trên AI Studio**: https://aistudio.google.com/apps/4cc7e19e-46dd-4d38-8617-ba38ef1c80c3?showPreview=true&showAssistant=true&fullscreenApplet=true (tận dụng được ngưỡng miễn phí hàng ngày tương đổi rộng rãi của Gemini).
