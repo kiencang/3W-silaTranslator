@@ -11,6 +11,15 @@
 
 3W-silaTranslator sử dụng SI/Prompt mẫu `SI-Prompt-WEB-EV-Translate` (v1.0.4) ở đây (cùng tác giả): https://github.com/kiencang/SI-Prompt-WEB-EV-Translate
 
+## Lý do tồn tại
+Các công cụ dịch web hiện có rất nhiều, tiện dùng ngay trên trình duyệt (ví dụ Chrome, Firefox, v.v..), tuy nhiên chất lượng dịch mặc định của chúng không cao, với nhiều nội dung hơi phức tạp dễ có những đoạn dịch `ngây ngô`. Công cụ này ra đời để khắc phục phần nào nhược điểm đó. Về bản chất nó cũng chỉ là dịch máy, tuy nhiên 3W-silaTranslator sử dụng các model AI mới nhất của Gemini để dịch, giúp tăng cường chất lượng dịch lên đáng kể.
+
+## Một số ưu điểm
+- Mạnh mẽ & Miễn phí: Tận dụng sức mạnh từ các model hàng đầu (như Gemini Pro hoặc Flash) cùng ngưỡng miễn phí rộng rãi từ Google AI Studio.
+- Điều chỉnh cách đọc: Thay đổi font chữ, cỡ chữ, độ rộng dòng, khoảng cách giãn dòng và màu nền để phù hợp nhất với nhu cầu của bạn.
+- Lưu trữ lâu dài: Hỗ trợ tải bản dịch về máy cá nhân để lưu trữ lâu dài & đọc lại offline mọi lúc.
+- Lịch sử dịch: Lưu 10 bài dịch gần nhất trong trình duyệt để có thể đọc lại nhanh khi cần.
+
 ## Tuyên bố từ chối trách nhiệm
 Công cụ này có thể được sử dụng cho mục đích nghiên cứu và học tập cá nhân.
 
