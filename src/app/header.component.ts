@@ -16,9 +16,13 @@ import { MatIconModule } from '@angular/material/icon';
         <!-- Logo & Temperature Block -->
         <div class="flex flex-col items-center md:items-start justify-center gap-1.5 md:gap-2">
           <!-- Logo -->
-          <div class="font-sans font-black text-lg md:text-xl tracking-tight whitespace-nowrap cursor-default select-none">
-            <span class="text-slate-900">3W</span>&nbsp;<span class="text-indigo-600">sila</span><span class="text-rose-600">Translator</span>
-          </div>
+          <button (click)="goHome.emit()"
+                  [disabled]="isLoading() || isSearchLoading()"
+                  aria-label="Về trang chủ"
+                  [title]="(isLoading() || isSearchLoading()) ? 'Đang trong quá trình xử lý...' : 'Về trang chủ.'"
+                  class="font-sans font-black text-lg md:text-xl tracking-tight whitespace-nowrap bg-transparent border-none p-0 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 transition-all select-none active:scale-95 text-left group">
+            <span class="text-slate-900">3W</span>&nbsp;<span class="text-indigo-600 group-hover:opacity-80 transition-opacity">sila</span><span class="text-rose-600 group-hover:opacity-80 transition-opacity">Translator</span>
+          </button>
           
           <!-- Controls: API Key -->
           <div class="flex flex-row gap-4 items-center">
@@ -210,4 +214,5 @@ export class HeaderComponent {
   removeUploadedFile = output<void>();
   fileSelected = output<Event>();
   translate = output<void>();
+  goHome = output<void>();
 }

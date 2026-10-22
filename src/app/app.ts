@@ -289,6 +289,13 @@ export class App {
     }
   }
 
+  goHome() {
+    if (this.isLoading() || this.searchTranslationTracker.isSearchLoading()) return;
+    this.isZenMode.set(false);
+    this.closeTranslation();
+    this.error.set('');
+  }
+
   closeTranslation() {
     this.fullHtmlString.set(null);
     this.translatedHtml.set(null);

@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
   template: `
     <div class="mt-8 w-full max-w-3xl mx-auto flex flex-col items-center gap-4 relative z-10">
       @if (favoriteSites().length === 0) {
-        <button (click)="openSitesModal.emit()" class="text-[#0066FF] hover:text-blue-700 font-medium text-sm md:text-base border-none bg-transparent cursor-pointer underline underline-offset-4 transition-colors">
+        <button (click)="openSitesModal.emit()" class="text-gray-400 hover:text-[#0066FF] font-medium text-sm md:text-base border-none bg-transparent cursor-pointer transition-colors">
           + Thêm danh sách website ưa thích
         </button>
       } @else {

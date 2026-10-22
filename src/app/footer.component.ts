@@ -22,7 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
           </button>
         </div>
         <div class="leading-relaxed text-gray-400 text-[11px] text-center mx-auto md:mx-0">
-          v1.0.53 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
+          v1.0.54 &bull; <a href="https://github.com/kiencang/3W-silaTranslator" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">GitHub</a> &bull; Chỉ dùng cho mục đích cá nhân &bull; Nguyễn Đức Anh &bull; contact@wpsila.com &bull; 
           <a href="https://web-translator.wpsila.com/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-[#0066FF] transition-colors underline underline-offset-2">Hướng dẫn dùng</a>
         </div>
 
@@ -43,7 +43,7 @@ import { MatIconModule } from '@angular/material/icon';
               
               <span class="text-[11px] font-bold transition-colors tracking-wide"
                     [class.text-blue-600]="useSearchGrounding()"
-                    [class.text-gray-500]="!useSearchGrounding()">SEARCH Grounding</span>
+                    [class.text-gray-500]="!useSearchGrounding()">+ SEARCH</span>
             </button>
             
             <!-- Tooltip above button for footer -->

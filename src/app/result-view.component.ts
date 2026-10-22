@@ -17,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
            [class.max-h-[100px]]="!isZenMode()" [class.opacity-100]="!isZenMode()" [class.overflow-visible]="!isZenMode()"
            [class.py-0]="isZenMode()" [class.border-none]="isZenMode()" [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.overflow-hidden]="isZenMode()">
         <div class="flex items-center gap-2 md:gap-3 flex-1 overflow-hidden mr-4">
-          <button (click)="closeTranslation.emit()" aria-label="Đóng bản dịch" title="Đóng bản dịch" class="p-1.5 md:p-2 text-gray-500 hover:text-gray-900 bg-gray-200/80 hover:bg-gray-300 rounded-full transition-colors border-none cursor-pointer flex items-center justify-center shrink-0">
+          <button (click)="closeTranslation.emit()" aria-label="Đóng bản dịch" title="Đóng bản dịch." class="p-1.5 md:p-2 text-gray-500 hover:text-gray-900 bg-gray-200/80 hover:bg-gray-300 rounded-full transition-colors border-none cursor-pointer flex items-center justify-center shrink-0">
             <mat-icon class="h-4 w-4 md:h-5 md:w-5 flex items-center justify-center font-bold" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">close</mat-icon>
           </button>
           <h2 class="text-base md:text-lg font-bold truncate text-[#1A1A1B] flex-1 m-0">{{ translatedTitle() }}</h2>
@@ -27,7 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
             <mat-icon class="h-4 w-4 md:h-5 md:w-5 flex items-center justify-center" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px;">file_download</mat-icon>
             <span class="font-semibold">Download</span>
           </button>
-          <button (click)="enableZenMode.emit()" aria-label="Kích hoạt chế độ đọc tĩnh tâm" title="Mở rộng toàn màn hình" class="p-1.5 md:p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 bg-white rounded-full transition-colors border border-gray-300 hover:border-indigo-300 cursor-pointer flex items-center justify-center active:scale-95 shadow-sm">
+          <button (click)="enableZenMode.emit()" aria-label="Kích hoạt chế độ đọc tĩnh tâm" title="Mở rộng toàn màn hình." class="p-1.5 md:p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 bg-white rounded-full transition-colors border border-gray-300 hover:border-indigo-300 cursor-pointer flex items-center justify-center active:scale-95 shadow-sm">
             <mat-icon class="w-6 h-6 md:w-7 md:h-7 flex items-center justify-center" style="font-size: 24px; line-height: 24px; width: 24px; height: 24px;">fullscreen</mat-icon>
           </button>
         </div>
