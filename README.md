@@ -2,7 +2,7 @@
 Ứng dụng dịch web từ tiếng Anh sang tiếng Việt. 
 
 <p align="center">
-  <img src="images/3w-silaTranslator.png" alt="Giao diện của 3w-silaTranslator...">
+  <img src="images/3W-silaTranslator-v1.0.55.png" alt="Giao diện của 3w-silaTranslator...">
    <br><em>Giao diện của 3W-silaTranslator...</em>
 </p>
 
