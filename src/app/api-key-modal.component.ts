@@ -15,7 +15,11 @@ import { MatIconModule } from '@angular/material/icon';
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h3 id="api-modal-title" class="text-lg font-bold text-[#1A1A1B] flex items-center gap-2">
-            <mat-icon class="text-indigo-600">vpn_key</mat-icon>
+            <mat-icon class="transition-transform duration-300 ease-in-out"
+                      [class.text-indigo-600]="userApiKey()"
+                      [class.-rotate-[30deg]]="userApiKey()"
+                      [class.text-gray-400]="!userApiKey()"
+                      [class.rotate-[30deg]]="!userApiKey()">vpn_key</mat-icon>
             Cấu hình Gemini API Key
           </h3>
           <button (click)="closeModal.emit()" aria-label="Đóng cửa sổ" class="text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
@@ -28,32 +32,30 @@ import { MatIconModule } from '@angular/material/icon';
           <div class="text-sm text-gray-600 leading-relaxed space-y-2">
             <div class="flex flex-col gap-2">
               <p>
-                Để sử dụng công cụ dịch web này bạn cần khóa API Key của Gemini (AI Studio). Bạn hãy vào link "Nơi lấy API Key Gemini" để thao tác. Bạn chỉ cần tạo Key miễn phí (Free tier) là đủ dùng.
+                Để sử dụng công cụ dịch web này bạn cần khóa API Key của Gemini (AI Studio). Bạn hãy vào link "Nơi lấy Gemini API Key" để thao tác. Bạn chỉ cần tạo Key miễn phí (Free tier) là đủ dùng.
               </p>
               <p>
-                Ngoài ra bạn cần remix công cụ này về AI Studio cá nhân để tránh bị quá tải do nhiều người dùng cùng lúc. Tại app này bạn nhìn phía trên bên phải, có nút remix, hãy click vào đó để sao chép ứng dụng về AI Studio của bạn:
+                Ngoài ra bạn cần Remix công cụ này về AI Studio cá nhân để tránh bị quá tải do nhiều người dùng cùng lúc. Tại app này bạn nhìn phía trên bên phải, có nút Remix, hãy click vào đó để sao chép ứng dụng về AI Studio của bạn:
               </p>
               <div class="flex justify-center my-2">
-                <img src="/remix-3w.png" alt="Hướng dẫn remix" class="max-w-full h-auto rounded border border-gray-200" referrerpolicy="no-referrer" />
+                <img src="/remix-3w.png" alt="Hướng dẫn Remix" class="max-w-full h-auto rounded border border-gray-200" referrerpolicy="no-referrer" />
               </div>
             </div>
-            <p class="flex items-center gap-2 flex-wrap">
+            <div class="flex items-center justify-between gap-2 flex-wrap pt-1">
               @if (userApiKey()) {
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold border border-indigo-100">
                   <span class="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse"></span>
                   Đang dùng API Key của bạn
                 </span>
-                <span class="text-gray-300">|</span>
               } @else {
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-semibold border border-gray-200">
                   Bạn chưa nhập API Key cho ứng dụng
                 </span>
-                <span class="text-gray-300">|</span>
               }
-              <a href="https://aistudio.google.com/app/api-keys" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 transition-colors font-medium hover:underline text-xs flex items-center gap-0.5">
-                <mat-icon style="font-size: 14px; width: 14px; height: 14px; line-height: 14px;">help_outline</mat-icon> Nơi lấy API Key Gemini
+              <a href="https://aistudio.google.com/app/api-keys" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 transition-colors font-semibold hover:underline text-xs ml-auto">
+                Nơi lấy Gemini API Key &rarr;
               </a>
-            </p>
+            </div>
           </div>
           
           <div class="flex flex-col gap-1.5">
