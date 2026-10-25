@@ -5,6 +5,12 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.57] - 2026-10-25
+### Fixed
+- Chỉnh thông tin footer;
+- Điều chỉnh tooltip của phần tải file lên;
+- Xóa icon dư thừa trong phần lịch sử dịch;
+
 ## [1.0.56] - 2026-10-23
 ### Fixed
 - Điều chỉnh nhỏ thiết kế của modal `Nhập API Key`;
