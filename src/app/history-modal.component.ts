@@ -34,9 +34,8 @@ import { HistoryService, TranslationHistoryItem } from './history.service';
 
         <!-- Warning block -->
         <div class="px-6 py-3 bg-amber-50 shrink-0 border-b border-amber-100">
-          <p class="text-[13px] text-amber-800 leading-relaxed m-0 flex gap-2">
-            <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 18px; margin-top: 2px" class="shrink-0 text-amber-600">warning_amber</mat-icon>
-            <span>Danh sách 10 bài viết gần nhất bạn dịch, được <strong>lưu cục bộ</strong> trên <strong>trình duyệt đang dùng</strong> để tiện xem lại. Hãy chủ động "Tải bản dịch" để lưu trữ lâu dài, danh sách này có thể bị mất nếu bạn xóa dữ liệu web.</span>
+          <p class="text-[13px] text-amber-800 leading-relaxed m-0">
+            Danh sách 10 bài viết gần nhất bạn dịch, được <strong>lưu cục bộ</strong> trên <strong>trình duyệt đang dùng</strong> để tiện xem lại. Hãy chủ động "Tải bản dịch" để lưu trữ lâu dài, danh sách này có thể bị mất nếu bạn xóa dữ liệu web.
           </p>
         </div>
 

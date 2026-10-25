@@ -157,7 +157,7 @@ import { MatIconModule } from '@angular/material/icon';
               <mat-icon class="w-5 h-5 flex items-center justify-center -rotate-45 block" style="font-size: 20px; line-height: 20px; width: 20px; height: 20px; display: block;">attach_file</mat-icon>
               <!-- Custom Tooltip -->
               <div class="absolute top-full right-0 md:left-1/2 md:-translate-x-1/2 mt-2 w-[280px] md:w-[320px] bg-[#1A1A1B] text-white text-[11px] md:text-xs leading-relaxed p-2.5 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 delay-500 z-50 pointer-events-none text-left font-medium">
-                Tải lên file bài viết (.html) nếu ứng dụng bị chặn không thể lấy được nội dung hoặc yêu cầu đăng nhập. Hướng dẫn: Nhấn Ctrl+S/Cmd+S tại trang gốc để lưu, chọn 'HTML only/chỉ HTML'.
+                Tải lên file bài viết cần dịch (.html hoặc .htm) nếu ứng dụng bị chặn không thể lấy được nội dung hoặc yêu cầu đăng nhập. Hướng dẫn: Nhấn Ctrl+S/Cmd+S tại trang gốc để lưu, chọn 'HTML only/chỉ HTML'.
                 <div class="absolute bottom-full right-2 md:right-auto md:left-1/2 md:-translate-x-1/2 -mb-[1px] border-4 border-transparent border-b-[#1A1A1B]"></div>
               </div>
             </label>
