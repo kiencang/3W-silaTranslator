@@ -5,6 +5,10 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.58] - 2026-10-28
+### Fixed
+- Đáp ứng tiêu chí call API qua server trung gian của Gemini (không được call trực tiếp từ môi trường trình duyệt trong AI Studio);
+
 ## [1.0.57] - 2026-10-25
 ### Fixed
 - Chỉnh thông tin footer;
