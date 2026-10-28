@@ -32,7 +32,7 @@ import { MatIconModule } from '@angular/material/icon';
           <div class="text-sm text-gray-600 leading-relaxed space-y-2">
             <div class="flex flex-col gap-2">
               <p>
-                Để sử dụng công cụ dịch web này bạn cần khóa API Key của Gemini (AI Studio). Bạn hãy vào link "Nơi lấy Gemini API Key" để thao tác. Bạn chỉ cần tạo Key miễn phí (Free tier) là đủ dùng.
+                Để sử dụng công cụ dịch web này bạn cần khóa API Key của Gemini (AI Studio). Bạn hãy vào link "Nơi lấy Gemini API Key" để thao tác. Hiện tại Key miễn phí (Free tier) thường bị giới hạn (limit), Key trả phí có thể dùng được ngay.
               </p>
               <p>
                 Ngoài ra bạn cần Remix công cụ này về AI Studio cá nhân để tránh bị quá tải do nhiều người dùng cùng lúc. Tại app này bạn nhìn phía trên bên phải, có nút Remix, hãy click vào đó để sao chép ứng dụng về AI Studio của bạn:

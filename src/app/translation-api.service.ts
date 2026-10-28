@@ -163,61 +163,60 @@ export class TranslationApiService {
     };
   }
 
-  async translateContent(markdownContent: string, selectedModel: string, useSearchGrounding: boolean, userApiKey: string) {
-    if (!userApiKey || !userApiKey.trim()) {
+  private async callServerGemini(payload: {
+    model: string;
+    prompt: string;
+    systemInstruction: string;
+    useSearchGrounding?: boolean;
+  }, userApiKey: string): Promise<string> {
+    const cleanKey = userApiKey ? userApiKey.trim() : '';
+    if (!cleanKey) {
       throw new Error('Chưa cấu hình API Key. Kính mời quý khách nhấp vào biểu tượng chiếc chìa khóa ở góc trên để cấu hình API Key cá nhân.');
     }
 
-    const fullPrompt = `${this.cachedPrompt}\n\n${markdownContent}`;
-    const model = selectedModel || 'gemini-flash-latest';
-    const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${userApiKey.trim()}`;
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const payload: any = {
-      systemInstruction: {
-        parts: [{ text: this.cachedSi }]
+    const response = await fetch('/api/gemini/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-gemini-api-key': cleanKey
       },
-      contents: [{
-        role: "user",
-        parts: [{ text: fullPrompt }]
-      }],
-      safetySettings: [
-        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-      ],
-      generationConfig: {
-        thinkingConfig: {
-          thinkingLevel: "HIGH"
-        }
-      }
-    };
+      body: JSON.stringify(payload)
+    });
 
-    if (useSearchGrounding) {
-      payload.tools = [{ googleSearch: {} }];
+    const rawText = await response.text();
+    let data: { text?: string; error?: string } | null = null;
+    try {
+      data = JSON.parse(rawText);
+    } catch {
+      throw new Error('Máy chủ đang khởi động hoặc phản hồi không đúng định dạng. Vui lòng thử lại sau vài giây.');
     }
 
+    if (!response.ok) {
+      throw new Error(data?.error || `HTTP ${response.status}`);
+    }
+
+    return data?.text || '';
+  }
+
+  async translateContent(markdownContent: string, selectedModel: string, useSearchGrounding: boolean, userApiKey: string) {
+    const fullPrompt = `${this.cachedPrompt}\n\n${markdownContent}`;
+    const model = selectedModel || 'gemini-flash-latest';
+
     try {
-      const response = await fetch(baseUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
+      const text = await this.callServerGemini(
+        {
+          model,
+          prompt: fullPrompt,
+          systemInstruction: this.cachedSi,
+          useSearchGrounding
         },
-        body: JSON.stringify(payload)
-      });
+        userApiKey
+      );
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.error?.message || `HTTP ${response.status}`);
-      }
-
-      const result = await response.json();
-      const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      
       const cleanedText = text.replace(/^```markdown\n?/, '').replace(/\n?```$/, '');
 
       return { translatedMarkdown: cleanedText };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error('Translation Error:', error);
       let errorMessage = error.message || 'Lỗi trong quá trình dịch';
@@ -231,10 +230,6 @@ export class TranslationApiService {
   }
 
   async translateSearchQuery(query: string, userApiKey: string) {
-    if (!userApiKey || !userApiKey.trim()) {
-      throw new Error('Chưa cấu hình API Key. Kính mời quý khách nhấp vào biểu tượng chiếc chìa khóa ở góc trên để cấu hình API Key cá nhân.');
-    }
-
     const systemInstruction = `Bạn là một AI chuyên dịch truy vấn tìm kiếm (search queries) từ tiếng Việt sang tiếng Anh. Nhiệm vụ DUY NHẤT của bạn là trả về MỘT (1) truy vấn tìm kiếm tiếng Anh hiệu quả nhất, dựa trên đánh giá của bạn về ý định (search intent) và cách tìm kiếm phổ biến nhất trong tiếng Anh.
 
 QUY TẮC BẮT BUỘC TUÂN THỦ:
@@ -246,49 +241,22 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
 
     const prompt = `Provide the single best English search query translation for the following Vietnamese query. Output ONLY the raw English text, nothing else:\n[${query}]`;
     const model = 'gemini-flash-latest';
-    const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${userApiKey.trim()}`;
-
-    const payload: any = {
-      systemInstruction: {
-        parts: [{ text: systemInstruction }]
-      },
-      contents: [{
-        role: "user",
-        parts: [{ text: prompt }]
-      }],
-      safetySettings: [
-        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-      ],
-      generationConfig: {
-        thinkingConfig: {
-          thinkingLevel: "HIGH"
-        }
-      }
-    };
 
     try {
-      const response = await fetch(baseUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
+      const text = await this.callServerGemini(
+        {
+          model,
+          prompt,
+          systemInstruction,
+          useSearchGrounding: false
         },
-        body: JSON.stringify(payload)
-      });
+        userApiKey
+      );
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.error?.message || `HTTP ${response.status}`);
-      }
-
-      const result = await response.json();
-      const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      
       const cleanedText = text.replace(/^```[a-z]*\n?/, '').replace(/\n?```$/, '').trim();
 
       return { translatedQuery: cleanedText };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error('Query Translation Error:', error);
       let errorMessage = error.message || 'Lỗi dịch từ khóa';
