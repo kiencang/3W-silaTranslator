@@ -13,6 +13,11 @@
 
 **Lưu ý**: Từ ngày 28/10/2026, việc sử dụng API Key miễn phí trên AI Studio không được thoải mái như trước đây, thường gặp giới hạn (thông báo dạng `model AI đang có nhu cầu sử dụng cao, vui lòng thử lại sau`). Hiện chỉ Key trả phí là tiện dùng ứng dụng được ngay.
 
+## Một số lưu ý khi dùng với API Key trả phí
+- Không chia sẻ API Key trả phí với người dùng khác, vì bạn sẽ bị tốn chi phí;
+- Luôn thiết lập ngưỡng cho API Key bạn dùng để tránh chi tiêu quá mức, ví dụ thiết lập ngưỡng chi tiêu tối đa 300 ngàn đồng/tháng;
+- Nên dùng ứng dụng này trên các trình duyệt đáng tin cậy, tốt nhất là Chrome, Firefox hoặc Edge. Ngoài ra nên hạn chế các addon cài trên trình duyệt;
+
 ## Lý do tồn tại
 Các công cụ dịch web hiện có rất nhiều, tiện dùng ngay trên trình duyệt (ví dụ Chrome, Firefox, v.v..), tuy nhiên chất lượng dịch mặc định của chúng không cao, với nhiều nội dung hơi phức tạp dễ có những đoạn dịch `ngây ngô`. Công cụ này ra đời để khắc phục phần nào nhược điểm đó. Về bản chất nó cũng chỉ là dịch máy, tuy nhiên 3W-silaTranslator sử dụng các model AI mới nhất của Gemini để dịch, giúp tăng cường chất lượng dịch lên đáng kể.
 
