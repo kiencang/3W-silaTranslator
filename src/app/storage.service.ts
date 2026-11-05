@@ -1,5 +1,6 @@
 import {Injectable, signal, inject} from '@angular/core';
 import {ToastService} from './toast.service';
+import {getSecureApiKey, saveSecureApiKey, removeSecureApiKey} from './core/crypto-storage.util';
 
 @Injectable({
   providedIn: 'root'
@@ -27,10 +28,12 @@ export class StorageService {
           // Ignore parse errors
         }
       }
-      const savedKey = localStorage.getItem('user_gemini_api_key');
-      if (savedKey) {
-        this.userApiKey.set(savedKey);
-      }
+
+      void getSecureApiKey().then((savedKey) => {
+        if (savedKey) {
+          this.userApiKey.set(savedKey);
+        }
+      });
     }
   }
 
@@ -52,10 +55,10 @@ export class StorageService {
     this.userApiKey.set(trimmedKey);
     if (typeof window !== 'undefined' && window.localStorage) {
       if (trimmedKey) {
-        localStorage.setItem('user_gemini_api_key', trimmedKey);
+        void saveSecureApiKey(trimmedKey);
         this.toastService.showToast('Đã lưu API Key riêng của bạn thành công!', 'success');
       } else {
-        localStorage.removeItem('user_gemini_api_key');
+        void removeSecureApiKey();
         this.toastService.showToast('Đã xóa API Key.', 'info');
       }
     }
