@@ -22,15 +22,65 @@ const angularApp = new AngularNodeAppEngine({
 
 app.use(express.json({ limit: '50mb' }));
 
+function isBlockedHost(hostname: string): boolean {
+  const lower = hostname.toLowerCase().replace(/^\[|\]$/g, '');
+  if (
+    lower === 'localhost' ||
+    lower === '0.0.0.0' ||
+    lower === '::1' ||
+    lower === 'metadata.google.internal' ||
+    lower.endsWith('.local') ||
+    lower.endsWith('.internal')
+  ) {
+    return true;
+  }
+
+  // Check IPv4 private / loopback / link-local ranges
+  const ipv4Match = lower.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+  if (ipv4Match) {
+    const [, a, b] = ipv4Match.map(Number);
+    if (
+      a === 127 ||
+      a === 10 ||
+      a === 0 ||
+      (a === 169 && b === 254) ||
+      (a === 192 && b === 168) ||
+      (a === 172 && b >= 16 && b <= 31)
+    ) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 app.post('/api/fetch-html', async (req, res) => {
   try {
     const { url } = req.body;
-    if (!url) {
+    if (!url || typeof url !== 'string') {
       res.status(400).json({ error: 'URL is required' });
       return;
     }
 
-    const response = await fetch(url, {
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(url.trim());
+    } catch {
+      res.status(400).json({ error: 'Định dạng URL không hợp lệ.' });
+      return;
+    }
+
+    if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+      res.status(400).json({ error: 'Chỉ hỗ trợ giao thức HTTP hoặc HTTPS.' });
+      return;
+    }
+
+    if (isBlockedHost(parsedUrl.hostname)) {
+      res.status(400).json({ error: 'Không cho phép truy cập địa chỉ mạng nội bộ.' });
+      return;
+    }
+
+    const response = await fetch(parsedUrl.href, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
       }
@@ -100,7 +150,16 @@ app.post('/api/gemini/generate', async (req, res) => {
     });
 
     const text = response.text || '';
-    res.json({ text });
+    const usage = response.usageMetadata;
+    const tokensIn = typeof usage?.promptTokenCount === 'number' ? usage.promptTokenCount : null;
+    const hasOutputTokens =
+      typeof usage?.candidatesTokenCount === 'number' ||
+      typeof usage?.thoughtsTokenCount === 'number';
+    const tokensOut = hasOutputTokens
+      ? (usage?.candidatesTokenCount ?? 0) + (usage?.thoughtsTokenCount ?? 0)
+      : null;
+
+    res.json({ text, tokensIn, tokensOut });
   } catch (error: unknown) {
     console.error('Gemini Generate Error:', error);
     let errorMessage = error instanceof Error ? error.message : 'Lỗi trong quá trình gọi Gemini API';

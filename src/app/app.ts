@@ -190,30 +190,34 @@ export class App {
       }
       this.translatedTitle.set(translatedTitleString);
       
-      // 4. Convert translated Markdown back to HTML
+      // 4. Convert translated Markdown back to HTML & sanitize
       let finalHtml = await marked.parse(translatedMarkdown);
-
-      // Add target="_blank" to all links so they open in a new tab
-      finalHtml = finalHtml.replace(/<a\s+(?![^>]*\btarget=)/gi, '<a target="_blank" rel="noopener noreferrer" ');
+      finalHtml = this.documentUtil.sanitizeArticleHtml(finalHtml);
 
       // 5. Restore YouTube Videos
       finalHtml = this.documentUtil.processYoutubeIframes(finalHtml, extraction.youtubeVideos);
 
-      const tokensIn = Math.round(this.documentUtil.countWords(markdownContent) * 1.4);
-      const tokensOut = Math.round(this.documentUtil.countWords(translatedMarkdown) * 1.5);
+      const tokensInStr = typeof translationResponse.tokensIn === 'number'
+        ? translationResponse.tokensIn.toString()
+        : 'N/A';
+      const tokensOutStr = typeof translationResponse.tokensOut === 'number'
+        ? translationResponse.tokensOut.toString()
+        : 'N/A';
       const now = new Date();
       const dateStr = `${now.toLocaleDateString('vi-VN')} | Giờ: ${now.toLocaleTimeString('vi-VN')}`;
+      const safeTitle = this.documentUtil.escapeHtml(translatedTitleString);
+      const safeOriginalUrl = this.documentUtil.escapeHtml(this.url().trim());
 
       const finalDoc = this.translationApi.cachedTemplateHtml
-        .replace('{{TITLE}}', translatedTitleString)
+        .replace('{{TITLE}}', safeTitle)
         .replace('{{CSS_CONTENT}}', this.translationApi.cachedTemplateCss)
         .replace('{{JS_CONTENT}}', this.translationApi.cachedTemplateJs)
-        .replace(/{{ORIGINAL_URL}}/g, this.url())
+        .replace(/{{ORIGINAL_URL}}/g, safeOriginalUrl)
         .replace('{{DATE}}', dateStr)
         .replace('{{MODEL}}', this.selectedModel())
         .replace('{{TEMP}}', 'N/A')
-        .replace('{{TOKENS_IN}}', tokensIn.toString())
-        .replace('{{TOKENS_OUT}}', tokensOut.toString())
+        .replace('{{TOKENS_IN}}', tokensInStr)
+        .replace('{{TOKENS_OUT}}', tokensOutStr)
         .replace('{{TRANSLATED_CONTENT}}', finalHtml);
 
       this.rawHtmlString.set(finalDoc);

@@ -5,6 +5,12 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.60] - 2026-11-08
+### Fixed
+- Thông tin token đầu vào và đầu ra chuẩn xác hơn;
+- Khử độc DOM & Tái tạo Iframe (document-util.service.ts): Loại bỏ mọi thẻ nguy hiểm và thuộc tính sự kiện on\* sau bước dịch Markdown; không dùng node.outerHTML từ trang lạ mà tự dựng lại thẻ <iframe> YouTube sạch từ mã videoId 11 ký tự hợp lệ; đồng thời mã hóa HTML Entities cho tiêu đề và URL gốc.
+- Chống tấn công SSRF ở Backend (server.ts): Endpoint /api/fetch-html kiểm tra chặt chẽ giao thức (http:/https:) và chặn toàn bộ truy vấn tới localhost, metadata.google.internal, tên miền .local/.internal cũng như các dải IP nội bộ (127.x.x.x, 10.x.x.x, 172.16-31.x.x, 192.168.x.x, 169.254.x.x)
+
 ## [1.0.59] - 2026-11-05
 ### Fixed
 - Bảo vệ khóa API Key tốt hơn;

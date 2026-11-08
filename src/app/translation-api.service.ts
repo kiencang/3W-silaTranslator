@@ -42,7 +42,7 @@ export class TranslationApiService {
       }
     }
 
-    let cleanHtml = rawHtml
+    const cleanHtml = rawHtml
       .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
       .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
       .replace(/<!--[\s\S]*?-->/g, '');
@@ -65,7 +65,7 @@ export class TranslationApiService {
           if (href && !href.startsWith('javascript:') && !href.startsWith('mailto:') && !href.startsWith('#')) {
             try {
               a.setAttribute('href', new URL(href, baseUrlObj).href);
-            } catch (e) {
+            } catch {
               // Ignore invalid URLs
             }
           }
@@ -77,7 +77,7 @@ export class TranslationApiService {
           if (src && !src.startsWith('data:')) {
             try {
               img.setAttribute('src', new URL(src, baseUrlObj).href);
-            } catch (e) {
+            } catch {
               // Ignore invalid URLs
             }
           }
@@ -168,7 +168,7 @@ export class TranslationApiService {
     prompt: string;
     systemInstruction: string;
     useSearchGrounding?: boolean;
-  }, userApiKey: string): Promise<string> {
+  }, userApiKey: string): Promise<{ text: string; tokensIn: number | null; tokensOut: number | null }> {
     const cleanKey = userApiKey ? userApiKey.trim() : '';
     if (!cleanKey) {
       throw new Error('Chưa cấu hình API Key. Kính mời quý khách nhấp vào biểu tượng chiếc chìa khóa ở góc trên để cấu hình API Key cá nhân.');
@@ -184,7 +184,7 @@ export class TranslationApiService {
     });
 
     const rawText = await response.text();
-    let data: { text?: string; error?: string } | null = null;
+    let data: { text?: string; tokensIn?: number | null; tokensOut?: number | null; error?: string } | null = null;
     try {
       data = JSON.parse(rawText);
     } catch {
@@ -195,7 +195,11 @@ export class TranslationApiService {
       throw new Error(data?.error || `HTTP ${response.status}`);
     }
 
-    return data?.text || '';
+    return {
+      text: data?.text || '',
+      tokensIn: typeof data?.tokensIn === 'number' ? data.tokensIn : null,
+      tokensOut: typeof data?.tokensOut === 'number' ? data.tokensOut : null
+    };
   }
 
   async translateContent(markdownContent: string, selectedModel: string, useSearchGrounding: boolean, userApiKey: string) {
@@ -203,7 +207,7 @@ export class TranslationApiService {
     const model = selectedModel || 'gemini-flash-latest';
 
     try {
-      const text = await this.callServerGemini(
+      const result = await this.callServerGemini(
         {
           model,
           prompt: fullPrompt,
@@ -213,9 +217,13 @@ export class TranslationApiService {
         userApiKey
       );
 
-      const cleanedText = text.replace(/^```markdown\n?/, '').replace(/\n?```$/, '');
+      const cleanedText = result.text.replace(/^```markdown\n?/, '').replace(/\n?```$/, '');
 
-      return { translatedMarkdown: cleanedText };
+      return {
+        translatedMarkdown: cleanedText,
+        tokensIn: result.tokensIn,
+        tokensOut: result.tokensOut
+      };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error('Translation Error:', error);
@@ -243,7 +251,7 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
     const model = 'gemini-flash-latest';
 
     try {
-      const text = await this.callServerGemini(
+      const result = await this.callServerGemini(
         {
           model,
           prompt,
@@ -253,7 +261,7 @@ QUY TẮC BẮT BUỘC TUÂN THỦ:
         userApiKey
       );
 
-      const cleanedText = text.replace(/^```[a-z]*\n?/, '').replace(/\n?```$/, '').trim();
+      const cleanedText = result.text.replace(/^```[a-z]*\n?/, '').replace(/\n?```$/, '').trim();
 
       return { translatedQuery: cleanedText };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

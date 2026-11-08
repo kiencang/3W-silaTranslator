@@ -22,36 +22,115 @@ export class DocumentUtilService {
     return count;
   }
 
+  escapeHtml(text: string): string {
+    if (!text) return '';
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  sanitizeArticleHtml(dirtyHtml: string): string {
+    if (!dirtyHtml || typeof DOMParser === 'undefined') return dirtyHtml;
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(dirtyHtml, 'text/html');
+
+    const dangerousTags = [
+      'script', 'iframe', 'object', 'embed', 'form', 'input',
+      'button', 'textarea', 'select', 'meta', 'link', 'style', 'base', 'applet'
+    ];
+    doc.body.querySelectorAll(dangerousTags.join(',')).forEach(el => el.remove());
+
+    const allElements = doc.body.querySelectorAll('*');
+    allElements.forEach(el => {
+      Array.from(el.attributes).forEach(attr => {
+        const attrName = attr.name.toLowerCase();
+        if (attrName.startsWith('on') || attrName === 'srcdoc') {
+          el.removeAttribute(attr.name);
+          return;
+        }
+
+        if (['href', 'src', 'xlink:href', 'action', 'formaction'].includes(attrName)) {
+          const normalizedVal = Array.from(attr.value)
+            .filter(ch => ch.charCodeAt(0) > 32)
+            .join('')
+            .toLowerCase();
+          if (
+            normalizedVal.startsWith('javascript:') ||
+            normalizedVal.startsWith('vbscript:') ||
+            normalizedVal.startsWith('data:text/html')
+          ) {
+            el.removeAttribute(attr.name);
+          }
+        }
+      });
+
+      if (el.tagName.toLowerCase() === 'a') {
+        el.setAttribute('target', '_blank');
+        el.setAttribute('rel', 'noopener noreferrer');
+      }
+    });
+
+    return doc.body.innerHTML;
+  }
+
   processYoutubeIframes(finalHtml: string, youtubeVideos: string[] | undefined): string {
     if (!youtubeVideos || youtubeVideos.length === 0) return finalHtml;
 
     let processedHtml = finalHtml;
     youtubeVideos.forEach((videoHtml, i) => {
+      const regexStr = `<p><code>\\[SILA_YOUTUBE_${i}\\]<\\/code><\\/p>|<code>\\[SILA_YOUTUBE_${i}\\]<\\/code>|\\[SILA_YOUTUBE_${i}\\]`;
+      const regex = new RegExp(regexStr, 'gi');
+
       const uniqueId = Math.random().toString(36).substring(2, 9) + i;
-      let videoSrc = '';
       let videoId = '';
-      const srcMatch = videoHtml.match(/src="([^"]+)"/i);
+      const srcMatch = videoHtml.match(/src=["']([^"']+)["']/i);
       if (srcMatch && srcMatch[1]) {
-        videoSrc = srcMatch[1];
+        let videoSrc = srcMatch[1].trim();
         if (videoSrc.startsWith('//')) {
           videoSrc = 'https:' + videoSrc;
-          videoHtml = videoHtml.replace(srcMatch[1], videoSrc);
         }
-        const idMatch = videoSrc.match(/(?:embed\/|v=|\/v\/|youtu\.be\/|\/e\/)([^"&?/\s]{11})/);
-        if (idMatch && idMatch[1]) {
-          videoId = idMatch[1];
+        try {
+          const parsedSrc = new URL(videoSrc);
+          const host = parsedSrc.hostname.toLowerCase();
+          const isYoutubeHost =
+            host === 'youtube.com' ||
+            host === 'www.youtube.com' ||
+            host === 'm.youtube.com' ||
+            host === 'youtube-nocookie.com' ||
+            host === 'www.youtube-nocookie.com' ||
+            host === 'youtu.be';
+
+          if (isYoutubeHost) {
+            const idMatch = videoSrc.match(/(?:embed\/|v=|\/v\/|youtu\.be\/|\/e\/)([a-zA-Z0-9_-]{11})/);
+            if (idMatch && idMatch[1]) {
+              videoId = idMatch[1];
+            }
+          }
+        } catch {
+          // Ignore malformed video URLs
         }
       }
-      
-      const watchUrl = videoId ? `https://www.youtube.com/watch?v=${videoId}` : (videoSrc || '#');
-      const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '';
+
+      if (!videoId) {
+        processedHtml = processedHtml.replace(regex, '');
+        return;
+      }
+
+      const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+      const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+      const cleanIframeHtml = `<iframe src="${embedUrl}" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; border: 0;" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
 
       const responsiveVideoHtml = `<div id="yt-wrap-${uniqueId}" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px; margin: 24px 0px; background: #000;">
         <div id="yt-iframe-container-${uniqueId}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-          ${videoHtml.replace(/<iframe /gi, '<iframe style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;" ')}
+          ${cleanIframeHtml}
         </div>
         <div id="yt-fallback-${uniqueId}" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('${thumbnailUrl}'); background-size: cover; background-position: center;">
-          <a href="${watchUrl}" target="_blank" style="position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: white; font-family: sans-serif; height: 100%; width: 100%;">
+          <a href="${watchUrl}" target="_blank" rel="noopener noreferrer" style="position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: white; font-family: sans-serif; height: 100%; width: 100%;">
             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3);" onmouseover="this.style.background='rgba(0,0,0,0.1)'" onmouseout="this.style.background='rgba(0,0,0,0.3)'"></div>
             <svg width="68" height="48" viewBox="0 0 68 48" style="position: relative; z-index: 2;"><path d="M66.5 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.1 34 .1 34 .1s-21.79 0-27.08 1.45C3.98 2.33 2.27 4.81 1.49 7.74.1 13.03.1 24 .1 24s0 10.97 1.39 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.9 34 47.9 34 47.9s21.79 0 27.08-1.45c2.93-.78 4.64-3.26 5.42-6.19C67.9 34.97 67.9 24 67.9 24s0-10.97-1.39-16.26z" fill="#FF0000"/><path d="M27 34l18-10-18-10v20z" fill="#FFFFFF"/></svg>
             <span style="position: relative; z-index: 2; margin-top: 12px; font-weight: 500; font-size: 15px; text-shadow: 0 1px 4px rgba(0,0,0,0.8); background: rgba(0,0,0,0.7); padding: 4px 12px; border-radius: 20px;">Xem trên YouTube</span>
@@ -69,8 +148,6 @@ export class DocumentUtilService {
         </script>
       </div>`;
       
-      const regexStr = `<p><code>\\[SILA_YOUTUBE_${i}\\]<\\/code><\\/p>|<code>\\[SILA_YOUTUBE_${i}\\]<\\/code>|\\[SILA_YOUTUBE_${i}\\]`;
-      const regex = new RegExp(regexStr, 'gi');
       processedHtml = processedHtml.replace(regex, responsiveVideoHtml);
     });
 

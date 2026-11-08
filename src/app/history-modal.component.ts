@@ -10,8 +10,8 @@ import { HistoryService, TranslationHistoryItem } from './history.service';
     '(window:keydown.escape)': 'closeModal.emit()'
   },
   template: `
-    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="history-modal-title" (click)="closeModal.emit()">
-      <div class="bg-white w-full max-w-3xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col" (click)="$event.stopPropagation()">
+    <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="history-modal-title" tabindex="-1" (keydown.escape)="closeModal.emit()" (click)="$event.target === $event.currentTarget && closeModal.emit()">
+      <div class="bg-white w-full max-w-3xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">
           <div class="flex items-center gap-3">
