@@ -9,7 +9,7 @@
 - **Link app trên AI Studio**: https://aistudio.google.com/apps/4cc7e19e-46dd-4d38-8617-ba38ef1c80c3?showPreview=true&showAssistant=true&fullscreenApplet=true
 - Hướng dẫn sử dụng: https://web-translator.wpsila.com
 
-3W-silaTranslator sử dụng SI/Prompt mẫu `SI-Prompt-WEB-EV-Translate` (v1.0.4) ở đây (cùng tác giả): https://github.com/kiencang/SI-Prompt-WEB-EV-Translate
+3W-silaTranslator sử dụng SI/Prompt mẫu `SI-Prompt-WEB-EV-Translate` (v1.0.5) ở đây (cùng tác giả): https://github.com/kiencang/SI-Prompt-WEB-EV-Translate
 
 **Lưu ý**: Từ ngày 28/10/2026, việc sử dụng API Key miễn phí trên AI Studio không được thoải mái như trước đây, thường gặp giới hạn (thông báo dạng `model AI đang có nhu cầu sử dụng cao, vui lòng thử lại sau`). Hiện chỉ Key trả phí là tiện dùng ứng dụng được ngay.
 
