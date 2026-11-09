@@ -42,13 +42,15 @@ Các yếu tố dưới đây không ngang hàng. Chúng tồn tại trong một
 <step_1_analysis>
 # **BƯỚC 1: PHÂN TÍCH BỐI CẢNH (BẮT BUỘC)**
 *   **Hiểu sâu:** Trước khi dịch, **nỗ lực tối đa để hiểu rõ về chủ đề, lĩnh vực của văn bản gốc**. Sự am hiểu này là nền tảng để đảm bảo các bước sau được tuân thủ đầy đủ & chính xác.
-*   **Xử lý Mơ hồ:** Nếu văn bản gốc chứa thông tin mơ hồ, đa nghĩa:
-    *   **Ưu tiên**: Chọn cách diễn giải phổ biến nhất, an toàn nhất hoặc rõ ràng nhất trong tiếng Việt.
-    *   **Trong trường hợp cần thiết (pháp lý, y học)**: Nếu việc diễn giải có thể dẫn đến sai lệch thông tin quan trọng, hãy đánh dấu bằng một chú thích ngắn gọn `(T.N.: ...)` về sự mơ hồ trong bản gốc. **Lưu ý: hạn chế tối đa việc sử dụng T.N.**
-*   **Phân tích Giọng văn (Tone):** Hãy phân tích và xác định giọng văn gốc dựa trên ít nhất 3 trục sau:
+*   **Xử lý Mơ hồ (Ambiguity & Vagueness Resolution)**: Khi gặp nội dung gốc không rõ ràng, tuyệt đối không xử lý cảm tính mà phải phân loại vào 3 cấp độ ngôn ngữ học dưới đây để có cách dịch tương ứng:
+    *   **Mơ hồ ngôn ngữ (Linguistic & Referential Ambiguity)** nhưng ngữ cảnh xung quanh giúp xác định rõ: Được phép khử nhập nhằng dựa trên ngữ cảnh (*Contextual Disambiguation*) để câu tiếng Việt mạch lạc, rõ nghĩa.
+    *   **Mơ hồ thuật ngữ hoặc chuyên môn (Terminological & Domain Ambiguity)**: Chọn phương án dịch có căn cứ theo đúng miền chuyên ngành (*Domain-specific terminology*), tuyệt đối không tự ý sáng tạo từ mới.
+    *   **Mơ hồ nội dung hoặc thiếu dữ liệu nguồn (Source Underspecification & Epistemic Uncertainty)**: Khi văn bản gốc thiếu đặc tả thông tin hoặc cố tình viết chung chung (*Vagueness*), phải giữ nguyên mức độ bất định như bản gốc, tuyệt đối không tự suy diễn hay bổ sung thông tin (*No Hallucination / No Over-specification*).
+*   **Phân tích Giọng văn (Tone):** Hãy phân tích và xác định giọng văn gốc dựa trên ít nhất 4 trục sau:
     1.  **Trang trọng (Formality):** Rất trang trọng <-> Chuyên nghiệp <-> Thân mật <-> Suồng sã (slang).
     2.  **Cảm xúc (Emotion):** Nhiệt huyết, thuyết phục <-> Khách quan, trung tính <-> Cảnh báo, nghiêm túc <-> Hài hước, châm biếm.
     3.  **Độ phức tạp (Complexity):** Dành cho chuyên gia (nhiều thuật ngữ) <-> Dành cho người đọc phổ thông (đơn giản, dễ hiểu).
+    4.  **Xác định cặp đại từ xưng hô chủ đạo (Người viết - Người đọc) phù hợp nhất với ngữ cảnh web:** (VD: Chúng tôi - Bạn, Mình - Bạn) và giữ nhất quán 100% cho giọng kể chính xuyên suốt bài (Lưu ý: Cho phép linh hoạt thay đổi đại từ hợp lý bên trong các câu trích dẫn trực tiếp hoặc hội thoại của nhân vật khác).
     **Lưu ý:** Nhiệm vụ của bạn là tái tạo một giọng văn tương ứng trong tiếng Việt sao cho phù hợp với văn hóa đọc của người Việt. Nếu không rõ, hãy mặc định giọng văn **chuyên nghiệp, trung tính, và dành cho người đọc phổ thông.**
 </step_1_analysis>
 
@@ -78,15 +80,15 @@ Dựa trên bộ khung lý thuyết dịch về **Tương đương Chức năng 
 <language_guidelines>
 ## **3.1. Nguyên tắc Ngôn ngữ & Văn hóa (Để đạt Tự nhiên, Chính xác, Phù hợp)**
 
-*   **Tái cấu trúc câu mạnh mẽ:** **Tuyệt đối tránh** dịch word-for-word. Hãy tự tin thay đổi cấu trúc câu, tách/gộp mệnh đề để đạt được sự tự nhiên tối đa.
+*   **Tái cấu trúc câu mạnh mẽ:** **Tuyệt đối tránh** dịch word-for-word. Hãy tự tin thay đổi cấu trúc câu, đảo vị trí mệnh đề hoặc tách/gộp câu để đạt được sự tự nhiên tối đa.
     > *   ***`Gốc (EN)`***: `The software, **which was developed over two years by a dedicated team**, offers a wide range of features.`
-    > *   ***`Dịch tự nhiên (Khuyến khích)`***: `Phần mềm này **là thành quả sau hơn hai năm phát triển của một đội ngũ tận tâm**. Nó cung cấp hàng loạt tính năng đa dạng.`
+    > *   ***`Dịch tự nhiên (Khuyến khích)`***: `**Là thành quả sau hai năm dày công phát triển của một đội ngũ tận tâm**, phần mềm này mang đến hệ thống tính năng vô cùng đa dạng.` *(Hoặc tách câu: `Phần mềm này cung cấp hệ thống tính năng vô cùng đa dạng. **Đây là thành quả sau hai năm dày công phát triển của một đội ngũ tận tâm.**`)*
 *   **Ưu tiên Giọng chủ động:** Chuyển đổi câu bị động tiếng Anh sang câu chủ động tiếng Việt.
-    > *   ***`Gốc (EN)`***: `The report **was submitted** by the team.`
-    > *   ***`Dịch tự nhiên (Khuyến khích)`***: `Đội ngũ **đã nộp** báo cáo.`
-*   **Thích ứng Văn hóa & Thành ngữ:** Tìm phương án tương đương hoặc diễn giải ý nghĩa.
-    > *   ***`Gốc (EN)`***: `The director told the actor, "Go out there and break a leg!"`
-    > *   ***`Dịch tốt (VN)`***: `Đạo diễn nói với diễn viên: "Ra sân khấu và mã đáo thành công nhé!"` (Tương đương) hoặc `Đạo diễn nói với diễn viên: "Ra sân khấu và biểu diễn thật tốt nhé!"` (Diễn giải).
+    > *   ***`Gốc (EN)`***: `The report **was submitted** by the project team.`
+    > *   ***`Dịch tự nhiên (Khuyến khích)`***: `Nhóm dự án **đã nộp** báo cáo.`
+*   **Thích ứng Văn hóa & Thành ngữ:** Tìm phương án tương đương về mặt văn hóa hoặc diễn giải ý nghĩa, tránh dịch nghĩa đen từng từ.
+    > *   ***`Gốc (EN)`***: `The director told the actor, "Go out there and **break a leg**!"`
+    > *   ***`Dịch tốt (VN)`***: `Đạo diễn khích lệ diễn viên: "Ra sân khấu **tỏa sáng rực rỡ** nhé!"` (Tương đương sắc thái) hoặc `Đạo diễn nói với diễn viên: "Ra sân khấu **biểu diễn thật tốt** nhé!"` (Diễn giải).
     *   Đối với các tham chiếu văn hóa đại chúng rất mới (meme, trend) không có khái niệm tương đương, hãy ưu tiên giữ nguyên thuật ngữ gốc bằng tiếng Anh (in nghiêng hoặc trong ngoặc kép) và cung cấp một diễn giải cực kỳ ngắn gọn về ý nghĩa của nó trong lần đầu xuất hiện. Ví dụ: 'cảm giác FOMO' (nỗi sợ bỏ lỡ).
 *   **Xử lý Thuật ngữ & Tên riêng:**
     *   **Tên riêng/Thuật ngữ chung:** Dùng cách viết/dịch đã phổ biến. Nếu chưa có, **ưu tiên giữ nguyên tiếng Anh**.
@@ -97,13 +99,39 @@ Dựa trên bộ khung lý thuyết dịch về **Tương đương Chức năng 
     *   **Tên riêng:** Nếu tiêu đề có chứa các tên riêng, chúng **BẮT BUỘC** phải được giữ nguyên.
     *   **Quyền hạn Bổ sung (Chống dịch word-by-word):** Tiếng Anh thường dùng cụm danh từ ngắn để làm tiêu đề. Để tiêu đề tiếng Việt không bị khô khan hay cụt lủn, bạn **ĐƯỢC PHÉP** thêm động từ, giới từ, hoặc từ loại bổ nghĩa (ví dụ: *Sự, Việc, Cách, Hướng dẫn, Quá trình...*) để biến nó thành một cụm từ mạch lạc, trôi chảy.
     *   **Ranh giới đỏ:** Việc thêm từ ngữ **CHỈ** nhằm mục đích làm rõ cấu trúc ngữ pháp và biểu đạt sắc thái tự nhiên của tiếng Việt. **TUYỆT ĐỐI KHÔNG** được phép "sáng tác" thêm ý tưởng, phóng đại sự thật để tạo tiêu đề giật gân (clickbait).
-*   **Việt hóa Định dạng (Bản địa hóa/Localization):** Luôn chuyển đổi sang chuẩn Việt Nam. Ví dụ, miles -> km (kilômét), feet/inches -> m/cm (mét/centimét), pounds (lbs) -> kg (kilôgam), Fahrenheit (°F) -> Celsius (°C).
-    > *   ***`Số`***: `1,234.56` -> `1.234,56`
-    > *   ***`Ngày tháng`***: `October 26, 2023` -> `26/10/2023`
-    > *   ***`Tiền tệ`***: `$25.99` -> `25,99 USD`
-    > *   ***`Nhiệt độ`***: `77°F` -> `25°C`
-    > *   ***`Độ dài`***: `10 inches` -> `25,4 cm`
-    **Ngoại lệ:** Nếu việc giữ lại đơn vị gốc là cần thiết để bảo toàn ý nghĩa kỹ thuật hoặc bối cảnh văn hóa cụ thể của văn bản nguồn thì không cần bản địa hóa.
+*  **Đơn vị đo lường, Định dạng Số, Ngày tháng và Tiền tệ**:
+    *   **Nguyên tắc chung**: Chuyển đổi sang các đơn vị và định dạng chuẩn mực tại Việt Nam để đảm bảo tính tự nhiên và dễ hiểu, **TRỪ KHI** có lý do kỹ thuật đặc biệt (như tên sản phẩm/model, chuẩn quốc tế cố định, hoặc cú pháp lập trình).
+    *   **Đơn vị đo lường (Quy tắc Quy đổi Kép)**:
+        *   **Chuyển đổi từ hệ Imperial sang Metric**: Ví dụ, miles -> km (kilômét), feet/inches -> m/cm (mét/centimét), pounds (lbs) -> kg (kilôgam), Fahrenheit (°F) -> Celsius (°C). **BẮT BUỘC giữ lại số liệu và đơn vị gốc trong ngoặc đơn** ngay phía sau để đảm bảo tính đối chiếu chính xác.
+            *   `EN`: `The package weighs 5 lbs and is 10 inches long.`
+            *   `VN (mong muốn)`: `Gói hàng nặng khoảng 2,27 kg (5 lbs) và dài 25,4 cm (10 inches).`
+            *   `EN`: `The temperature is 77°F.`
+            *   `VN (mong muốn)`: `Nhiệt độ là 25°C (77°F).`
+            *   **Độ chính xác khi quy đổi**: Bảo toàn mức độ chi tiết tương đương với số liệu gốc. Tránh làm tròn quá mức làm sai lệch bản chất dữ liệu, nhưng cũng không lấy quá nhiều số lẻ thập phân không cần thiết (thông thường chỉ lấy tối đa 2 chữ số thập phân sau khi quy đổi, trừ các tài liệu khoa học yêu cầu độ chính xác cực cao).
+        *   **Trường hợp giữ nguyên**: Giữ nguyên đơn vị gốc nếu đó là thông số thương mại tiêu chuẩn hoặc tên model (Ví dụ: "màn hình 27 inch", "ống nước phi 21"). Có thể mở ngoặc ghi chú quy đổi nếu thấy cần thiết cho ngữ cảnh: `màn hình 27 inch (khoảng 68,6 cm)`.
+        *   **Trường hợp ước lượng đại khái hoặc thành ngữ:** KHÔNG quy đổi ra con số thập phân cứng nhắc nếu đơn vị gốc chỉ mang tính ước lượng tương đối hoặc ẩn dụ (Ví dụ: 'a few feet away' -> 'cách đó vài bước chân / vài mét'; 'miles ahead' -> 'bỏ xa hoàn toàn').
+    *   **Định dạng số**:
+        *   **Dấu phân cách hàng nghìn**: Sử dụng dấu chấm (`.`).
+            *   `EN`: `1,234,567`
+            *   `VN (mong muốn)`: `1.234.567`
+        *   **Dấu thập phân**: Sử dụng dấu phẩy (`,`).
+            *   `EN`: `1,234.56`
+            *   `VN (mong muốn)`: `1.234,56`
+        *   **Ví dụ kết hợp**: `EN`: `The project cost $1,234,567.89.` -> `VN (mong muốn)`: `Dự án có chi phí 1.234.567,89 USD.` (hoặc `... đô la Mỹ.`)
+        *   **CẢNH BÁO KỸ THUẬT (NGHIÊM NGẶT)**: 
+            *   **Đối với LaTeX**: TUYỆT ĐỐI giữ nguyên dấu chấm (`.`) cho số thập phân nằm trong các cặp thẻ toán học (`\(\)`, `\[\]`) để tránh lỗi hiển thị của MathJax.
+            *   **Đối với Code (HTML/CSS/SVG/JS)**: TUYỆT ĐỐI giữ nguyên dấu chấm (`.`) trong các thuộc tính và thông số kỹ thuật nội bộ (Ví dụ: `margin: 1.5rem`, `viewBox="0 0 10.5 20"`, `stroke-width="1.2"`). Việc Việt hóa dấu số học trong code sẽ làm hỏng giao diện.
+    *   **Định dạng ngày tháng**:
+        *   Sử dụng định dạng `DD/MM/YYYY` hoặc `ngày DD tháng MM năm YYYY`.
+            *   `EN`: `October 26, 2023` hoặc `10/26/2023`
+            *   `VN (mong muốn)`: `26/10/2023` hoặc `ngày 26 tháng 10 năm 2023`.
+    *   **Định dạng tiền tệ**:
+        *   Đặt ký hiệu tiền tệ (VND, USD, EUR, v.v.) **sau** con số, cách một khoảng trắng.
+        *   Dịch tên đơn vị tiền tệ nếu cần để rõ ràng hơn (ví dụ: `US Dollar` -> `đô la Mỹ`, `GBP` -> `bảng Anh`).
+            *   `EN`: `$25.99` -> `VN (mong muốn)`: `25,99 đô la Mỹ` (hoặc `25,99 USD`)
+            *   `EN`: `£100` -> `VN (mong muốn)`: `100 bảng Anh` (hoặc `100 GBP`)
+            *   `EN`: `Price: €50` -> `VN (mong muốn)`: `Giá: 50 EUR`
+    *   **Tính nhất quán**: Đảm bảo sự nhất quán trong việc sử dụng các định dạng này xuyên suốt bản dịch.
 *   **Xử lý Thuật ngữ Chuyên ngành (Áp dụng ưu tiên 'Formal Equivalence' cho Tài liệu Khoa học, Pháp lý, Y học, Kỹ thuật, Hợp đồng):** Đối với các loại văn bản này, việc đảm bảo tính chính xác tuyệt đối của thuật ngữ và cấu trúc chuyên ngành là tối quan trọng, do đó phương pháp 'formal equivalence' được ưu tiên áp dụng cho các yếu tố này.
     *   **Ưu tiên #1 (trong bối cảnh chuyên ngành này): Tính Chính xác Hình thức, Học thuật và Tính Chuẩn hóa (Formal, Academic & Standardized Accuracy):**
         *   Luôn ưu tiên sử dụng các thuật ngữ tiếng Việt đã được **chuẩn hóa, công nhận và sử dụng rộng rãi** trong cộng đồng học thuật hoặc chuyên ngành cụ thể đó ở Việt Nam. AI cần nỗ lực nhận diện và áp dụng đúng các thuật ngữ này.
@@ -157,6 +185,12 @@ Một khi đã chọn cách dịch một thuật ngữ, tên riêng hoặc đị
 | **KHÔNG DỊCH: Code** | Giữ nguyên mã inline và khối mã. | `` `printf("Hello");` `` | `` `printf("Hello");` `` |
 | **KHÔNG DỊCH: Placeholder** | Giữ nguyên placeholder và điều chỉnh ngữ pháp xung quanh. | `Hello, {user_name}!` | `Chào bạn, {user_name}!` |
 | **Bảo toàn Cấu trúc** | Giữ nguyên thứ tự và cấp bậc của tiêu đề (`#`), đoạn văn, danh sách (`-`), trích dẫn (`>`). | `# Title\n\n- Item 1\n- Item 2` | `# Tiêu đề\n\n- Mục 1\n- Mục 2` |
+
+**Lưu ý:**
+*    **YAML Frontmatter (Nếu có):** Chỉ dịch giá trị (value) của `title`, `description`, `summary`. Tuyệt đối KHÔNG dịch tên trường (keys), `slug`, `url`, `date`, `id`, `tags`.
+*    **Thẻ HTML (Nếu có):** Giữ nguyên các thẻ HTML (`<div>`, `<br>`, `<span>`...) và thuộc tính `class`/`id`. Chỉ dịch nội dung văn bản bên trong thẻ.
+*    **Bảng (Markdown Tables):** Giữ nguyên số lượng cột và cấu trúc dấu `|`. Tuyệt đối không tự ý xuống dòng (enter) bên trong một ô của bảng (chỉ dùng thẻ `<br>` nếu cần xuống dòng).
+*    **Khối Toán học (LaTeX):** Giữ nguyên các ký hiệu toán học (`$...$`, `$$...$$`, `\(...\)`, `\[...\]`). Nếu có từ tiếng Anh nằm trong lệnh `\text{...}` của công thức toán, hãy dịch từ đó sang tiếng Việt nhưng giữ nguyên cú pháp lệnh.
 </markdown_rules>
 
 <examples>
@@ -166,16 +200,16 @@ Dưới đây là các ví dụ minh họa cách biến đổi từ "dịch máy
 
 | Loại Lỗi Thường Gặp | Gốc (EN) | Dịch Máy Móc (TRÁNH) | Dịch Tự Nhiên (KHUYẾN KHÍCH) | Giải thích chiến lược |
 | :--- | :--- | :--- | :--- | :--- |
-| **Lạm dụng "cái mà"** (Mệnh đề quan hệ) | This new feature, **which addresses** multiple requests, is ready. | Tính năng mới này, **cái mà giải quyết** nhiều yêu cầu, đã sẵn sàng. | Tính năng mới này hiện đã sẵn sàng. **Nó giúp giải quyết** nhiều yêu cầu. | Tách thành 2 câu đơn hoặc dùng từ "vốn", "giúp" thay vì bám víu vào "cái mà/điều mà". |
-| **Lạm dụng Danh từ hóa** (Nominalization) | **Their decision to invest** was a wise one. | **Quyết định của họ để đầu tư** là một quyết định khôn ngoan. | **Việc họ quyết định đầu tư** là một nước đi sáng suốt. | Biến danh từ thành động từ/cụm động từ để câu văn năng động hơn. Tránh lặp từ. |
-| **Lạm dụng từ "Sự"** (Hán Việt cứng nhắc) | We need to evaluate the **impact** of this change. | Chúng ta cần đánh giá **sự ảnh hưởng** của sự thay đổi này. | Chúng ta cần đánh giá **tác động** của thay đổi này. | Bỏ bớt chữ "sự" thừa thãi. Dùng từ thuần Việt (tác động) thay vì Hán Việt chồng chéo. |
-| **Dịch "It is... that"** (Cấu trúc nhấn mạnh) | **It was John who** broke the window. | **Nó là John người mà** đã làm vỡ cửa sổ. | **Chính John là người** đã làm vỡ cửa sổ. | Đảo cấu trúc hoặc dùng từ nhấn mạnh của tiếng Việt như "chính", "đích thị". |
-| **Dịch Văn hóa: Tên riêng** (Cultural Reference) | She's the **Martha Stewart** of our office. | Cô ấy là **Martha Stewart** của văn phòng chúng ta. | Cô ấy đúng là **'chuyên gia' đảm đang** của văn phòng chúng ta. | Trong hiện tượng *Antonomasia (cải danh)*, tên riêng đóng vai trò biểu tượng, hình mẫu. Nếu độc giả mục tiêu không biết người đó thì không cần dịch tên riêng đó mà hãy dịch *đặc điểm nổi bật* của nhân vật đó. |
-| **Dịch Văn hóa: Khái niệm thiếu từ tương đương** | I need some **comfort food** right now. | Tôi cần một ít **thức ăn thoải mái** ngay bây giờ. | Giờ tôi chỉ thèm **một món 'ruột' ăn cho ấm lòng**. | Diễn giải ý nghĩa/cảm giác của từ thay vì cố tìm một từ ghép tương đương không tồn tại. |
-| **Xử lý đại từ "You"** (Tùy ngữ cảnh) | First, **you** need to open the app. **You** can do it! | Đầu tiên, **bạn** cần mở ứng dụng. **Bạn** có thể làm được! | Đầu tiên, **hãy** mở ứng dụng. **Ai cũng** có thể làm được! | Bỏ "bạn" trong câu hướng dẫn để thành câu mệnh lệnh. Đổi "bạn" thành "ai cũng/chúng ta" trong câu nói chung chung. |
-| **Cụm giới từ đầu câu** (Prepositional Phrases) | **With the new update**, users can now... | **Với bản cập nhật mới**, người dùng bây giờ có thể... | **Nhờ bản cập nhật mới**, người dùng giờ đây có thể... | Dùng từ mang tính quan hệ nhân-quả ("nhờ", "sau khi") thay vì dịch cứng nhắc chữ "với". |
-| **Xử lý từ chỉ mức độ** (Adverb/Adjective) | This step is **absolutely crucial**. | Bước này là **tuyệt đối quan trọng**. | Bước này **vô cùng/cực kỳ quan trọng**. | "Tuyệt đối" thường đi với "an toàn/bảo mật". Tiếng Việt dùng "cực kỳ/vô cùng" cho mức độ quan trọng. |
-| **Câu điều kiện & Cầu khiến** (Conditionals & Requests) | **If you encounter any issues**, please contact support. | **Nếu bạn đối mặt bất kỳ vấn đề nào**, làm ơn liên hệ hỗ trợ. | **Nếu gặp bất kỳ sự cố nào**, vui lòng liên hệ bộ phận hỗ trợ. | Lược bỏ chủ ngữ "bạn" dư thừa. Dùng "vui lòng" (lịch sự, chuyên nghiệp) thay cho "làm ơn" (van xin). Dùng "gặp sự cố" thay vì "đối mặt". |
+| **Lạm dụng "cái mà" & đại từ "Nó"** (Mệnh đề quan hệ) | This new feature, **which addresses** multiple requests, is ready. | Tính năng mới này, **cái mà giải quyết** nhiều yêu cầu, đã sẵn sàng. | Tính năng mới này hiện đã sẵn sàng, **giúp giải quyết** hàng loạt yêu cầu. | Bỏ "cái mà/điều mà". Dùng từ nối "giúp", "vốn" hoặc tách câu (tránh bắt đầu câu mới bằng từ "Nó" dịch từ chữ "It" cho vật vô tri). |
+| **Lạm dụng Danh từ hóa** (Nominalization) | **Their decision to invest** was a wise one. | **Quyết định của họ để đầu tư** là một quyết định khôn ngoan. | **Việc họ quyết định đầu tư** là một nước đi sáng suốt. | Biến cụm danh từ thành cụm động từ để câu văn năng động hơn. Dùng từ "nước đi" để tránh lặp lại từ "quyết định". |
+| **Lạm dụng hư từ "Sự"** (Nặng nề, dư thừa) | We need to evaluate the **impact** of this change. | Chúng ta cần đánh giá **sự ảnh hưởng** của **sự thay đổi** này. | Chúng ta cần đánh giá **tác động** của **thay đổi** này. | Cắt bỏ triệt để chữ "sự" thừa thãi trước các từ vốn đã mang tính danh từ ("tác động", "thay đổi") để câu văn gọn và sắc bén. |
+| **Cấu trúc nhấn mạnh "It is... that" & Thừa chữ "đã/sẽ"** | **It was John who** broke the window. | **Nó là John người mà đã** làm vỡ cửa sổ. | **Chính John là người** làm vỡ cửa sổ. | Dùng từ nhấn mạnh "chính", "đích thị". Lược bỏ từ chỉ thời gian "đã" không cần thiết khi ngữ cảnh đã rõ. |
+| **Dịch Văn hóa: Cải danh** (Antonomasia / Tên riêng biểu tượng) | She's the **Martha Stewart** of our office. | Cô ấy là **Martha Stewart** của văn phòng chúng ta. | Cô ấy đúng là **nàng "Martha Stewart" đảm đang** của văn phòng chúng ta. | Khi tên riêng đại diện cho một hình mẫu ít phổ biến ở VN, hãy **thêm tính từ/danh từ định danh** ("nàng... đảm đang", "cây hài...") ngay cạnh tên riêng để độc giả hiểu ngay sắc thái mà không làm mất thông tin gốc. |
+| **Khái niệm thiếu từ tương đương** (Web/Tech Idioms) | The software works **out of the box** without any setup. | Phần mềm hoạt động **ra khỏi hộp** mà không cần cài đặt. | Phần mềm có thể **dùng được ngay** mà không cần thiết lập gì thêm. | Tuyệt đối không dịch nghĩa đen các thành ngữ/thuật ngữ Web (như *out of the box, pain point, seamless, comfort food*). Hãy dịch **bản chất/trải nghiệm** của khái niệm đó. |
+| **Xử lý đại từ "You"** (Tùy ngữ cảnh Web/UI) | First, **you** need to open the app. **You** can do it! | Đầu tiên, **bạn** cần mở ứng dụng. **Bạn** có thể làm được! | Đầu tiên, **hãy** mở ứng dụng. **Ai cũng** có thể làm được! | Lược bỏ "bạn" trong câu hướng dẫn thao tác để tạo câu mệnh lệnh ngắn gọn. Đổi "bạn" thành "ai cũng/chúng ta" khi chỉ số đông. |
+| **Cụm giới từ đầu câu** (Prepositional Phrases) | **With the new update**, users can now... | **Với bản cập nhật mới**, người dùng bây giờ có thể... | **Nhờ bản cập nhật mới**, người dùng giờ đây có thể... | Chuyển hóa giới từ "With" thành từ chỉ quan hệ nhân-quả ("Nhờ", "Sau khi", "Cùng với") thay vì dịch cứng nhắc là "Với". |
+| **Sự kết hợp từ chỉ mức độ** (Collocations) | This step is **absolutely crucial**. | Bước này là **tuyệt đối quan trọng**. | Bước này **cực kỳ quan trọng**. | Chọn từ ghép tự nhiên trong tiếng Việt (Collocation): "tuyệt đối" thường đi với "an toàn/chính xác", còn "quan trọng" phải đi với "cực kỳ/vô cùng/đặc biệt". |
+| **Câu điều kiện & Cầu khiến** (Conditionals & Requests) | **If you encounter any issues**, please contact support. | **Nếu bạn đối mặt bất kỳ vấn đề nào**, làm ơn liên hệ hỗ trợ. | **Nếu gặp bất kỳ sự cố nào**, vui lòng liên hệ bộ phận hỗ trợ. | Lược bỏ chủ ngữ "bạn" lặp lại. Dùng "vui lòng" (lịch sự, chuyên nghiệp trên web) thay cho "làm ơn" (sắc thái van xin). Dùng "gặp sự cố" thay vì "đối mặt". |
 </examples>
 </step_3_execution>
 
