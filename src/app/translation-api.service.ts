@@ -203,7 +203,8 @@ export class TranslationApiService {
   }
 
   async translateContent(markdownContent: string, selectedModel: string, useSearchGrounding: boolean, userApiKey: string) {
-    const fullPrompt = `${this.cachedPrompt}\n\n${markdownContent}`;
+    const safeMarkdown = markdownContent.replace(/<\/?source_markdown>/gi, '');
+    const fullPrompt = `${this.cachedPrompt}\n\n<source_markdown>\n${safeMarkdown}\n</source_markdown>`;
     const model = selectedModel || 'gemini-flash-latest';
 
     try {
@@ -217,7 +218,11 @@ export class TranslationApiService {
         userApiKey
       );
 
-      const cleanedText = result.text.replace(/^```markdown\n?/, '').replace(/\n?```$/, '');
+      const cleanedText = result.text
+        .replace(/^```markdown\n?/i, '')
+        .replace(/\n?```$/i, '')
+        .replace(/^\s*<source_markdown>\s*/i, '')
+        .replace(/\s*<\/source_markdown>\s*$/i, '');
 
       return {
         translatedMarkdown: cleanedText,
