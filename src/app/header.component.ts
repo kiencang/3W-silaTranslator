@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -8,9 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [MatIconModule, FormsModule],
   template: `
     <header class="flex-none bg-white/90 backdrop-blur-md sticky top-0 z-50 px-4 md:px-10 transition-all duration-500 ease-in-out origin-top border-[#E5E7EB]"
-            [class.py-2]="!isZenMode()" [class.border-b]="!isZenMode()"
-            [class.max-h-[200px]]="!isZenMode()" [class.opacity-100]="!isZenMode()" [class.overflow-visible]="!isZenMode()"
-            [class.max-h-0]="isZenMode()" [class.opacity-0]="isZenMode()" [class.py-0]="isZenMode()" [class.border-none]="isZenMode()" [class.overflow-hidden]="isZenMode()">
+            [class.py-2]="!isHidden()" [class.border-b]="!isHidden()"
+            [class.max-h-[200px]]="!isHidden()" [class.opacity-100]="!isHidden()" [class.overflow-visible]="!isHidden()"
+            [class.max-h-0]="isHidden()" [class.opacity-0]="isHidden()" [class.py-0]="isHidden()" [class.border-none]="isHidden()" [class.overflow-hidden]="isHidden()">
       <div class="max-w-[1240px] mx-auto flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 md:gap-8">
         
         <!-- Logo & Temperature Block -->
@@ -218,4 +218,6 @@ export class HeaderComponent {
   fileSelected = output<Event>();
   translate = output<void>();
   goHome = output<void>();
+
+  isHidden = computed(() => this.isZenMode() || (Boolean(this.fullHtmlString()) && !this.isLoading()));
 }

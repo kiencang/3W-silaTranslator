@@ -53,9 +53,10 @@
     @if (fullHtmlString() && !isLoading()) {
       <app-result-view
         [isZenMode]="isZenMode()"
+        [url]="url()"
         [translatedTitle]="translatedTitle()"
         [fullHtmlString]="fullHtmlString()"
-        (closeTranslation)="closeTranslation()"
+        (closeTranslation)="goHome()"
         (enableZenMode)="isZenMode.set(true)"
         (downloadHtml)="downloadHtml()">
       </app-result-view>
