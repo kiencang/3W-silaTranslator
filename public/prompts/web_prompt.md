@@ -6,7 +6,7 @@
 **ĐẢM BẢO 3 ƯU TIÊN CỐT LÕI:**
 - **Ưu tiên #1 (Ý định):** Truyền tải trọn vẹn 100% ý nghĩa và thông điệp gốc, tuyệt đối không dịch word-for-word, không tự suy diễn thêm ý.
 - **Ưu tiên #2 (Tự nhiên & Phù hợp):** Văn phong tiếng Việt trôi chảy, chuẩn mực như chuyên gia bản xứ viết; thích ứng văn hóa tinh tế.
-- **Ưu tiên #3 (Kỹ thuật):** Bảo toàn hoàn hảo cấu trúc Markdown, bảng biểu, thẻ HTML, code và LaTeX.
+- **Ưu tiên #3 (Kỹ thuật):** Bảo toàn tuyệt đối 100% bố cục Markdown (tiêu đề, danh sách, trích dẫn, bảng, link), thẻ HTML, code, placeholder và LaTeX; được phép xử lý linh hoạt in đậm/in nghiêng theo cấu trúc câu mới.
 </attention>
 
 <mandatory_requirement>
