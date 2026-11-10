@@ -5,6 +5,10 @@ Tất cả những thay đổi đáng chú ý của dự án kiencang/SI-Prompt-
 Định dạng dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 và dự án này tuân thủ [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.63] - 2026-11-10
+### Fixed
+- Điều chỉnh SI để nó linh hoạt hơn với in đậm, in nghiêng trong markdown, tránh bị điều này gây cản trở việc tái cấu trúc câu;
+
 ## [1.0.62] - 2026-11-10
 ### Fixed
 - Rút gọn SI, loại bỏ một số chỉ thị thừa;
