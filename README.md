@@ -18,6 +18,8 @@
 - Luôn thiết lập ngưỡng cho API Key bạn dùng để tránh chi tiêu quá mức, ví dụ thiết lập ngưỡng chi tiêu tối đa 300 ngàn đồng/tháng;
 - Nên dùng ứng dụng này trên các trình duyệt đáng tin cậy, tốt nhất là Chrome, Firefox hoặc Edge. Ngoài ra nên hạn chế các addon cài trên trình duyệt;
 
+Nếu gặp vấn đề về chi phí, và vẫn có nhu cầu dịch, bạn hãy dịch luôn trong môi trường Playground của Gemini, bạn chỉ cần thêm một file hướng dẫn cho AI là đủ. Xem cách làm ở đây: [MarkdownBox](https://github.com/kiencang/MarkdownBox).
+
 ## Lý do tồn tại
 Các công cụ dịch web hiện có rất nhiều, tiện dùng ngay trên trình duyệt (ví dụ Chrome, Firefox, v.v..), tuy nhiên chất lượng dịch mặc định của chúng không cao, với nhiều nội dung hơi phức tạp dễ có những đoạn dịch `ngây ngô`. Công cụ này ra đời để khắc phục phần nào nhược điểm đó. Về bản chất nó cũng chỉ là dịch máy, tuy nhiên 3W-silaTranslator sử dụng các model AI mới nhất của Gemini để dịch, giúp tăng cường chất lượng dịch lên đáng kể.
 
